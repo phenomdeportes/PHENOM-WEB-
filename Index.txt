@@ -1,0 +1,35 @@
+        <div class="editor-field">
+
+            <label>Talles / Onzas Disponibles</label>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; background: #111; padding: 8px; border-radius: 4px;">
+
+                <!-- Onzas para Guantes -->
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="6oz"> 6oz</label>
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="8oz"> 8oz</label>
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="10oz"> 10oz</label>
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="12oz"> 12oz</label>
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="14oz"> 14oz</label>
+
+                <label style="color:white; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="16oz"> 16oz</label>
+
+                <!-- Talles por Letras (Protectores, Tibiales, etc.) -->
+
+                <label style="color:#d4af37; font-size:0.8rem; margin-left:8px;"><input type="checkbox" class="size-checkbox" value="S"> S</label>
+
+                <label style="color:#d4af37; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="M"> M</label>
+
+                <label style="color:#d4af37; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="L"> L</label>
+
+                <label style="color:#d4af37; font-size:0.8rem;"><input type="checkbox" class="size-checkbox" value="XL"> XL</label>
+
+            </div>
+
+        </div>
+
+
