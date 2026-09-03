@@ -11,7 +11,8 @@
             --text-color: #111111;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); }
+        body { background-color: var(--bg-color); color: var(--text-color); transition: margin-right 0.3s ease; }
+        body.drawer-open { margin-right: 380px; }
 
         /* Barra FUB Superior */
         .fub-bar { background: #000; color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
@@ -39,13 +40,15 @@
 
         .cart-indicator { color: white; font-weight: bold; font-size: 0.9rem; }
 
-        /* Contenedor Principal / Tienda */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        /* Contenedor Principal / Páginas dinámicas */
+        .page-section { display: none; max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 400px; }
+        .page-section.active-page { display: block; }
+        
         h2.section-title { font-size: 1.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
         .subtitle { color: #666; margin-bottom: 30px; font-size: 1rem; }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .product-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
+        .product-card { background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-3px); }
         .product-img-placeholder { background: #f4f4f4; height: 200px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 15px; font-weight: 500; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
@@ -66,21 +69,35 @@
         .btn-mp { background: #009ee3; color: #fff; }
         .btn-mp:hover { background: #0082be; }
 
-        /* Modal Panel de Edición Secreto (5 clicks en logo) */
-        #secret-editor-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
-        .editor-box { background: #1a1a1a; color: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; border-top: 4px solid var(--primary-color); }
-        .editor-box h3 { margin-bottom: 20px; color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
-        .editor-group { margin-bottom: 15px; }
-        .editor-group label { display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 5px; }
-        .editor-group input { width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; }
-        .btn-close-modal { background: #444; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
-        .btn-save-modal { background: #28a745; color: #fff; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        /* Panel Lateral Deslizable desde la Derecha (Drawer) */
+        #side-editor-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #1a1a1a; color: #fff; z-index: 9999; box-shadow: -5px 0 25px rgba(0,0,0,0.5); transition: right 0.3s ease; display: flex; flex-direction: column; }
+        #side-editor-drawer.open { right: 0; }
+        
+        .drawer-header { background: #111; padding: 20px; border-bottom: 2px solid var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
+        .drawer-header h3 { color: var(--primary-color); font-size: 1.1rem; }
+        .btn-close-drawer { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+
+        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
+        
+        /* Acordeón / Secciones del Panel */
+        .editor-section { border-bottom: 1px solid #333; margin-bottom: 15px; padding-bottom: 15px; }
+        .section-toggle { background: #222; color: var(--primary-color); border: none; width: 100%; padding: 12px; text-align: left; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; justify-content: space-between; }
+        .section-body { display: none; padding-top: 15px; }
+        .section-body.active { display: block; }
+
+        .editor-group { margin-bottom: 12px; }
+        .editor-group label { display: block; font-size: 0.75rem; color: #aaa; margin-bottom: 4px; }
+        .editor-group input, .editor-group select { width: 100%; padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 0.85rem; }
+        
+        .btn-save-drawer { background: #28a745; color: #fff; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
 
         /* Responsive */
         @media (max-width: 768px) {
             nav.pc-nav { display: none; }
             .hamburger-btn { display: block; }
             header { padding: 10px 15px; }
+            body.drawer-open { margin-right: 0; }
+            #side-editor-drawer { width: 100%; right: -100%; }
         }
     </style>
 </head>
@@ -94,42 +111,42 @@
         <div class="header-left">
             <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">☰</button>
             <div class="logo-area">
-                <!-- 5 Clics rápidos aquí abren el editor -->
+                <!-- 5 Clics rápidos abren el panel lateral de edición -->
                 <span class="logo-text" id="brandLogoText" onclick="handleLogoClick()">PHENOM</span>
             </div>
         </div>
 
         <!-- Navegación PC -->
         <nav class="pc-nav">
-            <a onclick="filterCategory('todos')">INICIO</a>
-            <a onclick="filterCategory('protectores')">PROTECTORES</a>
-            <a onclick="filterCategory('accesorios')">ACCESORIOS</a>
-            <a onclick="scrollToSection('como-comprar')">CÓMO COMPRAR</a>
-            <a onclick="scrollToSection('contacto')">CONTACTO</a>
-            <a onclick="scrollToSection('fub-novedades')" style="color: var(--primary-color);">FUB - NOVEDADES</a>
+            <a onclick="switchPage('inicio')">INICIO</a>
+            <a onclick="switchPage('protectores')">PROTECTORES</a>
+            <a onclick="switchPage('accesorios')">ACCESORIOS</a>
+            <a onclick="switchPage('como-comprar')">CÓMO COMPRAR</a>
+            <a onclick="switchPage('contacto')">CONTACTO</a>
+            <a onclick="switchPage('fub-novedades')" style="color: var(--primary-color);">FUB - NOVEDADES</a>
         </nav>
 
         <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
 
         <!-- Menú Desplegable Celular -->
         <div class="mobile-menu" id="mobileMenuDropdown">
-            <a onclick="filterCategory('todos'); closeMobileMenu()">Inicio</a>
-            <a onclick="filterCategory('protectores'); closeMobileMenu()">Protectores</a>
-            <a onclick="filterCategory('accesorios'); closeMobileMenu()">Accesorios</a>
-            <a onclick="scrollToSection('como-comprar'); closeMobileMenu()">Cómo Comprar</a>
-            <a onclick="scrollToSection('contacto'); closeMobileMenu()">Contacto</a>
-            <a onclick="scrollToSection('fub-novedades'); closeMobileMenu()" style="color: var(--primary-color);">FUB - Novedades</a>
+            <a onclick="switchPage('inicio'); closeMobileMenu()">Inicio</a>
+            <a onclick="switchPage('protectores'); closeMobileMenu()">Protectores</a>
+            <a onclick="switchPage('accesorios'); closeMobileMenu()">Accesorios</a>
+            <a onclick="switchPage('como-comprar'); closeMobileMenu()">Cómo Comprar</a>
+            <a onclick="switchPage('contacto'); closeMobileMenu()">Contacto</a>
+            <a onclick="switchPage('fub-novedades'); closeMobileMenu()" style="color: var(--primary-color);">FUB - Novedades</a>
         </div>
     </header>
 
-    <!-- Contenido de la Tienda -->
-    <div class="container" id="inicio">
-        <h2 class="section-title" id="mainSectionTitle">Productos Más Vendidos</h2>
-        <p class="subtitle" id="subTitleText">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Producto 1: Guantes (Accesorios) -->
-            <div class="product-card" data-category="accesorios">
+    <!-- Contenedor de Páginas (SPA) -->
+    
+    <!-- 1. PÁGINA INICIO -->
+    <div class="page-section active-page" id="page-inicio">
+        <h2 class="section-title" id="title-inicio">Productos Más Vendidos</h2>
+        <p class="subtitle" id="sub-inicio">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
+        <div class="products-grid">
+            <div class="product-card">
                 <div class="product-img-placeholder">Guantes Blanco / Dorado</div>
                 <div class="product-title">Guantes de Boxeo Blanco / Dorado</div>
                 <div class="options-container">
@@ -144,9 +161,15 @@
                 <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
                 <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
             </div>
+        </div>
+    </div>
 
-            <!-- Producto 2: Cabezal (Protectores) -->
-            <div class="product-card" data-category="protectores">
+    <!-- 2. PÁGINA PROTECTORES -->
+    <div class="page-section" id="page-protectores">
+        <h2 class="section-title" id="title-protectores">Protectores Oficiales</h2>
+        <p class="subtitle" id="sub-protectores">Máxima seguridad para sparring y competencia.</p>
+        <div class="products-grid">
+            <div class="product-card">
                 <div class="product-img-placeholder">Cabezal Pro Negro</div>
                 <div class="product-title">Cabezal Sparring Pro Negro Mate</div>
                 <div class="options-container">
@@ -159,9 +182,15 @@
                 <div class="price-box">$2.350 UYU</div>
                 <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
             </div>
+        </div>
+    </div>
 
-            <!-- Producto 3: Vendas (Accesorios) -->
-            <div class="product-card" data-category="accesorios">
+    <!-- 3. PÁGINA ACCESORIOS -->
+    <div class="page-section" id="page-accesorios">
+        <h2 class="section-title" id="title-accesorios">Accesorios de Entrenamiento</h2>
+        <p class="subtitle" id="sub-accesorios">Equipamiento complementario de alta durabilidad.</p>
+        <div class="products-grid">
+            <div class="product-card">
                 <div class="product-img-placeholder">Vendas Pro 5 Metros</div>
                 <div class="product-title">Vendas Pro 5 Metros Phenom</div>
                 <div class="options-container">
@@ -176,44 +205,160 @@
         </div>
     </div>
 
-    <!-- Sección Fub Novedades -->
-    <div class="container" id="fub-novedades" style="margin-top: 60px; padding-top: 20px; border-top: 2px solid #eee;">
-        <h2 class="section-title">FUB - Novedades</h2>
-        <p class="subtitle">Enterate de todas las competencias oficiales, indumentaria para jueces y torneos de la Federación Uruguaya de Boxeo.</p>
+    <!-- 4. PÁGINA CÓMO COMPRAR -->
+    <div class="page-section" id="page-como-comprar">
+        <h2 class="section-title" id="title-como-comprar">Cómo Comprar</h2>
+        <p class="subtitle" id="sub-como-comprar">Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo.</p>
+    </div>
+
+    <!-- 5. PÁGINA CONTACTO -->
+    <div class="page-section" id="page-contacto">
+        <h2 class="section-title" id="title-contacto">Contacto</h2>
+        <p class="subtitle" id="sub-contacto">Escribinos por WhatsApp para consultas comerciales o atención a clubes.</p>
+    </div>
+
+    <!-- 6. PÁGINA FUB - NOVEDADES -->
+    <div class="page-section" id="page-fub-novedades">
+        <h2 class="section-title" id="title-fub-novedades">FUB - Novedades</h2>
+        <p class="subtitle" id="sub-fub-novedades">Enterate de todas las competencias oficiales y torneos de la Federación.</p>
         <div style="background: #f9f9f9; padding: 25px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
             <h3 style="margin-bottom: 10px;">👕 Nuevas camisetas oficiales de árbitros</h3>
-            <p style="color: #555; line-height: 1.6;">Desarrollo exclusivo en conjunto con la FUB para las transmisiones oficiales de boxeo uruguayo.</p>
+            <p style="color: #555; line-height: 1.6;">Desarrollo exclusivo en conjunto con la FUB.</p>
         </div>
     </div>
 
-    <!-- Secciones auxiliares -->
-    <div class="container" id="como-comprar" style="margin-top: 40px;">
-        <h2 class="section-title">Cómo Comprar</h2>
-        <p class="subtitle">Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo. Pagos seguros por transferencia bancaria o Mercado Pago.</p>
-    </div>
 
-    <div class="container" id="contacto" style="margin-top: 40px; margin-bottom: 80px;">
-        <h2 class="section-title">Contacto</h2>
-        <p class="subtitle">Escribinos por WhatsApp para consultas comerciales o atención a clubes y gimnasios oficiales de la FUB.</p>
-    </div>
+    <!-- PANEL LATERAL DE EDICIÓN (DRAWER) -->
+    <div id="side-editor-drawer">
+        <div class="drawer-header">
+            <h3>🛠️ Panel de Edición Phenom</h3>
+            <button class="btn-close-drawer" onclick="toggleDrawer()">✕</button>
+        </div>
+        <div class="drawer-content">
+            
+            <!-- SECCIÓN 1: PESTAÑAS -->
+            <div class="editor-section">
+                <button class="section-toggle" onclick="toggleSection('sec-pestanas')">📁 Pestañas y Páginas <span>▼</span></button>
+                <div class="section-body active" id="sec-pestanas">
+                    <div class="editor-group">
+                        <label>Seleccionar Página a Editar:</label>
+                        <select id="targetPageSelect" onchange="loadPageEditorData()">
+                            <option value="inicio">Inicio</option>
+                            <option value="protectores">Protectores</option>
+                            <option value="accesorios">Accesorios</option>
+                            <option value="como-comprar">Cómo Comprar</option>
+                            <option value="contacto">Contacto</option>
+                            <option value="fub-novedades">FUB - Novedades</option>
+                        </select>
+                    </div>
+                    <div class="editor-group">
+                        <label>Título Principal de la Página:</label>
+                        <input type="text" id="editPageTitle" oninput="updateCurrentPageLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Subtítulo de la Página:</label>
+                        <input type="text" id="editPageSub" oninput="updateCurrentPageLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>URL Imagen de Fondo:</label>
+                        <input type="text" id="editPageBgUrl" placeholder="https://..." oninput="updateCurrentPageLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Transparencia de Tarjetas / Bloques (0 a 1):</label>
+                        <input type="number" id="editCardOpacity" min="0" max="1" step="0.1" value="0.95" oninput="updateCurrentPageLive()">
+                    </div>
+                </div>
+            </div>
 
-    <!-- Modal del Panel de Edición (Oculto hasta hacer 5 clics en el logo) -->
-    <div id="secret-editor-modal">
-        <div class="editor-box">
-            <h3>🛠️ Panel de Edición Phenom <button class="btn-close-modal" onclick="closeEditorModal()">X</button></h3>
-            <div class="editor-group">
-                <label>Texto Barra Superior (FUB):</label>
-                <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateLiveContent()">
+            <!-- SECCIÓN 2: HEADER -->
+            <div class="editor-section">
+                <button class="section-toggle" onclick="toggleSection('sec-header')">🏷️ Barra Superior / Logo <span>▼</span></button>
+                <div class="section-body" id="sec-header">
+                    <div class="editor-group">
+                        <label>Texto Barra Superior (FUB):</label>
+                        <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateHeaderLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Nombre de Marca:</label>
+                        <input type="text" id="inputBrandName" value="PHENOM" oninput="updateHeaderLive()">
+                    </div>
+                </div>
             </div>
-            <div class="editor-group">
-                <label>Nombre de Marca:</label>
-                <input type="text" id="inputBrandName" value="PHENOM" oninput="updateLiveContent()">
-            </div>
-            <button class="btn-save-modal" onclick="saveAndCloseEditor()">💾 Guardar Configuración</button>
+
+            <button class="btn-save-drawer" onclick="saveConfiguration()">💾 Guardar Todo</button>
         </div>
     </div>
+
 
     <script>
+        // Memoria de configuración por página
+        let pagesConfig = {
+            inicio: { title: "Productos Más Vendidos", sub: "Sponsor Oficial de la Federación Uruguaya de Boxeo", bg: "", opacity: "0.95" },
+            protectores: { title: "Protectores Oficiales", sub: "Máxima seguridad para sparring y competencia.", bg: "", opacity: "0.95" },
+            accesorios: { title: "Accesorios de Entrenamiento", sub: "Equipamiento complementario de alta durabilidad.", bg: "", opacity: "0.95" },
+            "como-comprar": { title: "Cómo Comprar", sub: "Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo.", bg: "", opacity: "0.95" },
+            contacto: { title: "Contacto", sub: "Escribinos por WhatsApp para consultas comerciales o atención a clubes.", bg: "", opacity: "0.95" },
+            "fub-novedades": { title: "FUB - Novedades", sub: "Enterate de todas las competencias oficiales y torneos de la Federación.", bg: "", opacity: "0.95" }
+        };
+
+        let currentActivePage = 'inicio';
+
+        // Navegación tipo SPA
+        function switchPage(pageId) {
+            currentActivePage = pageId;
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active-page'));
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.add('active-page');
+            
+            // Sincronizar selector del panel
+            document.getElementById('targetPageSelect').value = pageId;
+            loadPageEditorData();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadPageEditorData() {
+            const sel = document.getElementById('targetPageSelect').value;
+            currentActivePage = sel;
+            const conf = pagesConfig[sel];
+            if (conf) {
+                document.getElementById('editPageTitle').value = conf.title;
+                document.getElementById('editPageSub').value = conf.sub;
+                document.getElementById('editPageBgUrl').value = conf.bg || '';
+                document.getElementById('editCardOpacity').value = conf.opacity || '0.95';
+            }
+        }
+
+        function updateCurrentPageLive() {
+            const sel = document.getElementById('targetPageSelect').value;
+            const title = document.getElementById('editPageTitle').value;
+            const sub = document.getElementById('editPageSub').value;
+            const bg = document.getElementById('editPageBgUrl').value;
+            const opacity = document.getElementById('editCardOpacity').value;
+
+            pagesConfig[sel] = { title, sub, bg, opacity };
+
+            // Aplicar en vivo
+            const tEl = document.getElementById('title-' + sel);
+            const sEl = document.getElementById('sub-'  + sel);
+            const pEl = document.getElementById('page-' + sel);
+
+            if (tEl) tEl.innerText = title;
+            if (sEl) sEl.innerText = sub;
+            if (pEl) {
+                pEl.style.backgroundImage = bg ? `url('${bg}')` : 'none';
+                pEl.style.backgroundSize = 'cover';
+                pEl.style.backgroundPosition = 'center';
+            }
+
+            // Aplicar transparencia a tarjetas de esa página
+            if (pEl) {
+                pEl.querySelectorAll('.product-card').forEach(card => {
+                    card.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
+                });
+            }
+        }
+
+        // Menú Hamburguesa
         const hamburgerBtn = document.getElementById('hamburgerToggle');
         const mobileMenu = document.getElementById('mobileMenuDropdown');
 
@@ -238,80 +383,69 @@
             alert('¡Producto agregado al carrito con éxito!');
         }
 
-        function filterCategory(category) {
-            const cards = document.querySelectorAll('.product-card');
-            const title = document.getElementById('mainSectionTitle');
-            
-            if(category === 'todos') {
-                title.innerText = "Productos Más Vendidos";
-                cards.forEach(card => card.style.display = 'block');
-            } else {
-                title.innerText = category.toUpperCase();
-                cards.forEach(card => {
-                    if(card.getAttribute('data-category') === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if(el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Lógica de los 5 clics rápidos en el logo PHENOM
+        // Drawer Latéreal & Sistema de 5 Clics
         let logoClicks = 0;
         let clickTimer = null;
 
         function handleLogoClick() {
             logoClicks++;
             clearTimeout(clickTimer);
-            
             if (logoClicks >= 5) {
                 logoClicks = 0;
-                document.getElementById('secret-editor-modal').style.display = 'flex';
+                toggleDrawer();
             } else {
-                clickTimer = setTimeout(() => {
-                    logoClicks = 0;
-                }, 600); // 600ms de ventana entre clics
+                clickTimer = setTimeout(() => { logoClicks = 0; }, 600);
             }
         }
 
-        function closeEditorModal() {
-            document.getElementById('secret-editor-modal').style.display = 'none';
+        function toggleDrawer() {
+            const drawer = document.getElementById('side-editor-drawer');
+            drawer.classList.toggle('open');
+            document.body.classList.toggle('drawer-open');
+            loadPageEditorData();
         }
 
-        function updateLiveContent() {
-            const fubText = document.getElementById('inputFubText').value;
-            const brandName = document.getElementById('inputBrandName').value;
-
-            document.getElementById('fubBarText').innerText = fubText;
-            document.getElementById('brandLogoText').innerText = brandName;
+        // Acordeón del Panel
+        function toggleSection(sectionId) {
+            const body = document.getElementById(sectionId);
+            body.classList.toggle('active');
         }
 
-        function saveAndCloseEditor() {
-            const config = {
+        function updateHeaderLive() {
+            document.getElementById('fubBarText').innerText = document.getElementById('inputFubText').value;
+            document.getElementById('brandLogoText').innerText = document.getElementById('inputBrandName').value;
+        }
+
+        function saveConfiguration() {
+            const globalConfig = {
                 fubText: document.getElementById('inputFubText').value,
-                brandName: document.getElementById('inputBrandName').value
+                brandName: document.getElementById('inputBrandName').value,
+                pages: pagesConfig
             };
-            localStorage.setItem('phenom_config', JSON.stringify(config));
-            closeEditorModal();
-            alert('¡Configuración guardada correctamente!');
+            localStorage.setItem('phenom_advanced_config', JSON.stringify(globalConfig));
+            alert('¡Configuración completa guardada con éxito en la memoria del navegador!');
+            toggleDrawer();
         }
 
+        // Cargar configuración guardada al iniciar
         window.addEventListener('DOMContentLoaded', () => {
-            const savedConfig = localStorage.getItem('phenom_config');
-            if (savedConfig) {
-                const config = JSON.parse(savedConfig);
-                document.getElementById('inputFubText').value = config.fubText;
-                document.getElementById('inputBrandName').value = config.brandName;
-                updateLiveContent();
+            const saved = localStorage.getItem('phenom_advanced_config');
+            if (saved) {
+                const cfg = JSON.parse(saved);
+                document.getElementById('inputFubText').value = cfg.fubText || '';
+                document.getElementById('inputBrandName').value = cfg.brandName || '';
+                updateHeaderLive();
+                if (cfg.pages) {
+                    pagesConfig = cfg.pages;
+                    loadPageEditorData();
+                    // Refrescar vistas en vivo
+                    Object.keys(pagesConfig).forEach(p => {
+                        currentActivePage = p;
+                        document.getElementById('targetPageSelect').value = p;
+                        updateCurrentPageLive();
+                    });
+                    switchPage('inicio');
+                }
             }
         });
     </script>
