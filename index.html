@@ -9,30 +9,29 @@
             --bg-color: #ffffff;
             --primary-color: #e5b80b;
             --text-color: #111111;
+            --header-bg: #111111;
+            --header-height: auto;
+            --header-font-size: 24px;
+            --header-font-family: 'Impact', sans-serif;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); transition: margin-right 0.3s ease; }
-        body.drawer-open { margin-right: 380px; }
+        body.drawer-open { margin-right: 400px; }
 
-        /* Barra FUB Superior */
-        .fub-bar { background: #000; color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
+        /* Barra FUB Superior dinámicas */
+        .fub-bar { background: var(--header-bg); color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* Header Principal */
-        header { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 15px 30px; color: white; position: relative; }
+        /* Header Principal dinámico */
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); padding: var(--header-height, 15px) 30px; color: white; position: relative; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         
-        /* Botón Hamburguesa */
         .hamburger-btn { display: none; background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 5px; }
-
-        /* Logo con soporte para 5 clics */
-        .logo-text { font-family: 'Impact', sans-serif; font-size: 24px; letter-spacing: 7px; color: #fff; text-decoration: none; cursor: pointer; user-select: none; }
+        .logo-text { font-family: var(--header-font-family); font-size: var(--header-font-size); letter-spacing: 7px; color: #fff; text-decoration: none; cursor: pointer; user-select: none; }
         
-        /* Menú de Navegación PC */
         nav.pc-nav { display: flex; gap: 20px; }
         nav.pc-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
         nav.pc-nav a:hover { color: var(--primary-color); }
 
-        /* Menú Desplegable Móvil */
         .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; flex-direction: column; border-top: 1px solid #333; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .mobile-menu a { color: white; text-decoration: none; padding: 15px 20px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; }
         .mobile-menu a:hover { background: #222; color: var(--primary-color); }
@@ -40,24 +39,24 @@
 
         .cart-indicator { color: white; font-weight: bold; font-size: 0.9rem; }
 
-        /* Contenedor Principal / Páginas dinámicas */
-        .page-section { display: none; max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 400px; }
+        /* Páginas / Contenedores */
+        .page-section { display: none; max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 400px; background-size: cover; background-position: center; border-radius: 8px; }
         .page-section.active-page { display: block; }
         
         h2.section-title { font-size: 1.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
         .subtitle { color: #666; margin-bottom: 30px; font-size: 1rem; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px; }
         .product-card { background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-3px); }
-        .product-img-placeholder { background: #f4f4f4; height: 200px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 15px; font-weight: 500; }
+        .product-img-placeholder { background: #f4f4f4; height: 200px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 15px; font-weight: 500; overflow: hidden; }
+        .product-img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
         
-        /* Selectores de Talles y Onzas */
         .options-container { margin: 15px 0; text-align: left; }
         .options-label { font-size: 0.8rem; color: #555; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
-        .options-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-        .opt-btn { background: #f8f8f8; border: 1px solid #ccc; padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .options-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+        .opt-btn { background: #f8f8f8; border: 1px solid #ccc; padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
         .opt-btn.selected { background: #000; color: #fff; border-color: #000; }
 
         .price-box { margin: 15px 0; font-size: 1.2rem; font-weight: bold; color: #111; }
@@ -65,12 +64,22 @@
         
         .btn-action { display: block; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; text-decoration: none; text-align: center; font-size: 0.9rem; }
         .btn-cart { background: #111; color: #fff; }
-        .btn-cart:hover { background: #333; }
         .btn-mp { background: #009ee3; color: #fff; }
-        .btn-mp:hover { background: #0082be; }
 
-        /* Panel Lateral Deslizable desde la Derecha (Drawer) */
-        #side-editor-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #1a1a1a; color: #fff; z-index: 9999; box-shadow: -5px 0 25px rgba(0,0,0,0.5); transition: right 0.3s ease; display: flex; flex-direction: column; }
+        /* Botón Abrir Formulario Nuevo Producto */
+        .btn-open-new-product { background: var(--primary-color); color: #11; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px; }
+
+        /* Modal / Contenedor Cargar Nuevo Producto */
+        .new-product-modal { display: none; background: #1a1a1a; color: #fff; padding: 25px; border-radius: 8px; border: 1px solid #333; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .new-product-modal.active { display: block; }
+        .form-row { margin-bottom: 15px; }
+        .form-row label { display: block; font-size: 0.85rem; color: #ccc; margin-bottom: 5px; font-weight: bold; }
+        .form-row input[type="text"] { width: 100%; padding: 9px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; }
+        .checkbox-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: #222; padding: 12px; border-radius: 4px; }
+        .checkbox-grid label { font-size: 0.8rem; color: #ddd; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+        /* Panel Lateral Deslizable (Drawer) */
+        #side-editor-drawer { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #1a1a1a; color: #fff; z-index: 9999; box-shadow: -5px 0 25px rgba(0,0,0,0.5); transition: right 0.3s ease; display: flex; flex-direction: column; }
         #side-editor-drawer.open { right: 0; }
         
         .drawer-header { background: #111; padding: 20px; border-bottom: 2px solid var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
@@ -79,7 +88,6 @@
 
         .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
         
-        /* Acordeón / Secciones del Panel */
         .editor-section { border-bottom: 1px solid #333; margin-bottom: 15px; padding-bottom: 15px; }
         .section-toggle { background: #222; color: var(--primary-color); border: none; width: 100%; padding: 12px; text-align: left; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; justify-content: space-between; }
         .section-body { display: none; padding-top: 15px; }
@@ -91,7 +99,6 @@
         
         .btn-save-drawer { background: #28a745; color: #fff; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
 
-        /* Responsive */
         @media (max-width: 768px) {
             nav.pc-nav { display: none; }
             .hamburger-btn { display: block; }
@@ -111,12 +118,10 @@
         <div class="header-left">
             <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">☰</button>
             <div class="logo-area">
-                <!-- 5 Clics rápidos abren el panel lateral de edición -->
                 <span class="logo-text" id="brandLogoText" onclick="handleLogoClick()">PHENOM</span>
             </div>
         </div>
 
-        <!-- Navegación PC -->
         <nav class="pc-nav">
             <a onclick="switchPage('inicio')">INICIO</a>
             <a onclick="switchPage('protectores')">PROTECTORES</a>
@@ -128,7 +133,6 @@
 
         <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
 
-        <!-- Menú Desplegable Celular -->
         <div class="mobile-menu" id="mobileMenuDropdown">
             <a onclick="switchPage('inicio'); closeMobileMenu()">Inicio</a>
             <a onclick="switchPage('protectores'); closeMobileMenu()">Protectores</a>
@@ -139,13 +143,11 @@
         </div>
     </header>
 
-    <!-- Contenedor de Páginas (SPA) -->
-    
-    <!-- 1. PÁGINA INICIO -->
+    <!-- PÁGINAS DE LA TIENDA -->
     <div class="page-section active-page" id="page-inicio">
         <h2 class="section-title" id="title-inicio">Productos Más Vendidos</h2>
         <p class="subtitle" id="sub-inicio">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
-        <div class="products-grid">
+        <div class="products-grid" id="grid-inicio">
             <div class="product-card">
                 <div class="product-img-placeholder">Guantes Blanco / Dorado</div>
                 <div class="product-title">Guantes de Boxeo Blanco / Dorado</div>
@@ -164,11 +166,35 @@
         </div>
     </div>
 
-    <!-- 2. PÁGINA PROTECTORES -->
+    <!-- PROTECTORES -->
     <div class="page-section" id="page-protectores">
         <h2 class="section-title" id="title-protectores">Protectores Oficiales</h2>
         <p class="subtitle" id="sub-protectores">Máxima seguridad para sparring y competencia.</p>
-        <div class="products-grid">
+        
+        <button class="btn-open-new-product" onclick="toggleNewProductForm('protectores')">＋ Cargar Nuevo Producto</button>
+        
+        <!-- Formulario Cargar Nuevo Producto Protectores -->
+        <div class="new-product-modal" id="form-protectores">
+            <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
+            <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-protectores" placeholder="Ej: Cabezal Pro Negro"></div>
+            <div class="form-row">
+                <label>Talles / Onzas Disponibles</label>
+                <div class="checkbox-grid" id="opts-protectores">
+                    <label><input type="checkbox" value="6oz"> 6oz</label><label><input type="checkbox" value="8oz"> 8oz</label><label><input type="checkbox" value="10oz"> 10oz</label><label><input type="checkbox" value="12oz"> 12oz</label>
+                    <label><input type="checkbox" value="14oz"> 14oz</label><label><input type="checkbox" value="16oz"> 16oz</label><label><input type="checkbox" value="S"> S</label><label><input type="checkbox" value="M"> M</label>
+                    <label><input type="checkbox" value="L"> L</label><label><input type="checkbox" value="XL"> XL</label>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="form-row"><label>Precio Tachado (UYU)</label><input type="text" id="old-price-protectores" placeholder="$2.500"></div>
+                <div class="form-row"><label>Precio Actual (UYU)</label><input type="text" id="price-protectores" placeholder="$2.090"></div>
+            </div>
+            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-protectores" placeholder="https://mpago.la/..."></div>
+            <div class="form-row"><label>Cargar Fotos (Desde PC)</label><input type="file" id="file-protectores" accept="image/*" style="color:#ccc;"></div>
+            <button class="btn-action btn-cart" style="background:var(--primary-color); color:#11; margin-top:15px;" onclick="saveNewProduct('protectores')">Guardar Publicación</button>
+        </div>
+
+        <div class="products-grid" id="grid-protectores">
             <div class="product-card">
                 <div class="product-img-placeholder">Cabezal Pro Negro</div>
                 <div class="product-title">Cabezal Sparring Pro Negro Mate</div>
@@ -185,11 +211,35 @@
         </div>
     </div>
 
-    <!-- 3. PÁGINA ACCESORIOS -->
+    <!-- ACCESORIOS -->
     <div class="page-section" id="page-accesorios">
         <h2 class="section-title" id="title-accesorios">Accesorios de Entrenamiento</h2>
         <p class="subtitle" id="sub-accesorios">Equipamiento complementario de alta durabilidad.</p>
-        <div class="products-grid">
+        
+        <button class="btn-open-new-product" onclick="toggleNewProductForm('accesorios')">＋ Cargar Nuevo Producto</button>
+        
+        <!-- Formulario Cargar Nuevo Producto Accesorios -->
+        <div class="new-product-modal" id="form-accesorios">
+            <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
+            <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-accesorios" placeholder="Ej: Vendas Pro 5M"></div>
+            <div class="form-row">
+                <label>Talles / Onzas Disponibles</label>
+                <div class="checkbox-grid" id="opts-accesorios">
+                    <label><input type="checkbox" value="6oz"> 6oz</label><label><input type="checkbox" value="8oz"> 8oz</label><label><input type="checkbox" value="10oz"> 10oz</label><label><input type="checkbox" value="12oz"> 12oz</label>
+                    <label><input type="checkbox" value="14oz"> 14oz</label><label><input type="checkbox" value="16oz"> 16oz</label><label><input type="checkbox" value="S"> S</label><label><input type="checkbox" value="M"> M</label>
+                    <label><input type="checkbox" value="L"> L</label><label><input type="checkbox" value="XL"> XL</label>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="form-row"><label>Precio Tachado (UYU)</label><input type="text" id="old-price-accesorios" placeholder="$500"></div>
+                <div class="form-row"><label>Precio Actual (UYU)</label><input type="text" id="price-accesorios" placeholder="$450"></div>
+            </div>
+            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-accesorios" placeholder="https://mpago.la/..."></div>
+            <div class="form-row"><label>Cargar Fotos (Desde PC)</label><input type="file" id="file-accesorios" accept="image/*" style="color:#ccc;"></div>
+            <button class="btn-action btn-cart" style="background:var(--primary-color); color:#11; margin-top:15px;" onclick="saveNewProduct('accesorios')">Guardar Publicación</button>
+        </div>
+
+        <div class="products-grid" id="grid-accesorios">
             <div class="product-card">
                 <div class="product-img-placeholder">Vendas Pro 5 Metros</div>
                 <div class="product-title">Vendas Pro 5 Metros Phenom</div>
@@ -200,28 +250,29 @@
                     </div>
                 </div>
                 <div class="price-box"><span class="old-price">$500 UYU</span>$450 UYU</div>
+                <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
                 <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
             </div>
         </div>
     </div>
 
-    <!-- 4. PÁGINA CÓMO COMPRAR -->
+    <!-- CÓMO COMPRAR -->
     <div class="page-section" id="page-como-comprar">
         <h2 class="section-title" id="title-como-comprar">Cómo Comprar</h2>
         <p class="subtitle" id="sub-como-comprar">Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo.</p>
     </div>
 
-    <!-- 5. PÁGINA CONTACTO -->
+    <!-- CONTACTO -->
     <div class="page-section" id="page-contacto">
         <h2 class="section-title" id="title-contacto">Contacto</h2>
         <p class="subtitle" id="sub-contacto">Escribinos por WhatsApp para consultas comerciales o atención a clubes.</p>
     </div>
 
-    <!-- 6. PÁGINA FUB - NOVEDADES -->
+    <!-- FUB NOVEDADES -->
     <div class="page-section" id="page-fub-novedades">
         <h2 class="section-title" id="title-fub-novedades">FUB - Novedades</h2>
         <p class="subtitle" id="sub-fub-novedades">Enterate de todas las competencias oficiales y torneos de la Federación.</p>
-        <div style="background: #f9f9f9; padding: 25px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+        <div style="background: rgba(249,249,249,0.9); padding: 25px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
             <h3 style="margin-bottom: 10px;">👕 Nuevas camisetas oficiales de árbitros</h3>
             <p style="color: #555; line-height: 1.6;">Desarrollo exclusivo en conjunto con la FUB.</p>
         </div>
@@ -236,10 +287,46 @@
         </div>
         <div class="drawer-content">
             
-            <!-- SECCIÓN 1: PESTAÑAS -->
+            <!-- SECCIÓN 1: BARRA SUPERIOR / LOGO (Arriba del todo) -->
+            <div class="editor-section">
+                <button class="section-toggle" onclick="toggleSection('sec-header')">🏷️ Barra Superior / Logo <span>▼</span></button>
+                <div class="section-body active" id="sec-header">
+                    <div class="editor-group">
+                        <label>Texto Barra Superior (FUB):</label>
+                        <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateHeaderLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Nombre de Marca:</label>
+                        <input type="text" id="inputBrandName" value="PHENOM" oninput="updateHeaderLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Color de la Barra / Header:</label>
+                        <input type="color" id="inputHeaderColor" value="#111111" oninput="updateHeaderLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Dimensiones / Padding vertical (px):</label>
+                        <input type="number" id="inputHeaderHeight" value="15" min="5" max="40" oninput="updateHeaderLive()">
+                    </div>
+                    <div class="editor-group">
+                        <label>Tipografía del Logo:</label>
+                        <select id="inputHeaderFont" onchange="updateHeaderLive()">
+                            <option value="'Impact', sans-serif">Impact</option>
+                            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                            <option value="'Courier New', monospace">Courier New</option>
+                            <option value="'Georgia', serif">Georgia</option>
+                        </select>
+                    </div>
+                    <div class="editor-group">
+                        <label>Tamaño de Fuente del Logo (px):</label>
+                        <input type="number" id="inputHeaderFontSize" value="24" min="14" max="48" oninput="updateHeaderLive()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: PESTAÑAS Y PÁGINAS -->
             <div class="editor-section">
                 <button class="section-toggle" onclick="toggleSection('sec-pestanas')">📁 Pestañas y Páginas <span>▼</span></button>
-                <div class="section-body active" id="sec-pestanas">
+                <div class="section-body" id="sec-pestanas">
                     <div class="editor-group">
                         <label>Seleccionar Página a Editar:</label>
                         <select id="targetPageSelect" onchange="loadPageEditorData()">
@@ -260,27 +347,12 @@
                         <input type="text" id="editPageSub" oninput="updateCurrentPageLive()">
                     </div>
                     <div class="editor-group">
-                        <label>URL Imagen de Fondo:</label>
-                        <input type="text" id="editPageBgUrl" placeholder="https://..." oninput="updateCurrentPageLive()">
+                        <label>Cargar Imagen de Fondo (Desde Dispositivo):</label>
+                        <input type="file" id="editPageBgFile" accept="image/*" onchange="loadBgImage(event)" style="color:#ccc;">
                     </div>
                     <div class="editor-group">
                         <label>Transparencia de Tarjetas / Bloques (0 a 1):</label>
                         <input type="number" id="editCardOpacity" min="0" max="1" step="0.1" value="0.95" oninput="updateCurrentPageLive()">
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECCIÓN 2: HEADER -->
-            <div class="editor-section">
-                <button class="section-toggle" onclick="toggleSection('sec-header')">🏷️ Barra Superior / Logo <span>▼</span></button>
-                <div class="section-body" id="sec-header">
-                    <div class="editor-group">
-                        <label>Texto Barra Superior (FUB):</label>
-                        <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateHeaderLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Nombre de Marca:</label>
-                        <input type="text" id="inputBrandName" value="PHENOM" oninput="updateHeaderLive()">
                     </div>
                 </div>
             </div>
@@ -291,7 +363,6 @@
 
 
     <script>
-        // Memoria de configuración por página
         let pagesConfig = {
             inicio: { title: "Productos Más Vendidos", sub: "Sponsor Oficial de la Federación Uruguaya de Boxeo", bg: "", opacity: "0.95" },
             protectores: { title: "Protectores Oficiales", sub: "Máxima seguridad para sparring y competencia.", bg: "", opacity: "0.95" },
@@ -303,14 +374,12 @@
 
         let currentActivePage = 'inicio';
 
-        // Navegación tipo SPA
         function switchPage(pageId) {
             currentActivePage = pageId;
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active-page'));
             const target = document.getElementById('page-' + pageId);
             if (target) target.classList.add('active-page');
             
-            // Sincronizar selector del panel
             document.getElementById('targetPageSelect').value = pageId;
             loadPageEditorData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -323,8 +392,20 @@
             if (conf) {
                 document.getElementById('editPageTitle').value = conf.title;
                 document.getElementById('editPageSub').value = conf.sub;
-                document.getElementById('editPageBgUrl').value = conf.bg || '';
                 document.getElementById('editCardOpacity').value = conf.opacity || '0.95';
+            }
+        }
+
+        function loadBgImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const sel = document.getElementById('targetPageSelect').value;
+                    pagesConfig[sel].bg = e.target.result;
+                    updateCurrentPageLive();
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -332,12 +413,13 @@
             const sel = document.getElementById('targetPageSelect').value;
             const title = document.getElementById('editPageTitle').value;
             const sub = document.getElementById('editPageSub').value;
-            const bg = document.getElementById('editPageBgUrl').value;
             const opacity = document.getElementById('editCardOpacity').value;
 
-            pagesConfig[sel] = { title, sub, bg, opacity };
+            if(!pagesConfig[sel]) pagesConfig[sel] = {};
+            pagesConfig[sel].title = title;
+            pagesConfig[sel].sub = sub;
+            pagesConfig[sel].opacity = opacity;
 
-            // Aplicar en vivo
             const tEl = document.getElementById('title-' + sel);
             const sEl = document.getElementById('sub-'  + sel);
             const pEl = document.getElementById('page-' + sel);
@@ -345,12 +427,11 @@
             if (tEl) tEl.innerText = title;
             if (sEl) sEl.innerText = sub;
             if (pEl) {
-                pEl.style.backgroundImage = bg ? `url('${bg}')` : 'none';
-                pEl.style.backgroundSize = 'cover';
-                pEl.style.backgroundPosition = 'center';
+                if(pagesConfig[sel].bg) {
+                    pEl.style.backgroundImage = `url('${pagesConfig[sel].bg}')`;
+                }
             }
 
-            // Aplicar transparencia a tarjetas de esa página
             if (pEl) {
                 pEl.querySelectorAll('.product-card').forEach(card => {
                     card.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
@@ -358,17 +439,97 @@
             }
         }
 
+        // Formularios Nuevos Productos
+        function toggleNewProductForm(category) {
+            const form = document.getElementById('form-' + category);
+            form.classList.toggle('active');
+        }
+
+        function saveNewProduct(category) {
+            const title = document.getElementById('title-prod-' + category).value;
+            const oldPrice = document.getElementById('old-price-' + category).value;
+            const price = document.getElementById('price-' + category).value;
+            const mpLink = document.getElementById('mp-' + category).value;
+            const fileInput = document.getElementById('file-' + category);
+
+            if(!title || !price) {
+                alert('Por favor completa al menos el título y el precio actual.');
+                return;
+            }
+
+            // Recopilar checkboxes seleccionados
+            const checkboxes = document.querySelectorAll('#opts-' + category + ' input[type="checkbox"]:checked');
+            let optsHtml = '';
+            checkboxes.forEach(cb => {
+                optsHtml += `<button class="opt-btn" onclick="selectOption(this)">${cb.value}</button>`;
+            });
+            if(optsHtml === '') optsHtml = `<button class="opt-btn selected" onclick="selectOption(this)">Estándar</button>`;
+
+            let imgHtml = title;
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    createNewCard(category, title, oldPrice, price, mpLink, e.target.result, optsHtml);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                createNewCard(category, title, oldPrice, price, mpLink, null, optsHtml);
+            }
+        }
+
+        function createNewCard(category, title, oldPrice, price, mpLink, imgSrc, optsHtml) {
+            const grid = document.getElementById('grid-' + category);
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            let imgContent = `<div class="product-img-placeholder">${title}</div>`;
+            if(imgSrc) {
+                imgContent = `<div class="product-img-placeholder"><img src="${imgSrc}" alt="${title}"></div>`;
+            }
+
+            let oldPriceHtml = oldPrice ? `<span class="old-price">${oldPrice} UYU</span>` : '';
+            let mpBtnHtml = mpLink ? `<a href="${mpLink}" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>` : '';
+
+            card.innerHTML = `
+                ${imgContent}
+                <div class="product-title">${title}</div>
+                <div class="options-container">
+                    <span class="options-label">Opciones:</span>
+                    <div class="options-buttons">${optsHtml}</div>
+                </div>
+                <div class="price-box">${oldPriceHtml}${price} UYU</div>
+                ${mpBtnHtml}
+                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+            `;
+
+            grid.insertBefore(card, grid.firstChild);
+            document.getElementById('form-' + category).classList.remove('active');
+            alert('¡Producto publicado con éxito!');
+        }
+
+        // Header vivo
+        function updateHeaderLive() {
+            const fub = document.getElementById('inputFubText').value;
+            const brand = document.getElementById('inputBrandName').value;
+            const color = document.getElementById('inputHeaderColor').value;
+            const height = document.getElementById('inputHeaderHeight').value;
+            const font = document.getElementById('inputHeaderFont').value;
+            const fontSize = document.getElementById('inputHeaderFontSize').value;
+
+            document.getElementById('fubBarText').innerText = fub;
+            document.getElementById('brandLogoText').innerText = brand;
+
+            document.documentElement.style.setProperty('--header-bg', color);
+            document.documentElement.style.setProperty('--header-height', height + 'px');
+            document.documentElement.style.setProperty('--header-font-family', font);
+            document.documentElement.style.setProperty('--header-font-size', fontSize + 'px');
+        }
+
         // Menú Hamburguesa
         const hamburgerBtn = document.getElementById('hamburgerToggle');
         const mobileMenu = document.getElementById('mobileMenuDropdown');
-
-        hamburgerBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-        });
-
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('active');
-        }
+        hamburgerBtn.addEventListener('click', () => { mobileMenu.classList.toggle('active'); });
+        function closeMobileMenu() { mobileMenu.classList.remove('active'); }
 
         function selectOption(button) {
             const container = button.parentElement;
@@ -383,10 +544,8 @@
             alert('¡Producto agregado al carrito con éxito!');
         }
 
-        // Drawer Latéreal & Sistema de 5 Clics
         let logoClicks = 0;
         let clickTimer = null;
-
         function handleLogoClick() {
             logoClicks++;
             clearTimeout(clickTimer);
@@ -405,40 +564,40 @@
             loadPageEditorData();
         }
 
-        // Acordeón del Panel
         function toggleSection(sectionId) {
             const body = document.getElementById(sectionId);
             body.classList.toggle('active');
-        }
-
-        function updateHeaderLive() {
-            document.getElementById('fubBarText').innerText = document.getElementById('inputFubText').value;
-            document.getElementById('brandLogoText').innerText = document.getElementById('inputBrandName').value;
         }
 
         function saveConfiguration() {
             const globalConfig = {
                 fubText: document.getElementById('inputFubText').value,
                 brandName: document.getElementById('inputBrandName').value,
+                headerColor: document.getElementById('inputHeaderColor').value,
+                headerHeight: document.getElementById('inputHeaderHeight').value,
+                headerFont: document.getElementById('inputHeaderFont').value,
+                headerFontSize: document.getElementById('inputHeaderFontSize').value,
                 pages: pagesConfig
             };
-            localStorage.setItem('phenom_advanced_config', JSON.stringify(globalConfig));
-            alert('¡Configuración completa guardada con éxito en la memoria del navegador!');
+            localStorage.setItem('phenom_advanced_config_v2', JSON.stringify(globalConfig));
+            alert('¡Configuración guardada correctamente en el navegador!');
             toggleDrawer();
         }
 
-        // Cargar configuración guardada al iniciar
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('phenom_advanced_config');
+            const saved = localStorage.getItem('phenom_advanced_config_v2');
             if (saved) {
                 const cfg = JSON.parse(saved);
                 document.getElementById('inputFubText').value = cfg.fubText || '';
                 document.getElementById('inputBrandName').value = cfg.brandName || '';
+                document.getElementById('inputHeaderColor').value = cfg.headerColor || '#111111';
+                document.getElementById('inputHeaderHeight').value = cfg.headerHeight || '15';
+                document.getElementById('inputHeaderFont').value = cfg.headerFont || "'Impact', sans-serif";
+                document.getElementById('inputHeaderFontSize').value = cfg.headerFontSize || '24';
                 updateHeaderLive();
                 if (cfg.pages) {
                     pagesConfig = cfg.pages;
                     loadPageEditorData();
-                    // Refrescar vistas en vivo
                     Object.keys(pagesConfig).forEach(p => {
                         currentActivePage = p;
                         document.getElementById('targetPageSelect').value = p;
