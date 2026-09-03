@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phenom Uruguay - Tienda Oficial FUB</title>
     <!-- Fuentes e Iconos Internacionales -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&family=Oswald:wght@500;700&family=Poppins:wght@400;600;800&family=Roboto:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&family=Oswald:wght@500;700&family=Poppins:wght@400;600;800&family=Roboto:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@700&family=Caveat:wght@700&family=Anton&family=Raleway:wght@400;700&family=Playfair+Display:wght@700&family=Lato:wght@400;700&family=Merriweather:wght@700&family=Ubuntu:wght@700&family=Lobster&family=Abril+Fatface&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -24,14 +24,26 @@
             --header-shadow: 0 4px 12px rgba(0,0,0,0.2);
 
             /* Logo */
-            --logo-width: 170px;
+            --logo-width: 138px;
+            --logo-height: 38px;
             --logo-text-font: 'Impact', sans-serif;
             --logo-text-color: #ffffff;
             --logo-text-size: 24px;
-            --logo-text-spacing: 2px;
+            --logo-text-spacing: 7px;
             --logo-text-weight: bold;
             --logo-text-style: normal;
             --logo-text-decor: none;
+
+            /* Barra FUB */
+            --fub-bg: linear-gradient(90deg, #0038a8, #002266);
+            --fub-color: #ffffff;
+            --fub-size: 0.85rem;
+            --fub-font: 'Segoe UI', sans-serif;
+            --fub-align: center;
+            --fub-weight: bold;
+            --fub-style: normal;
+            --fub-decor: none;
+            --fub-text: "SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)";
 
             /* Tipografía Títulos */
             --title-font: 'Segoe UI', sans-serif;
@@ -89,12 +101,15 @@
 
         /* BANNER FUB */
         .fub-bar {
-            background: linear-gradient(90deg, #0038a8, #002266);
-            color: #fff;
-            text-align: center;
+            background: var(--fub-bg);
+            color: var(--fub-color);
+            text-align: var(--fub-align);
             padding: 8px 15px;
-            font-size: 0.85rem;
-            font-weight: bold;
+            font-size: var(--fub-size);
+            font-family: var(--fub-font);
+            font-weight: var(--fub-weight);
+            font-style: var(--fub-style);
+            text-decoration: var(--fub-decor);
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -120,10 +135,21 @@
             user-select: none;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
-        .logo-svg { width: var(--logo-width); height: auto; max-height: 70px; }
+        .logo-display-area {
+            width: var(--logo-width);
+            height: var(--logo-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-display-area img, .logo-display-area svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
         .logo-text {
             color: var(--logo-text-color);
@@ -389,17 +415,19 @@
 <body>
 
     <div id="app-wrapper">
-        <div class="fub-bar">
-            <i class="fa-solid fa-award"></i> SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)
+        <div id="fub-bar" class="fub-bar">
+            <i class="fa-solid fa-award"></i> <span id="fub-text-content">SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)</span>
         </div>
 
         <!-- HEADER -->
         <header id="main-header">
             <div class="logo-container" onclick="handleLogoClick()" title="Presioná 5 veces para el Panel de Edición">
-                <svg id="main-logo-svg" class="logo-svg" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="120" cy="35" rx="110" ry="30" fill="none" stroke="#FFFFFF" stroke-width="3.5"/>
-                    <text x="120" y="44" font-family="Impact, sans-serif" font-size="30" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">PHENOM</text>
-                </svg>
+                <div id="logo-display-area" class="logo-display-area">
+                    <svg id="main-logo-svg" class="logo-svg" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="120" cy="35" rx="110" ry="30" fill="none" stroke="#FFFFFF" stroke-width="3.5"/>
+                        <text x="120" y="44" font-family="Impact, sans-serif" font-size="30" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">PHENOM</text>
+                    </svg>
+                </div>
                 <span id="main-logo-text" class="logo-text"></span>
             </div>
 
@@ -506,6 +534,45 @@
             </div>
         </div>
 
+        <!-- Editor Barra FUB -->
+        <div class="editor-section">
+            <h3>Barra Superior FUB</h3>
+            <div class="editor-field">
+                <label>Texto del Anuncio</label>
+                <input type="text" id="edit-fub-text" value="SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateFubSettings()">
+            </div>
+            <div class="editor-row">
+                <div class="editor-field" style="flex:1;"><label>Fondo</label><input type="color" id="edit-fub-bg" value="#0038a8" onchange="updateFubSettings()"></div>
+                <div class="editor-field" style="flex:1;"><label>Texto Color</label><input type="color" id="edit-fub-color" value="#ffffff" onchange="updateFubSettings()"></div>
+            </div>
+            <div class="editor-row">
+                <div class="editor-field" style="flex:1;"><label>Tamaño (rem)</label><input type="number" id="edit-fub-size" value="0.85" step="0.05" oninput="updateFubSettings()"></div>
+                <div class="editor-field" style="flex:1;">
+                    <label>Alineación</label>
+                    <select id="edit-fub-align" onchange="updateFubSettings()">
+                        <option value="center">Centro</option>
+                        <option value="left">Izquierda</option>
+                        <option value="right">Derecha</option>
+                    </select>
+                </div>
+            </div>
+            <div class="editor-field">
+                <label>Fuente del Texto</label>
+                <select id="edit-fub-font" onchange="updateFubSettings()">
+                    <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                    <option value="'Impact', sans-serif">Impact</option>
+                    <option value="'Bebas Neue', cursive">Bebas Neue</option>
+                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                    <option value="'Poppins', sans-serif">Poppins</option>
+                </select>
+            </div>
+            <div class="editor-row">
+                <button id="btn-fub-bold" class="btn-toggle-style active" onclick="toggleStyle('fub', 'bold')">B</button>
+                <button id="btn-fub-italic" class="btn-toggle-style" onclick="toggleStyle('fub', 'italic')">I</button>
+                <button id="btn-fub-strike" class="btn-toggle-style" onclick="toggleStyle('fub', 'strike')">S</button>
+            </div>
+        </div>
+
         <!-- Barra Superior Header -->
         <div class="editor-section">
             <h3>Barra Superior (Header)</h3>
@@ -535,16 +602,26 @@
             </div>
         </div>
 
-        <!-- Logo & Tipografía -->
+        <!-- Logo & Texto Adyacente -->
         <div class="editor-section">
             <h3>Logo & Texto Adyacente</h3>
             <div class="editor-field">
-                <label>Ancho del Logo (px)</label>
-                <input type="number" id="edit-logo-width" value="170" oninput="updateLogoSettings()">
+                <label>Adjuntar Imagen de Logo (Local)</label>
+                <input type="file" id="edit-logo-file" accept="image/*" onchange="applyLogoImage(event)">
+            </div>
+            <div class="editor-row">
+                <div class="editor-field" style="flex:1;">
+                    <label>Ancho del Logo (px)</label>
+                    <input type="number" id="edit-logo-width" value="138" oninput="updateLogoSettings()">
+                </div>
+                <div class="editor-field" style="flex:1;">
+                    <label>Alto del Logo (px o auto)</label>
+                    <input type="text" id="edit-logo-height" value="38px" oninput="updateLogoSettings()">
+                </div>
             </div>
             <div class="editor-field">
-                <label>Texto al Lado del Logo</label>
-                <input type="text" id="edit-logo-text-val" value="" placeholder="Ej: URUGUAY" oninput="updateLogoSettings()">
+                <label>Texto a la Derecha del Logo</label>
+                <input type="text" id="edit-logo-text-val" value="" placeholder="Ej: PHENOM DEPORTES URUGUAY" oninput="updateLogoSettings()">
             </div>
             <div class="editor-field">
                 <label>Fuente del Texto</label>
@@ -555,20 +632,34 @@
                     <option value="'Oswald', sans-serif">Oswald</option>
                     <option value="'Poppins', sans-serif">Poppins</option>
                     <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Anton', sans-serif">Anton</option>
+                    <option value="'Raleway', sans-serif">Raleway</option>
+                    <option value="'Playfair Display', serif">Playfair Display</option>
+                    <option value="'Lato', sans-serif">Lato</option>
+                    <option value="'Merriweather', serif">Merriweather</option>
+                    <option value="'Ubuntu', sans-serif">Ubuntu</option>
+                    <option value="'Cinzel', serif">Cinzel</option>
+                    <option value="'Lobster', cursive">Lobster</option>
+                    <option value="'Abril Fatface', cursive">Abril Fatface</option>
+                    <option value="'Caveat', cursive">Caveat</option>
                 </select>
             </div>
             <div class="editor-row">
                 <div class="editor-field" style="flex:1;">
-                    <label>Color</label>
-                    <input type="color" id="edit-logo-text-color" value="#ffffff" onchange="updateLogoSettings()">
+                    <label>Tamaño Fuente (px)</label>
+                    <input type="number" id="edit-logo-text-size" value="24" oninput="updateLogoSettings()">
                 </div>
                 <div class="editor-field" style="flex:1;">
                     <label>Espaciado (px)</label>
-                    <input type="number" id="edit-logo-text-spacing" value="2" oninput="updateLogoSettings()">
+                    <input type="number" id="edit-logo-text-spacing" value="7" oninput="updateLogoSettings()">
                 </div>
             </div>
+            <div class="editor-field">
+                <label>Color</label>
+                <input type="color" id="edit-logo-text-color" value="#ffffff" onchange="updateLogoSettings()">
+            </div>
             <div class="editor-row">
-                <button id="btn-logo-bold" class="btn-toggle-style" onclick="toggleStyle('logo', 'bold')">B</button>
+                <button id="btn-logo-bold" class="btn-toggle-style active" onclick="toggleStyle('logo', 'bold')">B</button>
                 <button id="btn-logo-italic" class="btn-toggle-style" onclick="toggleStyle('logo', 'italic')">I</button>
                 <button id="btn-logo-strike" class="btn-toggle-style" onclick="toggleStyle('logo', 'strike')">S</button>
             </div>
@@ -597,11 +688,33 @@
                     <option value="cover">Pantalla Completa (Cover)</option>
                     <option value="contain">Ajustado Sin Recorte (Contain)</option>
                     <option value="fixed">Fijo con Movimiento Parallax</option>
+                    <option value="auto">Tamaño Real (Auto)</option>
+                </select>
+            </div>
+            <div class="editor-field">
+                <label>Posición de la Imagen</label>
+                <select id="edit-screen-bg-position" onchange="applyScreenStyles()">
+                    <option value="center center">Centro / Centro</option>
+                    <option value="top center">Arriba / Centro</option>
+                    <option value="bottom center">Abajo / Centro</option>
+                    <option value="center left">Centro / Izquierda</option>
+                    <option value="center right">Centro / Derecha</option>
+                    <option value="top left">Arriba / Izquierda</option>
+                    <option value="bottom right">Abajo / Derecha</option>
+                </select>
+            </div>
+            <div class="editor-field">
+                <label>Repetición del Fondo</label>
+                <select id="edit-screen-bg-repeat" onchange="applyScreenStyles()">
+                    <option value="no-repeat">Sin Repetir (No-Repeat)</option>
+                    <option value="repeat">Repetir en Mosaico (Repeat)</option>
+                    <option value="repeat-x">Repetir Horizontal (Repeat-X)</option>
+                    <option value="repeat-y">Repetir Vertical (Repeat-Y)</option>
                 </select>
             </div>
             <div class="editor-field">
                 <label>Transparencia Tarjeta (0 a 1)</label>
-                <input type="number" id="edit-screen-overlay" min="0" max="1" step="0.1" value="0" oninput="applyScreenStyles()">
+                <input type="number" id="edit-screen-overlay" min="0" max="1" step="0.1" value="0.6" oninput="applyScreenStyles()">
             </div>
         </div>
 
@@ -637,7 +750,7 @@
                 </div>
             </div>
             <div class="editor-row" style="margin-top:5px;">
-                <button id="btn-title-bold" class="btn-toggle-style" onclick="toggleStyle('title', 'bold')">B</button>
+                <button id="btn-title-bold" class="btn-toggle-style active" onclick="toggleStyle('title', 'bold')">B</button>
                 <button id="btn-title-italic" class="btn-toggle-style" onclick="toggleStyle('title', 'italic')">I</button>
                 <button id="btn-title-strike" class="btn-toggle-style" onclick="toggleStyle('title', 'strike')">S</button>
             </div>
@@ -768,6 +881,7 @@
         let logoClickTimer = null;
 
         let styleState = {
+            fub: { bold: true, italic: false, strike: false },
             logo: { bold: true, italic: false, strike: false },
             title: { bold: true, italic: false, strike: false }
         };
@@ -906,6 +1020,23 @@
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         }
 
+        // CONTROLES BARRA FUB
+        function updateFubSettings() {
+            const text = document.getElementById('edit-fub-text').value;
+            const bg = document.getElementById('edit-fub-bg').value;
+            const color = document.getElementById('edit-fub-color').value;
+            const size = document.getElementById('edit-fub-size').value;
+            const align = document.getElementById('edit-fub-align').value;
+            const font = document.getElementById('edit-fub-font').value;
+
+            document.getElementById('fub-text-content').innerText = text;
+            document.documentElement.style.setProperty('--fub-bg', bg);
+            document.documentElement.style.setProperty('--fub-color', color);
+            document.documentElement.style.setProperty('--fub-size', size + 'rem');
+            document.documentElement.style.setProperty('--fub-align', align);
+            document.documentElement.style.setProperty('--fub-font', font);
+        }
+
         // CONTROLES DE HEADER Y LOGO
         function updateHeaderSettings() {
             const color = document.getElementById('edit-header-color').value;
@@ -920,15 +1051,31 @@
             document.documentElement.style.setProperty('--header-radius', `${radius}px`);
         }
 
+        function applyLogoImage(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logoArea = document.getElementById('logo-display-area');
+                    logoArea.innerHTML = `<img src="${e.target.result}" alt="Logo Personalizado">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         function updateLogoSettings() {
             const width = document.getElementById('edit-logo-width').value;
+            const height = document.getElementById('edit-logo-height').value;
             const textVal = document.getElementById('edit-logo-text-val').value;
             const font = document.getElementById('edit-logo-font').value;
+            const textSize = document.getElementById('edit-logo-text-size').value;
             const color = document.getElementById('edit-logo-text-color').value;
             const spacing = document.getElementById('edit-logo-text-spacing').value;
 
             document.documentElement.style.setProperty('--logo-width', width + 'px');
+            document.documentElement.style.setProperty('--logo-height', height);
             document.documentElement.style.setProperty('--logo-text-font', font);
+            document.documentElement.style.setProperty('--logo-text-size', textSize + 'px');
             document.documentElement.style.setProperty('--logo-text-color', color);
             document.documentElement.style.setProperty('--logo-text-spacing', spacing + 'px');
             document.getElementById('main-logo-text').innerText = textVal;
@@ -939,7 +1086,11 @@
             const btn = document.getElementById(`btn-${target}-${styleType}`);
             if(btn) btn.classList.toggle('active', styleState[target][styleType]);
 
-            if(target === 'logo') {
+            if(target === 'fub') {
+                document.documentElement.style.setProperty('--fub-weight', styleState.fub.bold ? 'bold' : 'normal');
+                document.documentElement.style.setProperty('--fub-style', styleState.fub.italic ? 'italic' : 'normal');
+                document.documentElement.style.setProperty('--fub-decor', styleState.fub.strike ? 'line-through' : 'none');
+            } else if(target === 'logo') {
                 document.documentElement.style.setProperty('--logo-text-weight', styleState.logo.bold ? 'bold' : 'normal');
                 document.documentElement.style.setProperty('--logo-text-style', styleState.logo.italic ? 'italic' : 'normal');
                 document.documentElement.style.setProperty('--logo-text-decor', styleState.logo.strike ? 'line-through' : 'none');
@@ -966,6 +1117,8 @@
         function applyScreenStyles() {
             const screen = document.getElementById('edit-screen-target').value;
             const bgSize = document.getElementById('edit-screen-bg-size').value;
+            const bgPos = document.getElementById('edit-screen-bg-position').value;
+            const bgRepeat = document.getElementById('edit-screen-bg-repeat').value;
             const alpha = document.getElementById('edit-screen-overlay').value;
 
             const tabElem = document.getElementById('tab-' + screen);
@@ -976,6 +1129,8 @@
                 tabElem.style.backgroundAttachment = 'scroll';
                 tabElem.style.backgroundSize = bgSize;
             }
+            tabElem.style.backgroundPosition = bgPos;
+            tabElem.style.backgroundRepeat = bgRepeat;
 
             const overlay = document.getElementById('overlay-' + screen);
             if(overlay) overlay.style.backgroundColor = `rgba(255, 255, 255, ${alpha})`;
@@ -1138,7 +1293,7 @@
         function saveProduct() {
             const id = document.getElementById('prod-id').value;
             const category = document.getElementById('prod-category').value;
-            const title = document.getElementById('prod-title').value;
+            const title = document.getElementById('prod-title-val' in window ? 'prod-title-val' : 'prod-title').value;
             const priceCrossed = document.getElementById('prod-price-crossed').value;
             const priceCurrent = document.getElementById('prod-price-current').value;
             const mpLink = document.getElementById('prod-mp-link').value;
