@@ -18,22 +18,27 @@
         body { background-color: var(--bg-color); color: var(--text-color); transition: margin-right 0.3s ease; }
         body.drawer-open { margin-right: 400px; }
 
-        /* Barra FUB Superior dinámicas */
+        /* Barra FUB Superior */
         .fub-bar { background: var(--header-bg); color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* Header Principal dinámico */
+        /* Header Principal */
         header { display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); padding: var(--header-height, 15px) 30px; color: white; position: relative; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         
-        .hamburger-btn { display: none; background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 5px; }
+        /* Botón Hamburguesa de 3 líneas */
+        .hamburger-btn { display: flex; flex-direction: column; justify-content: space-between; width: 28px; height: 21px; background: none; border: none; cursor: pointer; padding: 0; z-index: 1001; }
+        .hamburger-btn span { display: block; width: 100%; height: 3px; background-color: white; border-radius: 2px; transition: all 0.3s ease; }
+
         .logo-text { font-family: var(--header-font-family); font-size: var(--header-font-size); letter-spacing: 7px; color: #fff; text-decoration: none; cursor: pointer; user-select: none; }
         
+        /* Menú de Navegación (PC y Desplegable) */
         nav.pc-nav { display: flex; gap: 20px; }
         nav.pc-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
         nav.pc-nav a:hover { color: var(--primary-color); }
 
-        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; flex-direction: column; border-top: 1px solid #333; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .mobile-menu a { color: white; text-decoration: none; padding: 15px 20px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; }
+        /* Menú Desplegable Móvil / Hamburguesa */
+        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 260px; background: #111; flex-direction: column; border-top: 1px solid #333; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .mobile-menu a { color: white; text-decoration: none; padding: 15px 20px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; display: block; }
         .mobile-menu a:hover { background: #222; color: var(--primary-color); }
         .mobile-menu.active { display: flex; }
 
@@ -66,10 +71,8 @@
         .btn-cart { background: #111; color: #fff; }
         .btn-mp { background: #009ee3; color: #fff; }
 
-        /* Botón Abrir Formulario Nuevo Producto */
         .btn-open-new-product { background: var(--primary-color); color: #11; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* Modal / Contenedor Cargar Nuevo Producto */
         .new-product-modal { display: none; background: #1a1a1a; color: #fff; padding: 25px; border-radius: 8px; border: 1px solid #333; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .new-product-modal.active { display: block; }
         .form-row { margin-bottom: 15px; }
@@ -100,9 +103,6 @@
         .btn-save-drawer { background: #28a745; color: #fff; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
 
         @media (max-width: 768px) {
-            nav.pc-nav { display: none; }
-            .hamburger-btn { display: block; }
-            header { padding: 10px 15px; }
             body.drawer-open { margin-right: 0; }
             #side-editor-drawer { width: 100%; right: -100%; }
         }
@@ -116,23 +116,18 @@
     <!-- Header Principal -->
     <header>
         <div class="header-left">
-            <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">☰</button>
+            <!-- Botón Hamburguesa de 3 líneas -->
+            <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="logo-area">
                 <span class="logo-text" id="brandLogoText" onclick="handleLogoClick()">PHENOM</span>
             </div>
         </div>
 
-        <nav class="pc-nav">
-            <a onclick="switchPage('inicio')">INICIO</a>
-            <a onclick="switchPage('protectores')">PROTECTORES</a>
-            <a onclick="switchPage('accesorios')">ACCESORIOS</a>
-            <a onclick="switchPage('como-comprar')">CÓMO COMPRAR</a>
-            <a onclick="switchPage('contacto')">CONTACTO</a>
-            <a onclick="switchPage('fub-novedades')" style="color: var(--primary-color);">FUB - NOVEDADES</a>
-        </nav>
-
-        <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
-
+        <!-- Menú Desplegable Hamburguesa (Con los 6 botones) -->
         <div class="mobile-menu" id="mobileMenuDropdown">
             <a onclick="switchPage('inicio'); closeMobileMenu()">Inicio</a>
             <a onclick="switchPage('protectores'); closeMobileMenu()">Protectores</a>
@@ -141,6 +136,8 @@
             <a onclick="switchPage('contacto'); closeMobileMenu()">Contacto</a>
             <a onclick="switchPage('fub-novedades'); closeMobileMenu()" style="color: var(--primary-color);">FUB - Novedades</a>
         </div>
+
+        <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
     </header>
 
     <!-- PÁGINAS DE LA TIENDA -->
@@ -173,7 +170,6 @@
         
         <button class="btn-open-new-product" onclick="toggleNewProductForm('protectores')">＋ Cargar Nuevo Producto</button>
         
-        <!-- Formulario Cargar Nuevo Producto Protectores -->
         <div class="new-product-modal" id="form-protectores">
             <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
             <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-protectores" placeholder="Ej: Cabezal Pro Negro"></div>
@@ -189,7 +185,7 @@
                 <div class="form-row"><label>Precio Tachado (UYU)</label><input type="text" id="old-price-protectores" placeholder="$2.500"></div>
                 <div class="form-row"><label>Precio Actual (UYU)</label><input type="text" id="price-protectores" placeholder="$2.090"></div>
             </div>
-            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-protectores" placeholder="https://mpago.la/..."></div>
+            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-protectores" placeholder="url?id=38..."></div>
             <div class="form-row"><label>Cargar Fotos (Desde PC)</label><input type="file" id="file-protectores" accept="image/*" style="color:#ccc;"></div>
             <button class="btn-action btn-cart" style="background:var(--primary-color); color:#11; margin-top:15px;" onclick="saveNewProduct('protectores')">Guardar Publicación</button>
         </div>
@@ -218,7 +214,6 @@
         
         <button class="btn-open-new-product" onclick="toggleNewProductForm('accesorios')">＋ Cargar Nuevo Producto</button>
         
-        <!-- Formulario Cargar Nuevo Producto Accesorios -->
         <div class="new-product-modal" id="form-accesorios">
             <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
             <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-accesorios" placeholder="Ej: Vendas Pro 5M"></div>
@@ -287,7 +282,7 @@
         </div>
         <div class="drawer-content">
             
-            <!-- SECCIÓN 1: BARRA SUPERIOR / LOGO (Arriba del todo) -->
+            <!-- SECCIÓN 1: BARRA SUPERIOR / LOGO -->
             <div class="editor-section">
                 <button class="section-toggle" onclick="toggleSection('sec-header')">🏷️ Barra Superior / Logo <span>▼</span></button>
                 <div class="section-body active" id="sec-header">
@@ -439,7 +434,6 @@
             }
         }
 
-        // Formularios Nuevos Productos
         function toggleNewProductForm(category) {
             const form = document.getElementById('form-' + category);
             form.classList.toggle('active');
@@ -457,7 +451,6 @@
                 return;
             }
 
-            // Recopilar checkboxes seleccionados
             const checkboxes = document.querySelectorAll('#opts-' + category + ' input[type="checkbox"]:checked');
             let optsHtml = '';
             checkboxes.forEach(cb => {
@@ -465,7 +458,6 @@
             });
             if(optsHtml === '') optsHtml = `<button class="opt-btn selected" onclick="selectOption(this)">Estándar</button>`;
 
-            let imgHtml = title;
             if(fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -507,7 +499,6 @@
             alert('¡Producto publicado con éxito!');
         }
 
-        // Header vivo
         function updateHeaderLive() {
             const fub = document.getElementById('inputFubText').value;
             const brand = document.getElementById('inputBrandName').value;
@@ -525,11 +516,24 @@
             document.documentElement.style.setProperty('--header-font-size', fontSize + 'px');
         }
 
-        // Menú Hamburguesa
+        // Menú Hamburguesa de 3 líneas
         const hamburgerBtn = document.getElementById('hamburgerToggle');
         const mobileMenu = document.getElementById('mobileMenuDropdown');
-        hamburgerBtn.addEventListener('click', () => { mobileMenu.classList.toggle('active'); });
-        function closeMobileMenu() { mobileMenu.classList.remove('active'); }
+        
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+        }
 
         function selectOption(button) {
             const container = button.parentElement;
