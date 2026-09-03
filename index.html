@@ -11,22 +11,281 @@
             --text-color: #111111;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); }
+        body { background-color: var(--bg-color); color: var(--text-color); transition: background 0.3s, color 0.3s; }
 
         /* Barra FUB Superior */
         .fub-bar { background: #000; color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
 
         /* Header Principal */
         header { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 15px 30px; color: white; position: relative; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
         .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-area img { height: 38px; width: auto; }
-        .logo-text { font-family: 'Impact', sans-serif; font-size: 24px; letter-spacing: 7px; color: #fff; }
+        .logo-text { font-family: 'Impact', sans-serif; font-size: 24px; letter-spacing: 7px; color: #fff; text-decoration: none; }
+        
+        /* Botón Hamburguesa Celular */
+        .hamburger-btn { display: none; background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 5px; }
 
         /* Menú de Navegación PC */
         nav.pc-nav { display: flex; gap: 20px; }
         nav.pc-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
         nav.pc-nav a:hover { color: var(--primary-color); }
 
-        /* Menú Hamburguesa Celular */
-        .hamburger-btn { display: none; background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
-        .mobile-menu { display: none; position: absolute; top: 100%
+        /* Menú Desplegable Móvil (Oculto por defecto) */
+        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; flex-direction: column; border-top: 1px solid #333; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .mobile-menu a { color: white; text-decoration: none; padding: 15px 20px; font-weight: 600; border-bottom: 1px solid #222; transition: background 0.2s; }
+        .mobile-menu a:hover { background: #222; color: var(--primary-color); }
+        .mobile-menu.active { display: flex; }
+
+        .cart-indicator { color: white; font-weight: bold; font-size: 0.9rem; }
+
+        /* Contenedor Principal / Tienda */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        h2.section-title { font-size: 1.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 1rem; }
+
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-3px); }
+        .product-img-placeholder { background: #f4f4f4; height: 200px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 15px; font-weight: 500; }
+        .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
+        
+        /* Selectores de Talles y Onzas */
+        .options-container { margin: 15px 0; text-align: left; }
+        .options-label { font-size: 0.8rem; color: #555; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
+        .options-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .opt-btn { background: #f8f8f8; border: 1px solid #ccc; padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .opt-btn.selected { background: #000; color: #fff; border-color: #000; }
+
+        .price-box { margin: 15px 0; font-size: 1.2rem; font-weight: bold; color: #111; }
+        .old-price { text-decoration: line-through; color: #888; font-size: 0.9rem; margin-right: 8px; }
+        
+        .btn-action { display: block; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; text-decoration: none; text-align: center; font-size: 0.9rem; }
+        .btn-cart { background: #111; color: #fff; }
+        .btn-cart:hover { background: #333; }
+        .btn-mp { background: #009ee3; color: #fff; }
+        .btn-mp:hover { background: #0082be; }
+
+        /* Panel de Edición Dinámico */
+        #editor-panel { background: #1a1a1a; color: #fff; padding: 25px; margin-top: 60px; border-top: 4px solid var(--primary-color); }
+        #editor-panel h3 { margin-bottom: 15px; color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
+        .editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .editor-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+        .editor-group input, .editor-group select { width: 100%; padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; }
+        
+        .btn-save-all { background: #28a745; color: #fff; padding: 12px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+        .btn-save-all:hover { background: #218838; }
+
+        /* Simulador Celular Integrado */
+        .simulator-container { border: 8px solid #333; border-radius: 25px; max-width: 380px; margin: 30px auto; background: #fff; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: none; }
+        .simulator-header { background: #111; color: #fff; padding: 10px; text-align: center; font-size: 0.8rem; }
+
+        /* Responsive Mobile Styles */
+        @media (max-width: 768px) {
+            nav.pc-nav { display: none; }
+            .hamburger-btn { display: block; }
+            header { padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra FUB Superior -->
+    <div class="fub-bar" id="fubBarText">🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)</div>
+
+    <!-- Header Principal -->
+    <header>
+        <div class="header-left">
+            <!-- Botón Hamburguesa Celular -->
+            <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">☰</button>
+            <div class="logo-area">
+                <a href="#" class="logo-text" id="brandLogoText">PHENOM</a>
+            </div>
+        </div>
+
+        <!-- Navegación PC -->
+        <nav class="pc-nav">
+            <a href="#inicio">INICIO</a>
+            <a href="#protectores">PROTECTORES</a>
+            <a href="#accesorios">ACCESORIOS</a>
+            <a href="#como-comprar">CÓMO COMPRAR</a>
+            <a href="#contacto">CONTACTO</a>
+            <a href="#fub-novedades" style="color: var(--primary-color);">FUB - NOVEDADES</a>
+        </nav>
+
+        <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
+
+        <!-- Menú Desplegable Celular -->
+        <div class="mobile-menu" id="mobileMenuDropdown">
+            <a href="#inicio" onclick="closeMobileMenu()">Inicio</a>
+            <a href="#protectores" onclick="closeMobileMenu()">Protectores</a>
+            <a href="#accesorios" onclick="closeMobileMenu()">Accesorios</a>
+            <a href="#como-comprar" onclick="closeMobileMenu()">Cómo Comprar</a>
+            <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+            <a href="#fub-novedades" onclick="closeMobileMenu()" style="color: var(--primary-color);">FUB - Novedades</a>
+        </div>
+    </header>
+
+    <!-- Contenido de la Tienda -->
+    <div class="container" id="inicio">
+        <h2 class="section-title">Productos Más Vendidos</h2>
+        <p class="subtitle" id="subTitleText">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
+
+        <div class="products-grid">
+            <!-- Producto 1 -->
+            <div class="product-card">
+                <div class="product-img-placeholder">Guantes Blanco / Dorado</div>
+                <div class="product-title">Guantes de Boxeo Blanco / Dorado</div>
+                <div class="options-container">
+                    <span class="options-label">Seleccionar Opción:</span>
+                    <div class="options-buttons">
+                        <button class="opt-btn selected" onclick="selectOption(this)">12oz</button>
+                        <button class="opt-btn" onclick="selectOption(this)">14oz</button>
+                        <button class="opt-btn" onclick="selectOption(this)">16oz</button>
+                    </div>
+                </div>
+                <div class="price-box"><span class="old-price">$2.500 UYU</span>$2.090 UYU</div>
+                <button class="btn-action btn-mp">Pagar con Mercado Pago</button>
+                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="product-card">
+                <div class="product-img-placeholder">Cabezal Pro Negro</div>
+                <div class="product-title">Cabezal Sparring Pro Negro Mate</div>
+                <div class="options-container">
+                    <span class="options-label">Seleccionar Opción:</span>
+                    <div class="options-buttons">
+                        <button class="opt-btn selected" onclick="selectOption(this)">10oz</button>
+                        <button class="opt-btn" onclick="selectOption(this)">12oz</button>
+                    </div>
+                </div>
+                <div class="price-box">$2.350 UYU</div>
+                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="product-card">
+                <div class="product-img-placeholder">Vendas Pro 5 Metros</div>
+                <div class="product-title">Vendas Pro 5 Metros Phenom</div>
+                <div class="options-container">
+                    <span class="options-label">Seleccionar Opción:</span>
+                    <div class="options-buttons">
+                        <button class="opt-btn selected" onclick="selectOption(this)">5 Metros</button>
+                    </div>
+                </div>
+                <div class="price-box"><span class="old-price">$500 UYU</span>$450 UYU</div>
+                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección Fub Novedades -->
+    <div class="container" id="fub-novedades" style="margin-top: 60px; padding-top: 20px; border-top: 2px solid #eee;">
+        <h2 class="section-title">FUB - Novedades</h2>
+        <p class="subtitle">Enterate de todas las competencias oficiales, indumentaria para jueces y torneos de la Federación Uruguaya de Boxeo.</p>
+        <div style="background: #f9f9f9; padding: 25px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+            <h3 style="margin-bottom: 10px;">👕 Nuevas camisetas oficiales de árbitros</h3>
+            <p style="color: #555; line-height: 1.6;">Desarrollo exclusivo en conjunto con la FUB para las transmisiones oficiales de boxeo uruguayo.</p>
+        </div>
+    </div>
+
+    <!-- Panel de Edición Interactiva -->
+    <div id="editor-panel">
+        <h3>🛠️ Panel de Edición Phenom 
+            <div>
+                <button onclick="toggleSimulator()" style="background:#444; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-size:0.8rem;">📱 Toggle Simulador Celular</button>
+            </div>
+        </h3>
+        <div class="editor-grid">
+            <div class="editor-group">
+                <label>Texto Barra Superior (FUB):</label>
+                <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateLiveContent()">
+            </div>
+            <div class="editor-group">
+                <label>Color Principal (Acentos):</label>
+                <input type="color" id="inputPrimaryColor" value="#e5b80b" oninput="updateLiveContent()">
+            </div>
+            <div class="editor-group">
+                <label>Nombre de Marca:</label>
+                <input type="text" id="inputBrandName" value="PHENOM" oninput="updateLiveContent()">
+            </div>
+        </div>
+        <button class="btn-save-all" onclick="saveConfiguration()">💾 Guardar Configuración Completa (Persistente)</button>
+    </div>
+
+    <!-- Simulador Celular (Oculto por defecto) -->
+    <div class="simulator-container" id="mobileSimulator">
+        <div class="simulator-header">📱 Vista Previa Celular Activa</div>
+        <div style="padding: 15px; font-size: 0.9rem; text-align: center; color: #333;">
+            <p>Simulador vertical en tiempo real cargado correctamente.</p>
+        </div>
+    </div>
+
+    <script>
+        // Funcionalidad del Menú Hamburguesa Móvil
+        const hamburgerBtn = document.getElementById('hamburgerToggle');
+        const mobileMenu = document.getElementById('mobileMenuDropdown');
+
+        hamburgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+        }
+
+        // Selección de Talles / Onzas en Tarjetas
+        function selectOption(button) {
+            const container = button.parentElement;
+            container.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+        }
+
+        // Contador de Carrito básico
+        let cartTotal = 0;
+        function addToCart() {
+            cartTotal++;
+            document.getElementById('cartCount').innerText = cartTotal;
+        }
+
+        // Editor dinámico en tiempo real con LocalStorage
+        function updateLiveContent() {
+            const fubText = document.getElementById('inputFubText').value;
+            const brandName = document.getElementById('inputBrandName').value;
+            const primaryColor = document.getElementById('inputPrimaryColor').value;
+
+            document.getElementById('fubBarText').innerText = fubText;
+            document.getElementById('brandLogoText').innerText = brandName;
+            document.documentElement.style.setProperty('--primary-color', primaryColor);
+        }
+
+        function saveConfiguration() {
+            const config = {
+                fubText: document.getElementById('inputFubText').value,
+                brandName: document.getElementById('inputBrandName').value,
+                primaryColor: document.getElementById('inputPrimaryColor').value
+            };
+            localStorage.setItem('phenom_config', JSON.stringify(config));
+            alert('¡Configuración guardada exitosamente en la memoria del navegador (localStorage)! Tus cambios no se perderán al actualizar.');
+        }
+
+        // Cargar configuración guardada al iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedConfig = localStorage.getItem('phenom_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('inputFubText').value = config.fubText;
+                document.getElementById('inputBrandName').value = config.brandName;
+                document.getElementById('inputPrimaryColor').value = config.primaryColor;
+                updateLiveContent();
+            }
+        });
+
+        // Alternar Simulador Celular
+        function toggleSimulator() {
+            const sim = document.getElementById('mobileSimulator');
+            sim.style.display = sim.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
