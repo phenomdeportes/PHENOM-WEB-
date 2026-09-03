@@ -23,8 +23,8 @@
         /* Botón Hamburguesa */
         .hamburger-btn { display: none; background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 5px; }
 
-        /* Logo con contador de clics para el panel */
-        .logo-text { font-family: 'Impact', sans-serif; font-size: 24px; letter-spacing: 7px; color: #fff; text-decoration: none; cursor: pointer; }
+        /* Logo */
+        .logo-text { font-family: 'Impact', sans-serif; font-size: 24px; letter-spacing: 7px; color: #fff; text-decoration: none; }
         
         /* Menú de Navegación PC */
         nav.pc-nav { display: flex; gap: 20px; }
@@ -66,14 +66,13 @@
         .btn-mp { background: #009ee3; color: #fff; }
         .btn-mp:hover { background: #0082be; }
 
-        /* Modal / Panel de Editor Oculto (Se abre con 5 clicks en el logo) */
-        #secret-editor-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
-        .editor-box { background: #1a1a1a; color: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; border-top: 4px solid var(--primary-color); }
-        .editor-box h3 { margin-bottom: 20px; color: var(--primary-color); display: flex; justify-content: space-between; }
-        .editor-group { margin-bottom: 15px; }
-        .editor-group label { display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 5px; }
-        .editor-group input { width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; }
-        .btn-close-modal { background: #444; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        /* Panel de Edición Visible abajo */
+        #editor-panel { background: #1a1a1a; color: #fff; padding: 30px; margin-top: 60px; border-top: 4px solid var(--primary-color); }
+        #editor-panel h3 { margin-bottom: 15px; color: var(--primary-color); }
+        .editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .editor-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+        .editor-group input { width: 100%; padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; }
+        .btn-save-all { background: #28a745; color: #fff; padding: 12px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -93,8 +92,7 @@
         <div class="header-left">
             <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">☰</button>
             <div class="logo-area">
-                <!-- 5 Clicks rápidos aquí abren el editor secreto -->
-                <span class="logo-text" id="brandLogoText" onclick="handleLogoClick()">PHENOM</span>
+                <span class="logo-text" id="brandLogoText">PHENOM</span>
             </div>
         </div>
 
@@ -127,7 +125,7 @@
         <p class="subtitle" id="subTitleText">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
 
         <div class="products-grid" id="productsGrid">
-            <!-- Producto 1: Guantes (Accesorios / General) -->
+            <!-- Producto 1: Guantes (Accesorios) -->
             <div class="product-card" data-category="accesorios">
                 <div class="product-img-placeholder">Guantes Blanco / Dorado</div>
                 <div class="product-title">Guantes de Boxeo Blanco / Dorado</div>
@@ -151,12 +149,11 @@
                 <div class="options-container">
                     <span class="options-label">Seleccionar Talle:</span>
                     <div class="options-buttons">
-                        <button class="opt-btn selected" onclick="selectOption(this)">Único</button>
-                        <button class="opt-btn" onclick="selectOption(this)">Pro</button>
+                        <button class="opt-btn selected" onclick="selectOption(this)">10oz</button>
+                        <button class="opt-btn" onclick="selectOption(this)">12oz</button>
                     </div>
                 </div>
                 <div class="price-box">$2.350 UYU</div>
-                <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
                 <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
             </div>
 
@@ -171,7 +168,6 @@
                     </div>
                 </div>
                 <div class="price-box"><span class="old-price">$500 UYU</span>$450 UYU</div>
-                <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
                 <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
             </div>
         </div>
@@ -187,21 +183,21 @@
         </div>
     </div>
 
-    <!-- Secciones auxiliares para navegación -->
+    <!-- Secciones auxiliares -->
     <div class="container" id="como-comprar" style="margin-top: 40px;">
         <h2 class="section-title">Cómo Comprar</h2>
         <p class="subtitle">Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo. Pagos seguros por transferencia bancaria o Mercado Pago.</p>
     </div>
 
-    <div class="container" id="contacto" style="margin-top: 40px; margin-bottom: 80px;">
+    <div class="container" id="contacto" style="margin-top: 40px;">
         <h2 class="section-title">Contacto</h2>
         <p class="subtitle">Escribinos por WhatsApp para consultas comerciales o atención a clubes y gimnasios oficiales de la FUB.</p>
     </div>
 
-    <!-- Modal Panel de Edición Secreto (Se activa con 5 clics en el logo) -->
-    <div id="secret-editor-modal">
-        <div class="editor-box">
-            <h3>🛠️ Editor Phenom <button class="btn-close-modal" onclick="closeEditorModal()">X</button></h3>
+    <!-- Panel de Edición Fijo Abajo -->
+    <div id="editor-panel">
+        <h3>🛠️ Panel de Edición Phenom</h3>
+        <div class="editor-grid">
             <div class="editor-group">
                 <label>Texto Barra Superior (FUB):</label>
                 <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateLiveContent()">
@@ -210,12 +206,11 @@
                 <label>Nombre de Marca:</label>
                 <input type="text" id="inputBrandName" value="PHENOM" oninput="updateLiveContent()">
             </div>
-            <button class="btn-action btn-cart" style="background:#28a745; margin-top:20px;" onclick="saveAndCloseEditor()">💾 Guardar y Cerrar</button>
         </div>
+        <button class="btn-save-all" onclick="saveConfiguration()">💾 Guardar Configuración</button>
     </div>
 
     <script>
-        // Menú Hamburguesa
         const hamburgerBtn = document.getElementById('hamburgerToggle');
         const mobileMenu = document.getElementById('mobileMenuDropdown');
 
@@ -227,14 +222,12 @@
             mobileMenu.classList.remove('active');
         }
 
-        // Selección de Talles / Onzas
         function selectOption(button) {
             const container = button.parentElement;
             container.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
         }
 
-        // Carrito
         let cartTotal = 0;
         function addToCart() {
             cartTotal++;
@@ -242,7 +235,6 @@
             alert('¡Producto agregado al carrito con éxito!');
         }
 
-        // Filtrado por categorías (Protectores / Accesorios / Todos)
         function filterCategory(category) {
             const cards = document.querySelectorAll('.product-card');
             const title = document.getElementById('mainSectionTitle');
@@ -263,34 +255,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Desplazamiento suave
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if(el) {
                 el.scrollIntoView({ behavior: 'smooth' });
             }
-        }
-
-        // Sistema de 5 clics en el logo para abrir el editor secreto
-        let logoClicks = 0;
-        let clickTimer = null;
-
-        function handleLogoClick() {
-            logoClicks++;
-            clearTimeout(clickTimer);
-            
-            if (logoClicks >= 5) {
-                logoClicks = 0;
-                document.getElementById('secret-editor-modal').style.display = 'flex';
-            } else {
-                clickTimer = setTimeout(() => {
-                    logoClicks = 0;
-                }, 600);
-            }
-        }
-
-        function closeEditorModal() {
-            document.getElementById('secret-editor-modal').style.display = 'none';
         }
 
         function updateLiveContent() {
@@ -301,17 +270,15 @@
             document.getElementById('brandLogoText').innerText = brandName;
         }
 
-        function saveAndCloseEditor() {
+        function saveConfiguration() {
             const config = {
                 fubText: document.getElementById('inputFubText').value,
                 brandName: document.getElementById('inputBrandName').value
             };
             localStorage.setItem('phenom_config', JSON.stringify(config));
-            closeEditorModal();
-            alert('¡Configuración guardada correctamente!');
+            alert('¡Configuración guardada exitosamente!');
         }
 
-        // Cargar configuración guardada al iniciar
         window.addEventListener('DOMContentLoaded', () => {
             const savedConfig = localStorage.getItem('phenom_config');
             if (savedConfig) {
