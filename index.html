@@ -26,7 +26,7 @@
         .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
         .icon { font-size: 20px; cursor: pointer; }
 
-        /* --- VISTAS / PÁGINAS (SPA) --- */
+        /* --- VISTAS SPA --- */
         .page-view { display: none; }
         .page-view.active-view { display: block; }
 
@@ -40,7 +40,6 @@
         .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; }
         .btn-comprar:hover { background: #000; color: #fff; }
 
-        /* BOTÓN DE EDICIÓN AZUL (HERO) */
         .edit-hero-btn {
             position: absolute; top: 20px; right: 20px; width: 35px; height: 35px;
             background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
@@ -62,51 +61,77 @@
         .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px; align-items: stretch; }
         .carousel-track::-webkit-scrollbar { display: none; }
         
-        /* --- TARJETAS DE PRODUCTO --- */
-        .card-mini { min-width: 280px; max-width: 280px; flex-shrink: 0; cursor: pointer; position: relative; }
-        .card-img-container { position: relative; background: #f4f4f4; height: 280px; display: flex; justify-content: center; align-items: center; }
-        .card-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .heart-icon { position: absolute; top: 15px; right: 15px; font-size: 20px; color: #000; }
-        .card-price-tag { position: absolute; bottom: 0; left: 10px; background: #fff; padding: 5px 10px; font-weight: 900; font-size: 14px; }
-        .card-info { padding-top: 15px; }
-        .card-title { font-size: 13px; color: #000; font-weight: 400; margin-bottom: 3px; }
-        .card-category { font-size: 13px; color: #767677; }
-
-        /* --- VISTA DE CATÁLOGO / TIENDA --- */
-        .catalog-container { padding: 40px; min-height: 70vh; }
-        .catalog-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .catalog-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; }
-        .catalog-count { font-size: 13px; color: #666; font-weight: bold; }
-        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .catalog-grid .card-mini { min-width: 100%; max-width: 100%; }
-
-        /* --- MODO ADMINISTRADOR --- */
-        .admin-only { display: none; }
-        body.admin-mode .admin-only { display: block; }
+        /* --- ESTILOS TARJETAS CATÁLOGO (DISEÑO FIEL A CAPTURA DE PANTALLA) --- */
+        .catalog-container { padding: 40px; min-height: 70vh; background: #f8f9fa; }
+        .catalog-header { margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .catalog-title { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; color: #000; }
+        .catalog-subtitle { font-size: 13px; color: #555; margin-top: 4px; font-weight: 500; }
         
-        .edit-card-btn {
-            position: absolute; top: 10px; left: 10px; z-index: 10;
-            background: #e00; color: #fff; border: none; padding: 5px 10px;
-            font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase;
+        .btn-add-product-top {
+            background: #28a745; color: #fff; border: none; padding: 10px 18px;
+            font-weight: bold; border-radius: 6px; font-size: 12px; cursor: pointer;
+            display: none; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        body.admin-mode .btn-add-product-top { display: flex; }
+        .btn-add-product-top:hover { background: #218838; }
+
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 25px; }
+        
+        /* TARJETA DE PRODUCTO */
+        .product-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 15px; display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative;
         }
 
-        .add-product-card {
-            min-width: 280px; width: 100%; height: 355px;
-            background: #f9f9f9; border: 2px dashed #000; cursor: pointer;
-            display: none; justify-content: center; align-items: center;
-            transition: background 0.3s;
+        .product-card .card-img-wrapper {
+            background: #f8f9fa; height: 220px; border-radius: 6px;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; margin-bottom: 15px; position: relative;
         }
-        body.admin-mode .add-product-card { display: flex; }
-        .add-product-card:hover { background: #eaeaea; }
-        .add-product-card span { font-size: 16px; font-weight: 900; color: #000; }
 
-        /* --- SECCIÓN INFO MARCA (FONDO CREMA) --- */
+        .product-card .card-img-wrapper img { max-width: 85%; max-height: 85%; object-fit: contain; }
+
+        .product-card .card-title-text { font-size: 14px; font-weight: 800; color: #000; margin-bottom: 8px; }
+        
+        /* BADGES DE VARIANTES (10oz, 12oz, etc) */
+        .variant-badges { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .badge-item { background: #f1f5f9; color: #334155; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 3px; border: 1px solid #cbd5e1; }
+
+        /* PRECIOS */
+        .price-container { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .regular-price { text-decoration: line-through; color: #94a3b8; font-size: 12px; font-weight: bold; }
+        .offer-price { color: #d97706; font-size: 16px; font-weight: 900; }
+
+        /* BOTONES PAGO Y CARRITO */
+        .btn-mp {
+            background: #009ee3; color: #fff; text-decoration: none; text-align: center;
+            padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 800;
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+            margin-bottom: 8px; transition: background 0.2s; border: none; cursor: pointer; width: 100%;
+        }
+        .btn-mp:hover { background: #0081b8; }
+
+        .btn-add-cart {
+            background: #000; color: #fff; text-align: center; padding: 10px;
+            border-radius: 6px; font-size: 12px; font-weight: 800; border: none;
+            cursor: pointer; width: 100%; margin-bottom: 8px;
+        }
+        .btn-add-cart:hover { background: #222; }
+
+        /* BOTONES EDICIÓN EN TARJETA (MODO ADMIN) */
+        .admin-card-controls { display: none; gap: 8px; margin-top: 5px; }
+        body.admin-mode .admin-card-controls { display: flex; }
+
+        .btn-admin-edit { background: #007bff; color: #fff; border: none; padding: 8px; border-radius: 4px; font-size: 11px; font-weight: bold; flex: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .btn-admin-delete { background: #dc3545; color: #fff; border: none; padding: 8px; border-radius: 4px; font-size: 11px; font-weight: bold; flex: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+        /* --- SECCIÓN INFO MARCA --- */
         .info-section { background-color: #f4f4ec; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #000; }
         .info-column { position: relative; }
         .info-column h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; letter-spacing: -0.5px; }
         .info-column p { font-size: 14px; line-height: 1.7; margin-bottom: 15px; color: #111; }
 
-        /* BOTÓN DE EDICIÓN AZUL (INFO) */
         .edit-info-btn {
             position: absolute; top: -10px; right: 0; width: 35px; height: 35px;
             background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
@@ -116,43 +141,35 @@
         }
         body.admin-mode .edit-info-btn { display: flex; }
 
-        /* --- NEWSLETTER --- */
+        /* --- NEWSLETTER Y FOOTER --- */
         .newsletter-bar { background-color: #ede734; padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
         .newsletter-bar h2 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: #000; }
         .btn-register { background-color: #000; color: #fff; padding: 15px 30px; font-weight: 900; text-transform: uppercase; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
-        .btn-register:hover { background-color: #333; }
-        
-        /* BOTÓN DE EDICIÓN AZUL (NEWSLETTER) */
+
         .edit-news-btn {
             position: absolute; top: 15px; right: 15px; width: 35px; height: 35px;
             background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
             color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         body.admin-mode .edit-news-btn { display: flex; }
 
-        /* --- FOOTER --- */
         .footer { background-color: #fff; padding: 60px 40px; display: grid; grid-template-columns: repeat(4, 1fr) 0.5fr; gap: 30px; color: #000; border-top: 1px solid #eaeaea; }
         .footer-col { position: relative; }
         .footer-col h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
         .footer-col a { display: block; color: #333; text-decoration: none; font-size: 13px; margin-bottom: 12px; cursor: pointer; }
-        .footer-col a:hover { text-decoration: underline; color: #000; }
-        .ssl-badge { margin-top: 5px; width: 50px; }
 
-        /* BOTÓN DE EDICIÓN AZUL (FOOTER) */
         .edit-footer-btn {
             position: absolute; top: -10px; right: 0; width: 30px; height: 30px;
             background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
             color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         body.admin-mode .edit-footer-btn { display: flex; }
 
         .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
 
-        /* --- PANEL DE EDICIÓN OCULTO --- */
+        /* --- PANEL CONTROL OMEGA --- */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #f4f4f4; border-right: 2px solid #000; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.3); }
         #admin-panel.active { display: block; }
         .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -167,34 +184,21 @@
         .section-title { font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #000; border-bottom: 1px solid #eee; padding-bottom: 6px; }
         
         #header-tabs-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-        .header-tab-item { background: #f8f9fa; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; }
-        .header-tab-item:hover { background: #e9ecef; border-color: #000; }
-        .header-tab-item .tab-tag { font-size: 10px; background: #e00; color: #fff; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; margin-left: 6px; }
+        .header-tab-item { background: #f8f9fa; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: bold; cursor: pointer; }
         .btn-add-tab { background: #28a745; color: #fff; border: none; width: 100%; padding: 10px; font-weight: bold; text-transform: uppercase; font-size: 11px; cursor: pointer; border-radius: 4px; }
-        .btn-add-tab:hover { background: #218838; }
 
         /* --- MODALES --- */
         .simple-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center; }
         .simple-modal-overlay.active { display: flex; }
-        .simple-modal-content { background: #fff; padding: 30px; width: 380px; border: 2px solid #000; position: relative; max-height: 90vh; overflow-y: auto; }
+        .simple-modal-content { background: #fff; padding: 30px; width: 420px; border: 2px solid #000; position: relative; max-height: 90vh; overflow-y: auto; border-radius: 8px; }
         .simple-modal-title { font-weight: 900; font-size: 16px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
         .simple-modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer; }
         .simple-group { margin-bottom: 15px; }
         .simple-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #333; }
         .simple-group input, .simple-group select, .simple-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; outline: none; }
-        .btn-apply { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-apply { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 4px; }
 
         #toast-success { position: fixed; top: 20px; right: 20px; background: #000; color: #ede734; padding: 15px 25px; font-weight: 900; border-radius: 4px; z-index: 10000; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; font-size: 12px; border: 1px solid #ede734; }
-
-        @media (max-width: 768px) {
-            body.panel-active { margin-left: 0; }
-            #admin-panel { width: 100%; }
-            .hero-grid { grid-template-columns: 1fr; height: auto; }
-            .hero-col { height: 400px; }
-            .info-section { grid-template-columns: 1fr; padding: 40px 20px; }
-            .footer { grid-template-columns: repeat(2, 1fr); }
-            .newsletter-bar { flex-direction: column; text-align: center; }
-        }
     </style>
 </head>
 <body>
@@ -228,7 +232,6 @@
 
     <!-- ==================== VISTA 1: INICIO (HOME) ==================== -->
     <div id="view-home" class="page-view active-view">
-        <!-- HERO SECTION -->
         <section class="hero-grid">
             <div class="hero-col" id="hero-col-1" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800');">
                 <button class="edit-hero-btn" onclick="openHeroModal(1)">✎</button>
@@ -256,7 +259,7 @@
             </div>
         </section>
 
-        <!-- CARRUSEL DE NOVEDADES -->
+        <!-- CARRUSEL NOVEDADES -->
         <section class="carousel-section">
             <div class="carousel-header">
                 <div class="carousel-tabs">
@@ -270,71 +273,21 @@
                 </div>
             </div>
             <div class="carousel-track" id="carousel-track-container">
-                <div class="card-mini" id="product-card-1" data-category="Guantes">
-                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                    <div class="card-img-container">
-                        <span class="heart-icon">♡</span>
-                        <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Guante Phenom">
-                        <div class="card-price-tag">$ 2.250,00</div>
-                    </div>
-                    <div class="card-info">
-                        <h3 class="card-title">Guantes Boxeo Phenom Pro Violeta 14oz</h3>
-                        <p class="card-category">Guantes</p>
-                    </div>
-                </div>
-
-                <div class="card-mini" id="product-card-2" data-category="Guantes">
-                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                    <div class="card-img-container">
-                        <span class="heart-icon">♡</span>
-                        <img src="https://images.unsplash.com/photo-1517649763962-0c6232660d02?q=80&w=400" alt="Guante Elite">
-                        <div class="card-price-tag">$ 2.070,00</div>
-                    </div>
-                    <div class="card-info">
-                        <h3 class="card-title">Guantes Phenom Elite Azul 16oz</h3>
-                        <p class="card-category">Guantes</p>
-                    </div>
-                </div>
-
-                <div class="card-mini" id="product-card-3" data-category="Protección">
-                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                    <div class="card-img-container">
-                        <span class="heart-icon">♡</span>
-                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400" alt="Cabezal">
-                        <div class="card-price-tag">$ 2.350,00</div>
-                    </div>
-                    <div class="card-info">
-                        <h3 class="card-title">Tibial Boxeo Phenom Sparring M</h3>
-                        <p class="card-category">Protección</p>
-                    </div>
-                </div>
-
-                <div class="card-mini" id="product-card-4" data-category="Indumentaria">
-                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                    <div class="card-img-container">
-                        <span class="heart-icon">♡</span>
-                        <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=400" alt="Vendas">
-                        <div class="card-price-tag">$ 400,00</div>
-                    </div>
-                    <div class="card-info">
-                        <h3 class="card-title">Vendas Phenom Pro 5m</h3>
-                        <p class="card-category">Indumentaria</p>
-                    </div>
-                </div>
+                <!-- PRODUCTOS INICIALES SE CARGAN DINÁMICAMENTE POR SCRIPT -->
             </div>
         </section>
 
-        <!-- SECCIÓN INFO BOXEO -->
+        <!-- SECCIÓN INFO -->
         <section class="info-section">
             <div class="info-column" id="info-col-1">
                 <button class="edit-info-btn" onclick="openInfoModal(1)">✎</button>
                 <h2 id="text-info-title-1">HISTORIA, COMBATE Y EQUIPAMIENTO PHENOM</h2>
-                <p id="text-info-desc-1">El deporte nos mantiene alerta. Nos une y nos forja. A través del boxeo y los deportes de combate podemos cambiar vidas, inspirándote a subir al ring y superar tu mejor marca personal. Ofrecemos artículos deportivos con las últimas tecnologías para absorber el impacto y mejorar tu rendimiento en cada round. Phenom es el hogar del peleador amateur, del atleta profesional y del entusiasta del fitness que deja todo en el saco. Nuestra ropa y equipamiento te mantienen concentrado antes de que suene la campana. En el sparring, en la competencia y en la recuperación. Estamos aquí para apoyar a los verdaderos peleadores.</p>
+                <p id="text-info-desc-1">El deporte nos mantiene alerta. Nos une y nos forja. A través del boxeo y los deportes de combate podemos cambiar vidas, inspirándote a subir al ring y superar tu mejor marca personal. Ofrecemos artículos deportivos con las últimas tecnologías para absorber el impacto y mejorar tu rendimiento en cada round.</p>
             </div>
             <div class="info-column" id="info-col-2">
                 <button class="edit-info-btn" onclick="openInfoModal(2)">✎</button>
                 <h2 id="text-info-title-2">TU TIENDA DE DEPORTES DE COMBATE PARA CUALQUIER DESAFÍO</h2>
-                <p id="text-info-desc-2">Phenom diseña equipamiento para atletas de todo tipo. Creadores que disfrutan desafiar las convenciones y romper las normas del combate. Confeccionamos los guantes y protectores que visten a los campeones en preparación para su próxima pelea. Para que no pierdan la concentración. Diseñamos con un objetivo en mente: máxima protección y durabilidad extrema para deportes de alto impacto. Innovamos en cada costura y ponemos a prueba nuevas tecnologías, desde nuestras onzas precisas hasta el equipamiento de recuperación. A través de nuestras colecciones, eliminamos las barreras entre el diseño de vanguardia y el mejor rendimiento en el ring.</p>
+                <p id="text-info-desc-2">Phenom diseña equipamiento para atletas de todo tipo. Creadores que disfrutan desafiar las convenciones y romper las normas del combate. Confeccionamos los guantes y protectores que visten a los campeones en preparación para su próxima pelea.</p>
             </div>
         </section>
     </div>
@@ -344,17 +297,15 @@
         <div class="catalog-container">
             <div class="catalog-header">
                 <div>
-                    <a onclick="showHomePage()" style="font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; color: #666;">← Volver al Inicio</a>
-                    <h1 class="catalog-title" id="catalog-category-title">CATÁLOGO DE PRODUCTOS</h1>
+                    <h1 class="catalog-title" id="catalog-category-title">EQUIPAMIENTO DE PROTECCIÓN</h1>
+                    <div class="catalog-subtitle" id="catalog-category-subtitle">Guantes, cabezales y tibiales de alto rendimiento</div>
                 </div>
-                <div class="catalog-count" id="catalog-item-count">Mostrando productos</div>
+                <button class="btn-add-product-top" onclick="openCreateProductModal()">+ Agregar Producto</button>
             </div>
 
-            <!-- GRILLA DE PRODUCTOS -->
+            <!-- GRILLA DE PRODUCTOS TIPO CAPTURA DE PANTALLA -->
             <div class="catalog-grid" id="catalog-grid-container">
-                <div class="add-product-card" onclick="createNewProductCard()">
-                    <span>+ AGREGAR PRODUCTO</span>
-                </div>
+                <!-- Tarjetas cargadas vía JavaScript -->
             </div>
         </div>
     </div>
@@ -405,7 +356,7 @@
     <!-- WHATSAPP FLOTANTE -->
     <a href="https://wa.me/59893418239" class="wp-float" target="_blank">✆</a>
 
-    <!-- PANEL DE EDICIÓN OCULTO (CONTROL OMEGA) -->
+    <!-- PANEL CONTROL OMEGA -->
     <div id="admin-panel">
         <div class="admin-header">
             <span>Control Omega</span>
@@ -441,37 +392,13 @@
         <button class="btn-save" onclick="saveAllSettings()">GUARDAR CAMBIOS</button>
     </div>
 
-    <!-- MODAL EDITAR PESTAÑA -->
-    <div class="simple-modal-overlay" id="edit-header-tab-modal">
-        <div class="simple-modal-content">
-            <button class="simple-modal-close" onclick="closeHeaderTabModal()">X</button>
-            <div class="simple-modal-title" id="header-tab-modal-title">EDITAR PESTAÑA</div>
-            <input type="hidden" id="edit-tab-index">
-            <div class="simple-group">
-                <label>Texto de la Pestaña</label>
-                <input type="text" id="edit-tab-text">
-            </div>
-            <div class="simple-group">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" id="edit-tab-highlight" style="width: auto;"> Destacar en Rojo (Sale)
-                </label>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-apply" style="background: #e00; flex: 1;" onclick="deleteHeaderTab()">Quitar</button>
-                <button class="btn-apply" style="background: #000; flex: 2; margin-top: 0;" onclick="applyHeaderTabChanges()">Modificar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL EDITAR PRODUCTO -->
+    <!-- MODAL EDITAR PRODUCTO COMPLETO (CON MERCADOPAGO Y TALLAS) -->
     <div class="simple-modal-overlay" id="edit-product-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeEditModal()">X</button>
-            <div class="simple-modal-title">EDITAR PRODUCTO</div>
-            <div class="simple-group">
-                <label>Adjuntar Archivo de Imagen</label>
-                <input type="file" id="edit-mod-file" accept="image/*">
-            </div>
+            <div class="simple-modal-title" id="prod-modal-title">EDITAR PRODUCTO</div>
+            
+            <input type="hidden" id="edit-prod-id">
             <div class="simple-group">
                 <label>Título del Producto</label>
                 <input type="text" id="edit-mod-title">
@@ -481,60 +408,82 @@
                 <input type="text" id="edit-mod-cat">
             </div>
             <div class="simple-group">
-                <label>Precio (Texto libre)</label>
+                <label>Variantes / Onzas (Separadas por coma: 10oz, 12oz, 14oz)</label>
+                <input type="text" id="edit-mod-variants" placeholder="Ej: 12oz, 14oz, 16oz">
+            </div>
+            <div class="simple-group">
+                <label>Precio Regular (Tachado) Ej: $2.500 UYU</label>
+                <input type="text" id="edit-mod-reg-price">
+            </div>
+            <div class="simple-group">
+                <label>Precio Oferta / Final Ej: $2.090 UYU</label>
                 <input type="text" id="edit-mod-price">
             </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-apply" style="background: #e00; flex: 1;" onclick="deleteCurrentProduct()">Borrar</button>
-                <button class="btn-apply" style="background: #000; flex: 2; margin-top: 0;" onclick="applyProductChanges()">Guardar</button>
+            <div class="simple-group">
+                <label>Link de Pago Mercado Pago</label>
+                <input type="text" id="edit-mod-mp" placeholder="https://mpago.la/...">
             </div>
+            <div class="simple-group">
+                <label>Imagen del Producto</label>
+                <input type="file" id="edit-mod-file" accept="image/*">
+            </div>
+            
+            <button class="btn-apply" onclick="saveProductFromModal()">GUARDAR PRODUCTO</button>
         </div>
     </div>
 
-    <!-- MODAL EDITAR HERO -->
+    <!-- OTROS MODALES DE EDICIÓN -->
+    <div class="simple-modal-overlay" id="edit-header-tab-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeHeaderTabModal()">X</button>
+            <div class="simple-modal-title">EDITAR PESTAÑA</div>
+            <input type="hidden" id="edit-tab-index">
+            <div class="simple-group"><label>Texto Pestaña</label><input type="text" id="edit-tab-text"></div>
+            <div class="simple-group"><label><input type="checkbox" id="edit-tab-highlight"> Destacar (Red)</label></div>
+            <button class="btn-apply" onclick="applyHeaderTabChanges()">MODIFICAR</button>
+            <button class="btn-apply" style="background:#dc3545;" onclick="deleteHeaderTab()">ELIMINAR</button>
+        </div>
+    </div>
+
     <div class="simple-modal-overlay" id="edit-hero-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
-            <div class="simple-modal-title" id="hero-modal-title">EDITAR COLUMNA HERO</div>
-            <div class="simple-group"><label>Imagen de Fondo</label><input type="file" id="edit-hero-file" accept="image/*"></div>
-            <div class="simple-group"><label>Título Principal</label><input type="text" id="hero-mod-title"></div>
+            <div class="simple-modal-title" id="hero-modal-title">EDITAR HERO</div>
+            <div class="simple-group"><label>Imagen Fondo</label><input type="file" id="edit-hero-file" accept="image/*"></div>
+            <div class="simple-group"><label>Título</label><input type="text" id="hero-mod-title"></div>
             <div class="simple-group"><label>Subtítulo</label><input type="text" id="hero-mod-sub"></div>
-            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR CAMBIOS</button>
+            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL EDITAR INFO -->
     <div class="simple-modal-overlay" id="edit-info-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeInfoModal()">X</button>
-            <div class="simple-modal-title" id="info-modal-title">EDITAR COLUMNA INFO</div>
+            <div class="simple-modal-title" id="info-modal-title">EDITAR INFO</div>
             <div class="simple-group"><label>Título</label><input type="text" id="info-mod-title"></div>
-            <div class="simple-group"><label>Texto Descriptivo</label><textarea id="info-mod-desc" rows="6"></textarea></div>
-            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-group"><label>Descripción</label><textarea id="info-mod-desc" rows="6"></textarea></div>
+            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL EDITAR NEWSLETTER -->
     <div class="simple-modal-overlay" id="edit-news-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsModal()">X</button>
             <div class="simple-modal-title">EDITAR NEWSLETTER</div>
-            <div class="simple-group"><label>Texto del Título</label><input type="text" id="news-mod-title"></div>
-            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-group"><label>Título</label><input type="text" id="news-mod-title"></div>
+            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL EDITAR FOOTER -->
     <div class="simple-modal-overlay" id="edit-footer-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeFooterModal()">X</button>
-            <div class="simple-modal-title" id="footer-modal-title">EDITAR COLUMNA FOOTER</div>
-            <div class="simple-group"><label>Contenido (HTML / Enlaces)</label><textarea id="footer-mod-html" rows="6"></textarea></div>
-            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-modal-title" id="footer-modal-title">EDITAR FOOTER</div>
+            <div class="simple-group"><label>Contenido HTML</label><textarea id="footer-mod-html" rows="6"></textarea></div>
+            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL REGISTRO NEWSLETTER -->
     <div class="simple-modal-overlay" id="newsletter-form-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsletterForm()">X</button>
@@ -547,9 +496,9 @@
         </div>
     </div>
 
-    <div id="toast-success">¡CAMBIOS GUARDADOS! ✓</div>
+    <div id="toast-success">¡CAMBIOS GUARDADOS Y PERSISTIDOS! ✓</div>
 
-    <!-- SCRIPT PRINCIPAL COMPLETO CON LÓGICA DE BOTONES AZULES -->
+    <!-- SCRIPT DE MOTOR LÓGICO COMPLETO CON PERSISTENCIA Y MERCADOPAGO -->
     <script>
         let clickCount = 0;
         let clickTimer;
@@ -557,7 +506,31 @@
         const adminPanel = document.getElementById('admin-panel');
         const mainHeader = document.getElementById('main-header');
 
-        // --- SISTEMA DE NAVEGACIÓN SPA ---
+        // PRODUCTOS BASE DE EJEMPLO (SE PERSISTEN EN LOCALSTORAGE)
+        let productsData = [
+            {
+                id: 'prod-1',
+                title: 'Guantes de Boxeo Blanco / Dorado',
+                category: 'Guantes',
+                variants: ['12oz', '14oz', '16oz'],
+                regularPrice: '$2.500 UYU',
+                price: '$2.090 UYU',
+                mpLink: 'https://www.mercadopago.com.uy',
+                img: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400'
+            },
+            {
+                id: 'prod-2',
+                title: 'Cabezal Sparring Pro Negro Mate',
+                category: 'Protección',
+                variants: ['10oz', '12oz'],
+                regularPrice: '',
+                price: '$2.350 UYU',
+                mpLink: '',
+                img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400'
+            }
+        ];
+
+        // --- SISTEMA SPA ---
         function showHomePage() {
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-home').classList.add('active-view');
@@ -584,31 +557,49 @@
             });
         }
 
+        // RENDERIZAR GRILLA IGUAL A LA CAPTURA DE PANTALLA
         function renderCatalogGrid(categoryFilter) {
             const container = document.getElementById('catalog-grid-container');
-            const allProducts = document.querySelectorAll('#carousel-track-container .card-mini');
-            
             container.innerHTML = '';
-            let count = 0;
 
-            allProducts.forEach(prod => {
-                const title = prod.querySelector('.card-title').innerText;
-                const cat = prod.querySelector('.card-category').innerText;
-                
-                if (categoryFilter === 'Todos' || categoryFilter === 'Sale' || cat.toLowerCase().includes(categoryFilter.toLowerCase()) || title.toLowerCase().includes(categoryFilter.toLowerCase())) {
-                    const clone = prod.cloneNode(true);
-                    container.appendChild(clone);
-                    count++;
-                }
+            const filtered = productsData.filter(p => 
+                categoryFilter === 'Todos' || categoryFilter === 'Sale' || 
+                p.category.toLowerCase().includes(categoryFilter.toLowerCase()) || 
+                p.title.toLowerCase().includes(categoryFilter.toLowerCase())
+            );
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.id = p.id;
+
+                let variantsHtml = p.variants.map(v => `<span class="badge-item">${v}</span>`).join('');
+                let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
+                let mpBtnHtml = p.mpLink ? `<a href="${p.mpLink}" target="_blank" class="btn-mp">💳 Pagar con Mercado Pago</a>` : '';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="card-img-wrapper">
+                            <img src="${p.img}" alt="${p.title}">
+                        </div>
+                        <div class="card-title-text">${p.title}</div>
+                        <div class="variant-badges">${variantsHtml}</div>
+                        <div class="price-container">
+                            ${regPriceHtml}
+                            <span class="offer-price">${p.price}</span>
+                        </div>
+                    </div>
+                    <div>
+                        ${mpBtnHtml}
+                        <button class="btn-add-cart" onclick="alert('Producto agregado al carrito')">Agregar al Carrito</button>
+                        <div class="admin-card-controls">
+                            <button class="btn-admin-edit" onclick="editProductById('${p.id}')">✏️ Editar</button>
+                            <button class="btn-admin-delete" onclick="deleteProductById('${p.id}')">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
             });
-
-            const addCard = document.createElement('div');
-            addCard.className = 'add-product-card';
-            addCard.onclick = createNewProductCard;
-            addCard.innerHTML = '<span>+ AGREGAR PRODUCTO</span>';
-            container.appendChild(addCard);
-
-            document.getElementById('catalog-item-count').innerText = `Mostrando ${count} productos en ${categoryFilter}`;
         }
 
         function filterCatalogSearch(query) {
@@ -618,33 +609,7 @@
             renderCatalogGrid(query);
         }
 
-        function createNewProductCard() {
-            const track = document.getElementById('carousel-track-container');
-            const id = 'product-card-' + Date.now();
-            const newProd = document.createElement('div');
-            newProd.className = 'card-mini';
-            newProd.id = id;
-            newProd.dataset.category = 'Guantes';
-            newProd.innerHTML = `
-                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                <div class="card-img-container">
-                    <span class="heart-icon">♡</span>
-                    <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Nuevo Producto">
-                    <div class="card-price-tag">$ 1.000,00</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Nuevo Producto Phenom</h3>
-                    <p class="card-category">Guantes</p>
-                </div>
-            `;
-            track.appendChild(newProd);
-            saveAllSettings();
-            
-            const currentCat = document.getElementById('catalog-category-title').innerText;
-            renderCatalogGrid(currentCat);
-        }
-
-        // --- MODO ADMINISTRADOR ---
+        // --- MODO AMINISTRADOR ---
         function toggleAdminMode(forceState) {
             if (forceState) {
                 adminPanel.classList.add('active');
@@ -667,7 +632,7 @@
             }
         });
 
-        // --- GESTIÓN DE PESTAÑAS DEL HEADER ---
+        // --- GESTIÓN PESTAÑAS HEADER ---
         function renderHeaderTabsManager() {
             const listContainer = document.getElementById('header-tabs-list');
             listContainer.innerHTML = '';
@@ -676,8 +641,7 @@
             navLinks.forEach((a, index) => {
                 const item = document.createElement('div');
                 item.className = 'header-tab-item';
-                const isHighlight = a.classList.contains('highlight');
-                item.innerHTML = `<span>${a.innerText} ${isHighlight ? '<span class="tab-tag">Sale</span>' : ''}</span> <span style="color:#007bff;">✎ Editar</span>`;
+                item.innerHTML = `<span>${a.innerText}</span> <span>✎</span>`;
                 item.onclick = () => openHeaderTabModal(index);
                 listContainer.appendChild(item);
             });
@@ -733,87 +697,122 @@
             saveAllSettings();
         }
 
-        // --- LÓGICA DE EDICIÓN: HERO (COLUMNAS PORTADA) ---
-        let currentHeroColNum = null;
-        let tempHeroImgBase64 = null;
+        // --- GESTIÓN DE PRODUCTOS (CREAR, EDITAR, ELIMINAR, MERCADOPAGO) ---
+        let tempBase64Img = '';
 
-        function openHeroModal(colNum) {
-            currentHeroColNum = colNum;
-            document.getElementById('hero-modal-title').innerText = "EDITAR COLUMNA HERO " + colNum;
-            document.getElementById('edit-hero-file').value = '';
-            document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
-            const subElem = document.getElementById('text-col' + colNum + '-sub');
-            document.getElementById('hero-mod-sub').value = subElem ? subElem.innerText : '';
-            tempHeroImgBase64 = null;
-            document.getElementById('edit-hero-modal').classList.add('active');
+        function openCreateProductModal() {
+            document.getElementById('prod-modal-title').innerText = "NUEVO PRODUCTO";
+            document.getElementById('edit-prod-id').value = '';
+            document.getElementById('edit-mod-title').value = '';
+            document.getElementById('edit-mod-cat').value = document.getElementById('catalog-category-title').innerText;
+            document.getElementById('edit-mod-variants').value = '10oz, 12oz, 14oz, 16oz';
+            document.getElementById('edit-mod-reg-price').value = '';
+            document.getElementById('edit-mod-price').value = '$2.000 UYU';
+            document.getElementById('edit-mod-mp').value = '';
+            tempBase64Img = 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400';
+            
+            document.getElementById('edit-product-modal').classList.add('active');
         }
 
-        function closeHeroModal() {
-            document.getElementById('edit-hero-modal').classList.remove('active');
-            currentHeroColNum = null;
+        function editProductById(id) {
+            const prod = productsData.find(p => p.id === id);
+            if (!prod) return;
+
+            document.getElementById('prod-modal-title').innerText = "EDITAR PRODUCTO";
+            document.getElementById('edit-prod-id').value = prod.id;
+            document.getElementById('edit-mod-title').value = prod.title;
+            document.getElementById('edit-mod-cat').value = prod.category;
+            document.getElementById('edit-mod-variants').value = prod.variants.join(', ');
+            document.getElementById('edit-mod-reg-price').value = prod.regularPrice || '';
+            document.getElementById('edit-mod-price').value = prod.price;
+            document.getElementById('edit-mod-mp').value = prod.mpLink || '';
+            tempBase64Img = prod.img;
+
+            document.getElementById('edit-product-modal').classList.add('active');
         }
 
-        document.getElementById('edit-hero-file').addEventListener('change', function(e) {
+        function closeEditModal() { document.getElementById('edit-product-modal').classList.remove('active'); }
+
+        document.getElementById('edit-mod-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) { tempHeroImgBase64 = event.target.result; };
+                reader.onload = function(event) { tempBase64Img = event.target.result; };
                 reader.readAsDataURL(file);
             }
         });
 
-        function applyHeroChanges() {
-            if (!currentHeroColNum) return;
-            const targetCol = document.getElementById('hero-col-' + currentHeroColNum);
-            const newTitle = document.getElementById('hero-mod-title').value;
-            const newSub = document.getElementById('hero-mod-sub').value;
+        function saveProductFromModal() {
+            const id = document.getElementById('edit-prod-id').value;
+            const title = document.getElementById('edit-mod-title').value || 'Producto Phenom';
+            const cat = document.getElementById('edit-mod-cat').value || 'Equipamiento';
+            const variants = document.getElementById('edit-mod-variants').value.split(',').map(v => v.trim()).filter(v => v);
+            const regPrice = document.getElementById('edit-mod-reg-price').value;
+            const price = document.getElementById('edit-mod-price').value || '$0 UYU';
+            const mp = document.getElementById('edit-mod-mp').value;
 
-            if (tempHeroImgBase64) {
-                targetCol.style.backgroundImage = `url('${tempHeroImgBase64}')`;
+            if (id) {
+                const index = productsData.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    productsData[index] = { id, title, category: cat, variants, regularPrice: regPrice, price, mpLink: mp, img: tempBase64Img };
+                }
+            } else {
+                const newId = 'prod-' + Date.now();
+                productsData.push({ id: newId, title, category: cat, variants, regularPrice: regPrice, price, mpLink: mp, img: tempBase64Img });
             }
-            
-            const titleElem = document.getElementById('text-col' + currentHeroColNum + '-title');
-            if(titleElem) titleElem.innerText = newTitle;
-            
-            const subElem = document.getElementById('text-col' + currentHeroColNum + '-sub');
-            if(subElem) subElem.innerText = newSub;
 
+            closeEditModal();
+            saveAllSettings();
+            renderCatalogGrid(document.getElementById('catalog-category-title').innerText);
+        }
+
+        function deleteProductById(id) {
+            if(confirm("¿Eliminar este producto?")) {
+                productsData = productsData.filter(p => p.id !== id);
+                saveAllSettings();
+                renderCatalogGrid(document.getElementById('catalog-category-title').innerText);
+            }
+        }
+
+        // --- BOTONES AZULES (HERO, INFO, NEWSLETTER Y FOOTER) ---
+        let currentHeroColNum = null;
+        function openHeroModal(colNum) {
+            currentHeroColNum = colNum;
+            document.getElementById('hero-modal-title').innerText = "EDITAR HERO " + colNum;
+            document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
+            const sub = document.getElementById('text-col' + colNum + '-sub');
+            document.getElementById('hero-mod-sub').value = sub ? sub.innerText : '';
+            document.getElementById('edit-hero-modal').classList.add('active');
+        }
+        function closeHeroModal() { document.getElementById('edit-hero-modal').classList.remove('active'); }
+        function applyHeroChanges() {
+            if(currentHeroColNum) {
+                document.getElementById('text-col' + currentHeroColNum + '-title').innerText = document.getElementById('hero-mod-title').value;
+                const sub = document.getElementById('text-col' + currentHeroColNum + '-sub');
+                if(sub) sub.innerText = document.getElementById('hero-mod-sub').value;
+            }
             closeHeroModal();
             saveAllSettings();
         }
 
-        // --- LÓGICA DE EDICIÓN: INFO MARCA (HISTORIA, COMBATE...) ---
         let currentInfoColNum = null;
-
         function openInfoModal(colNum) {
             currentInfoColNum = colNum;
-            document.getElementById('info-modal-title').innerText = "EDITAR COLUMNA INFO " + colNum;
+            document.getElementById('info-modal-title').innerText = "EDITAR INFO " + colNum;
             document.getElementById('info-mod-title').value = document.getElementById('text-info-title-' + colNum).innerText;
             document.getElementById('info-mod-desc').value = document.getElementById('text-info-desc-' + colNum).innerText;
             document.getElementById('edit-info-modal').classList.add('active');
         }
-
-        function closeInfoModal() {
-            document.getElementById('edit-info-modal').classList.remove('active');
-            currentInfoColNum = null;
-        }
-
+        function closeInfoModal() { document.getElementById('edit-info-modal').classList.remove('active'); }
         function applyInfoChanges() {
-            if (!currentInfoColNum) return;
-            const newTitle = document.getElementById('info-mod-title').value;
-            const newDesc = document.getElementById('info-mod-desc').value;
-
-            const titleElem = document.getElementById('text-info-title-' + currentInfoColNum);
-            const descElem = document.getElementById('text-info-desc-' + currentInfoColNum);
-
-            if(titleElem) titleElem.innerText = newTitle;
-            if(descElem) descElem.innerText = newDesc;
-
+            if(currentInfoColNum) {
+                document.getElementById('text-info-title-' + currentInfoColNum).innerText = document.getElementById('info-mod-title').value;
+                document.getElementById('text-info-desc-' + currentInfoColNum).innerText = document.getElementById('info-mod-desc').value;
+            }
             closeInfoModal();
             saveAllSettings();
         }
 
-        // --- LÓGICA DE EDICIÓN: NEWSLETTER ---
         function openNewsModal() {
             document.getElementById('news-mod-title').value = document.getElementById('text-news-title').innerText;
             document.getElementById('edit-news-modal').classList.add('active');
@@ -825,22 +824,10 @@
             saveAllSettings();
         }
 
-        function openNewsletterForm() { document.getElementById('newsletter-form-modal').classList.add('active'); }
-        function closeNewsletterForm() { document.getElementById('newsletter-form-modal').classList.remove('active'); }
-        function submitNewsletter(e) {
-            e.preventDefault();
-            const name = document.getElementById('nl-name').value;
-            const wp = document.getElementById('nl-wp').value;
-            alert(`¡Gracias ${name}! Te registraste con éxito. Te contactaremos por WhatsApp (${wp}).`);
-            closeNewsletterForm();
-        }
-
-        // --- LÓGICA DE EDICIÓN: FOOTER ---
         let currentFooterCol = null;
-
         function openFooterModal(colNum) {
             currentFooterCol = colNum;
-            document.getElementById('footer-modal-title').innerText = "EDITAR COLUMNA FOOTER " + colNum;
+            document.getElementById('footer-modal-title').innerText = "EDITAR FOOTER " + colNum;
             const colElem = document.getElementById('footer-col-' + colNum);
             const clone = colElem.cloneNode(true);
             const btn = clone.querySelector('.edit-footer-btn');
@@ -848,73 +835,27 @@
             document.getElementById('footer-mod-html').value = clone.innerHTML;
             document.getElementById('edit-footer-modal').classList.add('active');
         }
-
-        function closeFooterModal() {
-            document.getElementById('edit-footer-modal').classList.remove('active');
-            currentFooterCol = null;
-        }
-
+        function closeFooterModal() { document.getElementById('edit-footer-modal').classList.remove('active'); }
         function applyFooterChanges() {
-            if (!currentFooterCol) return;
-            const newHtml = document.getElementById('footer-mod-html').value;
-            const colElem = document.getElementById('footer-col-' + currentFooterCol);
-            const editBtnHtml = colElem.querySelector('.edit-footer-btn').outerHTML;
-            colElem.innerHTML = editBtnHtml + newHtml;
+            if (currentFooterCol) {
+                const newHtml = document.getElementById('footer-mod-html').value;
+                const colElem = document.getElementById('footer-col-' + currentFooterCol);
+                const editBtnHtml = colElem.querySelector('.edit-footer-btn').outerHTML;
+                colElem.innerHTML = editBtnHtml + newHtml;
+            }
             closeFooterModal();
             saveAllSettings();
         }
 
-        // --- LÓGICA DE EDICIÓN: PRODUCTO ---
-        let currentEditingCard = null;
-        let tempNewImgBase64 = null;
-
-        function openEditModal(btnElement) {
-            currentEditingCard = btnElement.closest('.card-mini');
-            document.getElementById('edit-mod-title').value = currentEditingCard.querySelector('.card-title').innerText;
-            document.getElementById('edit-mod-cat').value = currentEditingCard.querySelector('.card-category').innerText;
-            document.getElementById('edit-mod-price').value = currentEditingCard.querySelector('.card-price-tag').innerText;
-            tempNewImgBase64 = null;
-            document.getElementById('edit-product-modal').classList.add('active');
+        function openNewsletterForm() { document.getElementById('newsletter-form-modal').classList.add('active'); }
+        function closeNewsletterForm() { document.getElementById('newsletter-form-modal').classList.remove('active'); }
+        function submitNewsletter(e) {
+            e.preventDefault();
+            alert("¡Registro Exitoso!");
+            closeNewsletterForm();
         }
 
-        function closeEditModal() { document.getElementById('edit-product-modal').classList.remove('active'); }
-
-        document.getElementById('edit-mod-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) { tempNewImgBase64 = event.target.result; };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function applyProductChanges() {
-            if (!currentEditingCard) return;
-            const newTitle = document.getElementById('edit-mod-title').value;
-            const newCat = document.getElementById('edit-mod-cat').value;
-            const newPrice = document.getElementById('edit-mod-price').value;
-
-            if(tempNewImgBase64) currentEditingCard.querySelector('img').src = tempNewImgBase64;
-            if(newTitle) currentEditingCard.querySelector('.card-title').innerText = newTitle;
-            if(newCat) currentEditingCard.querySelector('.card-category').innerText = newCat;
-            if(newPrice) currentEditingCard.querySelector('.card-price-tag').innerText = newPrice;
-
-            closeEditModal();
-            saveAllSettings();
-            
-            const currentCat = document.getElementById('catalog-category-title').innerText;
-            renderCatalogGrid(currentCat);
-        }
-
-        function deleteCurrentProduct() {
-            if(currentEditingCard) currentEditingCard.remove();
-            closeEditModal();
-            saveAllSettings();
-            const currentCat = document.getElementById('catalog-category-title').innerText;
-            renderCatalogGrid(currentCat);
-        }
-
-        // --- PERSISTENCIA LOCALSTORAGE ---
+        // --- SISTEMA DE PERSISTENCIA Y GUARDADO ---
         function saveAllSettings() {
             const settings = {
                 fubBar: document.getElementById('fub-bar').innerText,
@@ -922,34 +863,27 @@
                 logoSize: logoTrigger.style.height,
                 headerNavHtml: document.getElementById('main-nav-links').innerHTML,
                 
-                // Hero Data
                 hero1Title: document.getElementById('text-col1-title').innerText,
                 hero1Sub: document.getElementById('text-col1-sub').innerText,
-                hero1Bg: document.getElementById('hero-col-1').style.backgroundImage,
-
                 hero2Title: document.getElementById('text-col2-title').innerText,
                 hero2Sub: document.getElementById('text-col2-sub').innerText,
-                hero2Bg: document.getElementById('hero-col-2').style.backgroundImage,
-
                 hero3Title: document.getElementById('text-col3-title').innerText,
                 hero3Sub: document.getElementById('text-col3-sub').innerText,
-                hero3Bg: document.getElementById('hero-col-3').style.backgroundImage,
 
-                // Info Section
                 info1Title: document.getElementById('text-info-title-1').innerText,
                 info1Desc: document.getElementById('text-info-desc-1').innerText,
                 info2Title: document.getElementById('text-info-title-2').innerText,
                 info2Desc: document.getElementById('text-info-desc-2').innerText,
 
-                // Newsletter & Footer
                 newsTitle: document.getElementById('text-news-title').innerText,
                 footer1: document.getElementById('footer-col-1').innerHTML,
                 footer2: document.getElementById('footer-col-2').innerHTML,
                 footer3: document.getElementById('footer-col-3').innerHTML,
                 footer4: document.getElementById('footer-col-4').innerHTML,
 
-                carouselHtml: document.getElementById('carousel-track-container').innerHTML
+                productsData: productsData
             };
+
             localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
             triggerSaveToast();
         }
@@ -957,7 +891,7 @@
         function triggerSaveToast() {
             const toast = document.getElementById('toast-success');
             toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
         window.onload = () => {
@@ -967,20 +901,13 @@
                 if(data.fubBar) document.getElementById('fub-bar').innerText = data.fubBar;
                 if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
                 if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
-                if(data.carouselHtml) document.getElementById('carousel-track-container').innerHTML = data.carouselHtml;
 
-                // Restaurar datos guardados de Hero e Info
                 if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
                 if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
-                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
-
                 if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
                 if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
-                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
-
                 if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
                 if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
-                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
 
                 if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
                 if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
@@ -992,6 +919,8 @@
                 if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
                 if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
                 if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
+
+                if(data.productsData) productsData = data.productsData;
             }
             bindHeaderNavEvents();
         };
