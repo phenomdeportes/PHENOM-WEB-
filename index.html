@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phenom | Tienda Oficial</title>
-    <!-- Importación de las 15 fuentes tipográficas solicitadas -->
+    <!-- Importación de fuentes tipográficas -->
     <link href="https://fonts.googleapis.com/css2?family=Arial&family=Courier+New&family=Georgia&family=Impact&family=Lucida+Console&family=Palatino&family=Tahoma&family=Times+New+Roman&family=Verdana&family=Montserrat:wght@400;700;900&family=Oswald:wght@400;700&family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         /* --- RESET Y VARIABLES --- */
@@ -19,12 +19,16 @@
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; }
         .logo-container img { height: 45px; cursor: pointer; transition: all 0.3s ease; }
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-        .nav-links a:hover { color: #666; }
+        .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active-link { color: #666; text-decoration: underline; }
         .nav-links a.highlight { color: #e00; }
         .header-icons { display: flex; align-items: center; gap: 20px; }
         .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
         .icon { font-size: 20px; cursor: pointer; }
+
+        /* --- VISTAS / PÁGINAS (SPA) --- */
+        .page-view { display: none; }
+        .page-view.active-view { display: block; }
 
         /* --- HERO SECTION --- */
         .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); height: 85vh; }
@@ -33,10 +37,9 @@
         .hero-content { position: relative; z-index: 1; padding: 20px; width: 100%; }
         .hero-title { font-size: 2.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
         .hero-subtitle { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
-        .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; }
         .btn-comprar:hover { background: #000; color: #fff; }
 
-        /* BOTÓN DE EDICIÓN HERO (Círculo Azul) */
         .edit-hero-btn {
             position: absolute; top: 20px; right: 20px; width: 35px; height: 35px;
             background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
@@ -53,10 +56,12 @@
         .carousel-tabs button.active { background: #000; color: #fff; border: 1px solid #000; }
         .carousel-tabs button:not(.active) { border: 1px solid #000; margin-left: 10px; }
         .carousel-actions { display: flex; align-items: center; gap: 15px; }
-        .view-all { color: #000; text-decoration: underline; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .view-all { color: #000; text-decoration: underline; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .arrow-btn { background: none; border: none; font-size: 20px; cursor: pointer; }
         .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px; align-items: stretch; }
         .carousel-track::-webkit-scrollbar { display: none; }
+        
+        /* --- TARJETAS DE PRODUCTO --- */
         .card-mini { min-width: 280px; max-width: 280px; flex-shrink: 0; cursor: pointer; position: relative; }
         .card-img-container { position: relative; background: #f4f4f4; height: 280px; display: flex; justify-content: center; align-items: center; }
         .card-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; }
@@ -66,37 +71,40 @@
         .card-title { font-size: 13px; color: #000; font-weight: 400; margin-bottom: 3px; }
         .card-category { font-size: 13px; color: #767677; }
 
+        /* --- VISTA DE CATÁLOGO / TIENDA --- */
+        .catalog-container { padding: 40px; min-height: 70vh; }
+        .catalog-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .catalog-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; }
+        .catalog-count { font-size: 13px; color: #666; font-weight: bold; }
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .catalog-grid .card-mini { min-width: 100%; max-width: 100%; }
+
         /* --- MODO ADMINISTRADOR --- */
         .admin-only { display: none; }
         body.admin-mode .admin-only { display: block; }
-        body.admin-mode .admin-flex { display: flex; }
-
-        /* BOTONES DE EDICIÓN EN PRODUCTOS */
+        
         .edit-card-btn {
             position: absolute; top: 10px; left: 10px; z-index: 10;
             background: #e00; color: #fff; border: none; padding: 5px 10px;
-            font-size: 11px; font-weight: bold; cursor: pointer;
-            text-transform: uppercase;
+            font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        /* TARJETA NUEVO PRODUCTO */
         .add-product-card {
-            min-width: 280px; max-width: 280px; flex-shrink: 0;
+            min-width: 280px; width: 100%; height: 355px;
             background: #f9f9f9; border: 2px dashed #000; cursor: pointer;
             display: none; justify-content: center; align-items: center;
-            height: 355px; transition: background 0.3s;
+            transition: background 0.3s;
         }
         body.admin-mode .add-product-card { display: flex; }
         .add-product-card:hover { background: #eaeaea; }
         .add-product-card span { font-size: 16px; font-weight: 900; color: #000; }
 
-        /* --- SECCIÓN INFO MARCA (FONDO CREMA) --- */
+        /* --- SECCIÓN INFO MARCA --- */
         .info-section { background-color: #f4f4ec; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #000; }
         .info-column { position: relative; }
         .info-column h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; letter-spacing: -0.5px; }
         .info-column p { font-size: 14px; line-height: 1.7; margin-bottom: 15px; color: #111; }
 
-        /* BOTÓN EDICIÓN COLUMNA INFO (Círculo Azul) */
         .edit-info-btn {
             position: absolute; top: 0; right: 0; width: 35px; height: 35px;
             background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
@@ -106,7 +114,7 @@
         }
         body.admin-mode .edit-info-btn { display: flex; }
 
-        /* --- BARRA NEWSLETTER --- */
+        /* --- NEWSLETTER Y FOOTER --- */
         .newsletter-bar { background-color: #ede734; padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
         .newsletter-bar h2 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: #000; }
         .btn-register { background-color: #000; color: #fff; padding: 15px 30px; font-weight: 900; text-transform: uppercase; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
@@ -120,15 +128,13 @@
         }
         body.admin-mode .edit-news-btn { display: flex; }
 
-        /* --- FOOTER PRINCIPAL --- */
         .footer { background-color: #fff; padding: 60px 40px; display: grid; grid-template-columns: repeat(4, 1fr) 0.5fr; gap: 30px; color: #000; border-top: 1px solid #eaeaea; }
         .footer-col { position: relative; }
         .footer-col h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
-        .footer-col a { display: block; color: #333; text-decoration: none; font-size: 13px; margin-bottom: 12px; }
+        .footer-col a { display: block; color: #333; text-decoration: none; font-size: 13px; margin-bottom: 12px; cursor: pointer; }
         .footer-col a:hover { text-decoration: underline; color: #000; }
         .ssl-badge { margin-top: 5px; width: 50px; }
 
-        /* BOTÓN EDICIÓN FOOTER (Círculo Azul) */
         .edit-footer-btn {
             position: absolute; top: 0; right: 0; width: 30px; height: 30px;
             background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
@@ -138,10 +144,9 @@
         }
         body.admin-mode .edit-footer-btn { display: flex; }
 
-        /* --- WHATSAPP FLOTANTE --- */
         .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
 
-        /* --- PANEL DE EDICIÓN OCULTO (CONTROL OMEGA) --- */
+        /* --- PANEL DE EDICIÓN OCULTO --- */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #f4f4f4; border-right: 2px solid #000; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.3); }
         #admin-panel.active { display: block; }
         .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -152,7 +157,6 @@
         .btn-save:hover { background: #333; }
         .btn-close { background: #e00; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; font-size: 12px; }
         
-        /* ESTILOS DE LA SOLAPA Y GESTOR DE PESTAÑAS DEL HEADER */
         .section-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .section-title { font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #000; border-bottom: 1px solid #eee; padding-bottom: 6px; }
         
@@ -174,7 +178,6 @@
         .simple-group input, .simple-group select, .simple-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; outline: none; }
         .btn-apply { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
-        /* NOTIFICACIÓN DE ÉXITO */
         #toast-success { position: fixed; top: 20px; right: 20px; background: #000; color: #ede734; padding: 15px 25px; font-weight: 900; border-radius: 4px; z-index: 10000; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; font-size: 12px; border: 1px solid #ede734; }
 
         @media (max-width: 768px) {
@@ -198,141 +201,157 @@
     <!-- HEADER -->
     <header class="header" id="main-header">
         <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger" onclick="showHomePage()">
         </div>
         
         <nav class="nav-links" id="main-nav-links">
-            <a href="#">Guantes</a>
-            <a href="#">Protección</a>
-            <a href="#">Indumentaria</a>
-            <a href="#">Tinas de Recuperación</a>
-            <a href="#" class="highlight">Sale</a>
+            <a>Guantes</a>
+            <a>Protección</a>
+            <a>Indumentaria</a>
+            <a>Tinas de Recuperación</a>
+            <a class="highlight">Sale</a>
         </nav>
 
         <div class="header-icons">
-            <input type="text" class="search-box" placeholder="Buscar...">
+            <input type="text" class="search-box" placeholder="Buscar..." oninput="filterCatalogSearch(this.value)">
             <span class="icon">👤</span>
             <span class="icon">♡</span>
             <span class="icon">🛒</span>
         </div>
     </header>
 
-    <!-- HERO SECTION (3 COLUMNAS) -->
-    <section class="hero-grid">
-        <div class="hero-col" id="hero-col-1" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800');">
-            <button class="edit-hero-btn" onclick="openHeroModal(1)">✎</button>
-            <div class="hero-content">
-                <h1 class="hero-title" id="text-col1-title">PHENOM ELITE</h1>
-                <h2 class="hero-subtitle" id="text-col1-sub">MÁXIMA PROTECCIÓN</h2>
-                <a href="#" class="btn-comprar">COMPRAR AHORA →</a>
+    <!-- ==================== VISTA 1: INICIO (HOME) ==================== -->
+    <div id="view-home" class="page-view active-view">
+        <!-- HERO SECTION -->
+        <section class="hero-grid">
+            <div class="hero-col" id="hero-col-1" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800');">
+                <button class="edit-hero-btn" onclick="openHeroModal(1)">✎</button>
+                <div class="hero-content">
+                    <h1 class="hero-title" id="text-col1-title">PHENOM ELITE</h1>
+                    <h2 class="hero-subtitle" id="text-col1-sub">MÁXIMA PROTECCIÓN</h2>
+                    <a onclick="navigateToCategory('Guantes')" class="btn-comprar">COMPRAR AHORA →</a>
+                </div>
+            </div>
+            <div class="hero-col" id="hero-col-2" style="background-image: url('https://images.unsplash.com/photo-1596356453261-0d265eb26d43?q=80&w=800');">
+                <button class="edit-hero-btn" onclick="openHeroModal(2)">✎</button>
+                <div class="hero-content">
+                    <h1 class="hero-title" id="text-col2-title">THE ORIGINAL</h1>
+                    <h2 class="hero-subtitle" id="text-col2-sub"></h2>
+                    <a onclick="navigateToCategory('Todos')" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
+                </div>
+            </div>
+            <div class="hero-col" id="hero-col-3" style="background-image: url('https://images.unsplash.com/photo-1517438322307-e67111335449?q=80&w=800');">
+                <button class="edit-hero-btn" onclick="openHeroModal(3)">✎</button>
+                <div class="hero-content">
+                    <h1 class="hero-title" id="text-col3-title">SPARRING PRO</h1>
+                    <h2 class="hero-subtitle" id="text-col3-sub">ONZAS PRECISAS</h2>
+                    <a onclick="navigateToCategory('Protección')" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARRUSEL DE NOVEDADES -->
+        <section class="carousel-section">
+            <div class="carousel-header">
+                <div class="carousel-tabs">
+                    <button class="active">Novedades</button>
+                    <button>Equipamiento</button>
+                </div>
+                <div class="carousel-actions">
+                    <a onclick="navigateToCategory('Todos')" class="view-all">VER TODO</a>
+                    <button class="arrow-btn">❮</button>
+                    <button class="arrow-btn">❯</button>
+                </div>
+            </div>
+            <div class="carousel-track" id="carousel-track-container">
+                <div class="card-mini" id="product-card-1" data-category="Guantes">
+                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                    <div class="card-img-container">
+                        <span class="heart-icon">♡</span>
+                        <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Guante Phenom">
+                        <div class="card-price-tag">$ 2.250,00</div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Guantes Boxeo Phenom Pro Violeta 14oz</h3>
+                        <p class="card-category">Guantes</p>
+                    </div>
+                </div>
+
+                <div class="card-mini" id="product-card-2" data-category="Guantes">
+                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                    <div class="card-img-container">
+                        <span class="heart-icon">♡</span>
+                        <img src="https://images.unsplash.com/photo-1517649763962-0c6232660d02?q=80&w=400" alt="Guante Elite">
+                        <div class="card-price-tag">$ 2.070,00</div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Guantes Phenom Elite Azul 16oz</h3>
+                        <p class="card-category">Guantes</p>
+                    </div>
+                </div>
+
+                <div class="card-mini" id="product-card-3" data-category="Protección">
+                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                    <div class="card-img-container">
+                        <span class="heart-icon">♡</span>
+                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400" alt="Cabezal">
+                        <div class="card-price-tag">$ 2.350,00</div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Tibial Boxeo Phenom Sparring M</h3>
+                        <p class="card-category">Protección</p>
+                    </div>
+                </div>
+
+                <div class="card-mini" id="product-card-4" data-category="Indumentaria">
+                    <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                    <div class="card-img-container">
+                        <span class="heart-icon">♡</span>
+                        <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=400" alt="Vendas">
+                        <div class="card-price-tag">$ 400,00</div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Vendas Phenom Pro 5m</h3>
+                        <p class="card-category">Indumentaria</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN INFO BOXEO -->
+        <section class="info-section">
+            <div class="info-column" id="info-col-1">
+                <button class="edit-info-btn" onclick="openInfoModal(1)">✎</button>
+                <h2 id="text-info-title-1">HISTORIA, COMBATE Y EQUIPAMIENTO PHENOM</h2>
+                <p id="text-info-desc-1">El deporte nos mantiene alerta. Nos une y nos forja. A través del boxeo y los deportes de combate podemos cambiar vidas, inspirándote a subir al ring y superar tu mejor marca personal. Ofrecemos artículos deportivos con las últimas tecnologías para absorber el impacto y mejorar tu rendimiento en cada round. Phenom es el hogar del peleador amateur, del atleta profesional y del entusiasta del fitness que deja todo en el saco. Nuestra ropa y equipamiento te mantienen concentrado antes de que suene la campana. En el sparring, en la competencia y en la recuperación. Estamos aquí para apoyar a los verdaderos peleadores.</p>
+            </div>
+            <div class="info-column" id="info-col-2">
+                <button class="edit-info-btn" onclick="openInfoModal(2)">✎</button>
+                <h2 id="text-info-title-2">TU TIENDA DE DEPORTES DE COMBATE PARA CUALQUIER DESAFÍO</h2>
+                <p id="text-info-desc-2">Phenom diseña equipamiento para atletas de todo tipo. Creadores que disfrutan desafiar las convenciones y romper las normas del combate. Confeccionamos los guantes y protectores que visten a los campeones en preparación para su próxima pelea. Para que no pierdan la concentración. Diseñamos con un objetivo en mente: máxima protección y durabilidad extrema para deportes de alto impacto. Innovamos en cada costura y ponemos a prueba nuevas tecnologías, desde nuestras onzas precisas hasta el equipamiento de recuperación. A través de nuestras colecciones, eliminamos las barreras entre el diseño de vanguardia y el mejor rendimiento en el ring.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== VISTA 2: CATÁLOGO DE PRODUCTOS ==================== -->
+    <div id="view-catalog" class="page-view">
+        <div class="catalog-container">
+            <div class="catalog-header">
+                <div>
+                    <a onclick="showHomePage()" style="font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; color: #666;">← Volver al Inicio</a>
+                    <h1 class="catalog-title" id="catalog-category-title">CATÁLOGO DE PRODUCTOS</h1>
+                </div>
+                <div class="catalog-count" id="catalog-item-count">Mostrando productos</div>
+            </div>
+
+            <!-- GRILLA DE PRODUCTOS -->
+            <div class="catalog-grid" id="catalog-grid-container">
+                <div class="add-product-card" onclick="createNewProductCard()">
+                    <span>+ AGREGAR PRODUCTO</span>
+                </div>
             </div>
         </div>
-        <div class="hero-col" id="hero-col-2" style="background-image: url('https://images.unsplash.com/photo-1596356453261-0d265eb26d43?q=80&w=800');">
-            <button class="edit-hero-btn" onclick="openHeroModal(2)">✎</button>
-            <div class="hero-content">
-                <h1 class="hero-title" id="text-col2-title">THE ORIGINAL</h1>
-                <h2 class="hero-subtitle" id="text-col2-sub"></h2>
-                <a href="#" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
-            </div>
-        </div>
-        <div class="hero-col" id="hero-col-3" style="background-image: url('https://images.unsplash.com/photo-1517438322307-e67111335449?q=80&w=800');">
-            <button class="edit-hero-btn" onclick="openHeroModal(3)">✎</button>
-            <div class="hero-content">
-                <h1 class="hero-title" id="text-col3-title">SPARRING PRO</h1>
-                <h2 class="hero-subtitle" id="text-col3-sub">ONZAS PRECISAS</h2>
-                <a href="#" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- CARRUSEL DE PRODUCTOS -->
-    <section class="carousel-section">
-        <div class="carousel-header">
-            <div class="carousel-tabs">
-                <button class="active">Novedades</button>
-                <button>Equipamiento</button>
-            </div>
-            <div class="carousel-actions">
-                <a href="#" class="view-all">VER TODO</a>
-                <button class="arrow-btn">❮</button>
-                <button class="arrow-btn">❯</button>
-            </div>
-        </div>
-        <div class="carousel-track" id="carousel-track-container">
-            
-            <div class="card-mini" id="product-card-1">
-                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                <div class="card-img-container">
-                    <span class="heart-icon">♡</span>
-                    <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Guante Phenom">
-                    <div class="card-price-tag">$ 2.250,00</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Guantes Boxeo Phenom Pro Violeta 14oz</h3>
-                    <p class="card-category">Unisex</p>
-                </div>
-            </div>
-
-            <div class="card-mini" id="product-card-2">
-                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                <div class="card-img-container">
-                    <span class="heart-icon">♡</span>
-                    <img src="https://images.unsplash.com/photo-1517649763962-0c6232660d02?q=80&w=400" alt="Guante Elite">
-                    <div class="card-price-tag">$ 2.070,00</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Guantes Phenom Elite Azul 16oz</h3>
-                    <p class="card-category">Unisex</p>
-                </div>
-            </div>
-
-            <div class="card-mini" id="product-card-3">
-                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                <div class="card-img-container">
-                    <span class="heart-icon">♡</span>
-                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400" alt="Cabezal">
-                    <div class="card-price-tag">$ 2.350,00</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Tibial Boxeo Phenom Sparring M</h3>
-                    <p class="card-category">Protección</p>
-                </div>
-            </div>
-
-            <div class="card-mini" id="product-card-4">
-                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
-                <div class="card-img-container">
-                    <span class="heart-icon">♡</span>
-                    <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=400" alt="Vendas">
-                    <div class="card-price-tag">$ 400,00</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Vendas Phenom Pro 5m</h3>
-                    <p class="card-category">Accesorios</p>
-                </div>
-            </div>
-
-            <!-- TARJETA CREAR PRODUCTO (SOLO VISIBLE EN MODO ADMIN) -->
-            <div class="add-product-card" onclick="alert('Módulo de creación de producto')">
-                <span>+ NUEVO PRODUCTO</span>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- SECCIÓN INFO BOXEO (FONDO CREMA) -->
-    <section class="info-section">
-        <div class="info-column" id="info-col-1">
-            <button class="edit-info-btn" onclick="openInfoModal(1)">✎</button>
-            <h2 id="text-info-title-1">HISTORIA, COMBATE Y EQUIPAMIENTO PHENOM</h2>
-            <p id="text-info-desc-1">El deporte nos mantiene alerta. Nos une y nos forja. A través del boxeo y los deportes de combate podemos cambiar vidas, inspirándote a subir al ring y superar tu mejor marca personal. Ofrecemos artículos deportivos con las últimas tecnologías para absorber el impacto y mejorar tu rendimiento en cada round. Phenom es el hogar del peleador amateur, del atleta profesional y del entusiasta del fitness que deja todo en el saco. Nuestra ropa y equipamiento te mantienen concentrado antes de que suene la campana. En el sparring, en la competencia y en la recuperación. Estamos aquí para apoyar a los verdaderos peleadores.</p>
-        </div>
-        <div class="info-column" id="info-col-2">
-            <button class="edit-info-btn" onclick="openInfoModal(2)">✎</button>
-            <h2 id="text-info-title-2">TU TIENDA DE DEPORTES DE COMBATE PARA CUALQUIER DESAFÍO</h2>
-            <p id="text-info-desc-2">Phenom diseña equipamiento para atletas de todo tipo. Creadores que disfrutan desafiar las convenciones y romper las normas del combate. Confeccionamos los guantes y protectores que visten a los campeones en preparación para su próxima pelea. Para que no pierdan la concentración. Diseñamos con un objetivo en mente: máxima protección y durabilidad extrema para deportes de alto impacto. Innovamos en cada costura y ponemos a prueba nuevas tecnologías, desde nuestras onzas precisas hasta el equipamiento de recuperación. A través de nuestras colecciones, eliminamos las barreras entre el diseño de vanguardia y el mejor rendimiento en el ring.</p>
-        </div>
-    </section>
+    </div>
 
     <!-- BARRA NEWSLETTER -->
     <section class="newsletter-bar">
@@ -346,22 +365,18 @@
         <div class="footer-col" id="footer-col-1">
             <button class="edit-footer-btn" onclick="openFooterModal(1)">✎</button>
             <h3>PRODUCTOS</h3>
-            <a href="#">Guantes de Boxeo</a>
-            <a href="#">Tibiales y Cabezales</a>
-            <a href="#">Vendas y Bucales</a>
-            <a href="#">Tinas de Recuperación</a>
+            <a onclick="navigateToCategory('Guantes')">Guantes de Boxeo</a>
+            <a onclick="navigateToCategory('Protección')">Tibiales y Cabezales</a>
+            <a onclick="navigateToCategory('Indumentaria')">Vendas y Bucales</a>
+            <a onclick="navigateToCategory('Tinas de Recuperación')">Tinas de Recuperación</a>
         </div>
         <div class="footer-col" id="footer-col-2">
             <button class="edit-footer-btn" onclick="openFooterModal(2)">✎</button>
             <h3>DEPORTES</h3>
-            <a href="#">Boxeo</a>
-            <a href="#">Kickboxing</a>
-            <a href="#">Muay Thai</a>
-            <a href="#">Fitness</a>
-            <h3 style="margin-top: 30px;">COLECCIONES</h3>
-            <a href="#">Phenom Elite</a>
-            <a href="#">Phenom Pro</a>
-            <a href="#">Sparring Series</a>
+            <a onclick="navigateToCategory('Boxeo')">Boxeo</a>
+            <a onclick="navigateToCategory('Kickboxing')">Kickboxing</a>
+            <a onclick="navigateToCategory('Muay Thai')">Muay Thai</a>
+            <a onclick="navigateToCategory('Fitness')">Fitness</a>
         </div>
         <div class="footer-col" id="footer-col-3">
             <button class="edit-footer-btn" onclick="openFooterModal(3)">✎</button>
@@ -369,16 +384,12 @@
             <a href="#">Contacto</a>
             <a href="#">Preguntas Frecuentes</a>
             <a href="#">Cambios y Devoluciones</a>
-            <a href="#">Guía de Tallas (Onzas)</a>
-            <a href="#">Políticas del Sitio Web</a>
         </div>
         <div class="footer-col" id="footer-col-4">
             <button class="edit-footer-btn" onclick="openFooterModal(4)">✎</button>
-            <h3>INFORMACIÓN DE LA EMPRESA</h3>
+            <h3>INFORMACIÓN</h3>
             <a href="#">Trabaja con Nosotros</a>
-            <a href="#">Información Corporativa</a>
-            <h3 style="margin-top: 30px;">TIENDAS</h3>
-            <a href="#">Puntos de Retiro (Óptica)</a>
+            <a href="#">Puntos de Retiro</a>
         </div>
         <div class="footer-col">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/SSL_Secured.svg/120px-SSL_Secured.svg.png" alt="Sitio Seguro SSL" class="ssl-badge">
@@ -395,27 +406,21 @@
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
-        <!-- MÓDULO 1: PESTAÑAS DE NAVEGACIÓN -->
         <div class="section-box">
             <div class="section-title">Pestañas de Navegación</div>
             <div id="header-tabs-list"></div>
             <button type="button" class="btn-add-tab" onclick="addNewHeaderTab()">+ Agregar Pestaña</button>
         </div>
 
-        <!-- MÓDULO 2: AJUSTES GENERALES DEL HEADER -->
         <div class="section-box">
             <div class="section-title">Ajustes del Header & Marca</div>
             <div class="admin-group">
-                <label>Logo de la Marca (Subir Archivo)</label>
+                <label>Logo de la Marca</label>
                 <input type="file" id="edit-logo-file" accept="image/*">
             </div>
             <div class="admin-group">
                 <label>Tamaño del Logo (px)</label>
                 <input type="range" id="edit-logo-size" min="20" max="150" value="45">
-            </div>
-            <div class="admin-group">
-                <label>Altura Header (Padding px)</label>
-                <input type="range" id="edit-header-pad" min="5" max="50" value="15">
             </div>
             <div class="admin-group">
                 <label>WhatsApp de Ventas</label>
@@ -430,27 +435,21 @@
         <button class="btn-save" onclick="saveAllSettings()">GUARDAR CAMBIOS</button>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE PESTAÑA DEL HEADER -->
+    <!-- MODAL EDITAR PESTAÑA -->
     <div class="simple-modal-overlay" id="edit-header-tab-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeaderTabModal()">X</button>
             <div class="simple-modal-title" id="header-tab-modal-title">EDITAR PESTAÑA</div>
-            
             <input type="hidden" id="edit-tab-index">
             <div class="simple-group">
                 <label>Texto de la Pestaña</label>
                 <input type="text" id="edit-tab-text">
             </div>
             <div class="simple-group">
-                <label>Enlace (URL / #)</label>
-                <input type="text" id="edit-tab-link">
-            </div>
-            <div class="simple-group">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" id="edit-tab-highlight" style="width: auto;"> Destacar en Rojo (Sale)
                 </label>
             </div>
-            
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn-apply" style="background: #e00; flex: 1;" onclick="deleteHeaderTab()">Quitar</button>
                 <button class="btn-apply" style="background: #000; flex: 2; margin-top: 0;" onclick="applyHeaderTabChanges()">Modificar</button>
@@ -458,12 +457,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE PRODUCTO (CARRUSEL) -->
+    <!-- MODAL EDITAR PRODUCTO -->
     <div class="simple-modal-overlay" id="edit-product-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeEditModal()">X</button>
             <div class="simple-modal-title">EDITAR PRODUCTO</div>
-            
             <div class="simple-group">
                 <label>Adjuntar Archivo de Imagen</label>
                 <input type="file" id="edit-mod-file" accept="image/*">
@@ -473,167 +471,179 @@
                 <input type="text" id="edit-mod-title">
             </div>
             <div class="simple-group">
+                <label>Categoría</label>
+                <input type="text" id="edit-mod-cat">
+            </div>
+            <div class="simple-group">
                 <label>Precio (Texto libre)</label>
                 <input type="text" id="edit-mod-price">
             </div>
-            
-            <button class="btn-apply" onclick="applyProductChanges()">APLICAR CAMBIOS</button>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn-apply" style="background: #e00; flex: 1;" onclick="deleteCurrentProduct()">Borrar</button>
+                <button class="btn-apply" style="background: #000; flex: 2; margin-top: 0;" onclick="applyProductChanges()">Guardar</button>
+            </div>
         </div>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE HERO -->
+    <!-- MODALES ADICIONALES -->
     <div class="simple-modal-overlay" id="edit-hero-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
-            <div class="simple-modal-title" id="hero-modal-title">EDITAR COLUMNA HERO</div>
-            
-            <div class="simple-group">
-                <label>Adjuntar Imagen de Fondo</label>
-                <input type="file" id="edit-hero-file" accept="image/*">
-            </div>
-            <div class="simple-group">
-                <label>Título Principal</label>
-                <input type="text" id="hero-mod-title">
-            </div>
-            <div class="simple-group">
-                <label>Subtítulo</label>
-                <input type="text" id="hero-mod-sub">
-            </div>
-            <div class="simple-group">
-                <label>Tipografía (15 Opciones)</label>
-                <select id="hero-mod-font">
-                    <option value="'Arial', sans-serif">Arial</option>
-                    <option value="'Courier New', monospace">Courier New</option>
-                    <option value="'Georgia', serif">Georgia</option>
-                    <option value="'Impact', sans-serif">Impact</option>
-                    <option value="'Lucida Console', monospace">Lucida Console</option>
-                    <option value="'Palatino', serif">Palatino</option>
-                    <option value="'Tahoma', sans-serif">Tahoma</option>
-                    <option value="'Times New Roman', serif">Times New Roman</option>
-                    <option value="'Verdana', sans-serif">Verdana</option>
-                    <option value="'Montserrat', sans-serif">Montserrat</option>
-                    <option value="'Oswald', sans-serif">Oswald</option>
-                    <option value="'Roboto', sans-serif">Roboto</option>
-                    <option value="'Open Sans', sans-serif">Open Sans</option>
-                    <option value="'Lato', sans-serif">Lato</option>
-                    <option value="'Poppins', sans-serif">Poppins</option>
-                </select>
-            </div>
-            
-            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-modal-title" id="hero-modal-title">EDITAR HERO</div>
+            <div class="simple-group"><label>Imagen de Fondo</label><input type="file" id="edit-hero-file" accept="image/*"></div>
+            <div class="simple-group"><label>Título</label><input type="text" id="hero-mod-title"></div>
+            <div class="simple-group"><label>Subtítulo</label><input type="text" id="hero-mod-sub"></div>
+            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE COLUMNA INFO -->
     <div class="simple-modal-overlay" id="edit-info-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeInfoModal()">X</button>
-            <div class="simple-modal-title" id="info-modal-title">EDITAR COLUMNA INFO</div>
-            
-            <div class="simple-group">
-                <label>Título</label>
-                <input type="text" id="info-mod-title">
-            </div>
-            <div class="simple-group">
-                <label>Texto Descriptivo</label>
-                <textarea id="info-mod-desc" rows="6"></textarea>
-            </div>
-            <div class="simple-group">
-                <label>Tipografía (15 Opciones)</label>
-                <select id="info-mod-font">
-                    <option value="'Arial', sans-serif">Arial</option>
-                    <option value="'Courier New', monospace">Courier New</option>
-                    <option value="'Georgia', serif">Georgia</option>
-                    <option value="'Impact', sans-serif">Impact</option>
-                    <option value="'Lucida Console', monospace">Lucida Console</option>
-                    <option value="'Palatino', serif">Palatino</option>
-                    <option value="'Tahoma', sans-serif">Tahoma</option>
-                    <option value="'Times New Roman', serif">Times New Roman</option>
-                    <option value="'Verdana', sans-serif">Verdana</option>
-                    <option value="'Montserrat', sans-serif">Montserrat</option>
-                    <option value="'Oswald', sans-serif">Oswald</option>
-                    <option value="'Roboto', sans-serif">Roboto</option>
-                    <option value="'Open Sans', sans-serif">Open Sans</option>
-                    <option value="'Lato', sans-serif">Lato</option>
-                    <option value="'Poppins', sans-serif">Poppins</option>
-                </select>
-            </div>
-            
-            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-modal-title" id="info-modal-title">EDITAR INFO</div>
+            <div class="simple-group"><label>Título</label><input type="text" id="info-mod-title"></div>
+            <div class="simple-group"><label>Descripción</label><textarea id="info-mod-desc" rows="5"></textarea></div>
+            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE NEWSLETTER -->
     <div class="simple-modal-overlay" id="edit-news-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsModal()">X</button>
             <div class="simple-modal-title">EDITAR NEWSLETTER</div>
-            <div class="simple-group">
-                <label>Texto del Título</label>
-                <input type="text" id="news-mod-title" value="SUSCRÍBETE AL NEWSLETTER">
-            </div>
-            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-group"><label>Título</label><input type="text" id="news-mod-title"></div>
+            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL DE EDICIÓN DE FOOTER -->
     <div class="simple-modal-overlay" id="edit-footer-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeFooterModal()">X</button>
-            <div class="simple-modal-title" id="footer-modal-title">EDITAR COLUMNA FOOTER</div>
-            <div class="simple-group">
-                <label>Contenido (HTML / Enlaces)</label>
-                <textarea id="footer-mod-html" rows="6"></textarea>
-            </div>
-            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR CAMBIOS</button>
+            <div class="simple-modal-title" id="footer-modal-title">EDITAR FOOTER</div>
+            <div class="simple-group"><label>Contenido HTML</label><textarea id="footer-mod-html" rows="5"></textarea></div>
+            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR</button>
         </div>
     </div>
 
-    <!-- MODAL REGISTRO NEWSLETTER -->
     <div class="simple-modal-overlay" id="newsletter-form-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsletterForm()">X</button>
-            <div class="simple-modal-title">¡ÚNETE A PHENOM!</div>
+            <div class="simple-modal-title">REGISTRO NEWSLETTER</div>
             <form onsubmit="submitNewsletter(event)">
-                <div class="simple-group">
-                    <label>Tu Nombre *</label>
-                    <input type="text" id="nl-name" required placeholder="Ej. Juan Pérez">
-                </div>
-                <div class="simple-group">
-                    <label>Tu WhatsApp *</label>
-                    <input type="text" id="nl-wp" required placeholder="Ej. 099123456">
-                </div>
-                <div class="simple-group">
-                    <label>Correo Electrónico (Opcional)</label>
-                    <input type="email" id="nl-email" placeholder="tucorreo@email.com">
-                </div>
-                <button type="submit" class="btn-apply">REGISTRARME AHORA</button>
+                <div class="simple-group"><label>Nombre</label><input type="text" id="nl-name" required></div>
+                <div class="simple-group"><label>WhatsApp</label><input type="text" id="nl-wp" required></div>
+                <button type="submit" class="btn-apply">REGISTRARME</button>
             </form>
         </div>
     </div>
 
-    <!-- NOTIFICACIÓN DE ÉXITO -->
-    <div id="toast-success">¡CAMBIOS GUARDADOS Y PERSISTIDOS! ✓</div>
+    <div id="toast-success">¡CAMBIOS GUARDADOS! ✓</div>
 
-    <!-- SCRIPT DE MOTOR LÓGICO Y PERSISTENCIA -->
+    <!-- SCRIPT PRINCIPAL CON ENLACE AUTOMÁTICO DE NAVEGACIÓN -->
     <script>
-        // --- 1. LÓGICA GATILLO Y MODO ADMINISTRADOR ---
         let clickCount = 0;
         let clickTimer;
         const logoTrigger = document.getElementById('logo-trigger');
         const adminPanel = document.getElementById('admin-panel');
         const mainHeader = document.getElementById('main-header');
 
+        // --- SISTEMA DE NAVEGACIÓN SPA (PORTADA Y CATÁLOGO) ---
+        function showHomePage() {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-home').classList.add('active-view');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function navigateToCategory(categoryName) {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-catalog').classList.add('active-view');
+            
+            document.getElementById('catalog-category-title').innerText = categoryName.toUpperCase();
+            renderCatalogGrid(categoryName);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Revincula los clics en los enlaces del menú del header
+        function bindHeaderNavEvents() {
+            const navLinks = document.querySelectorAll('#main-nav-links a');
+            navLinks.forEach(a => {
+                const categoryText = a.innerText.trim();
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    navigateToCategory(categoryText);
+                };
+            });
+        }
+
+        function renderCatalogGrid(categoryFilter) {
+            const container = document.getElementById('catalog-grid-container');
+            const allProducts = document.querySelectorAll('#carousel-track-container .card-mini');
+            
+            container.innerHTML = '';
+            let count = 0;
+
+            allProducts.forEach(prod => {
+                const title = prod.querySelector('.card-title').innerText;
+                const cat = prod.querySelector('.card-category').innerText;
+                
+                if (categoryFilter === 'Todos' || categoryFilter === 'Sale' || cat.toLowerCase().includes(categoryFilter.toLowerCase()) || title.toLowerCase().includes(categoryFilter.toLowerCase())) {
+                    const clone = prod.cloneNode(true);
+                    container.appendChild(clone);
+                    count++;
+                }
+            });
+
+            const addCard = document.createElement('div');
+            addCard.className = 'add-product-card';
+            addCard.onclick = createNewProductCard;
+            addCard.innerHTML = '<span>+ AGREGAR PRODUCTO</span>';
+            container.appendChild(addCard);
+
+            document.getElementById('catalog-item-count').innerText = `Mostrando ${count} productos en ${categoryFilter}`;
+        }
+
+        function filterCatalogSearch(query) {
+            if(!document.getElementById('view-catalog').classList.contains('active-view')) {
+                navigateToCategory('Todos');
+            }
+            renderCatalogGrid(query);
+        }
+
+        function createNewProductCard() {
+            const track = document.getElementById('carousel-track-container');
+            const id = 'product-card-' + Date.now();
+            const newProd = document.createElement('div');
+            newProd.className = 'card-mini';
+            newProd.id = id;
+            newProd.dataset.category = 'Guantes';
+            newProd.innerHTML = `
+                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                <div class="card-img-container">
+                    <span class="heart-icon">♡</span>
+                    <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Nuevo Producto">
+                    <div class="card-price-tag">$ 1.000,00</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Nuevo Producto Phenom</h3>
+                    <p class="card-category">Guantes</p>
+                </div>
+            `;
+            track.appendChild(newProd);
+            saveAllSettings();
+            
+            const currentCat = document.getElementById('catalog-category-title').innerText;
+            renderCatalogGrid(currentCat);
+        }
+
+        // --- MODO ADMINISTRADOR ---
         function toggleAdminMode(forceState) {
             if (forceState) {
                 adminPanel.classList.add('active');
-                document.body.classList.add('admin-mode');
-                document.body.classList.add('panel-active');
-                renderHeaderTabsManager(); // Cargar la lista de pestañas al abrir el panel
+                document.body.classList.add('admin-mode', 'panel-active');
+                renderHeaderTabsManager();
             } else {
                 adminPanel.classList.remove('active');
-                document.body.classList.remove('admin-mode');
-                document.body.classList.remove('panel-active');
+                document.body.classList.remove('admin-mode', 'panel-active');
             }
         }
 
@@ -648,7 +658,7 @@
             }
         });
 
-        // --- GESTIÓN DE PESTAÑAS DE NAVEGACIÓN EN EL PANEL LATERAL ---
+        // --- GESTIÓN DE PESTAÑAS DEL HEADER ---
         function renderHeaderTabsManager() {
             const listContainer = document.getElementById('header-tabs-list');
             listContainer.innerHTML = '';
@@ -658,17 +668,11 @@
                 const item = document.createElement('div');
                 item.className = 'header-tab-item';
                 const isHighlight = a.classList.contains('highlight');
-                
-                item.innerHTML = `
-                    <span>${a.innerText} ${isHighlight ? '<span class="tab-tag">Sale</span>' : ''}</span> 
-                    <span style="color:#007bff;">✎ Editar</span>
-                `;
+                item.innerHTML = `<span>${a.innerText} ${isHighlight ? '<span class="tab-tag">Sale</span>' : ''}</span> <span style="color:#007bff;">✎ Editar</span>`;
                 item.onclick = () => openHeaderTabModal(index);
                 listContainer.appendChild(item);
             });
         }
-
-        const headerTabModal = document.getElementById('edit-header-tab-modal');
 
         function openHeaderTabModal(index) {
             const navLinks = document.querySelectorAll('#main-nav-links a');
@@ -676,36 +680,26 @@
                 const a = navLinks[index];
                 document.getElementById('edit-tab-index').value = index;
                 document.getElementById('edit-tab-text').value = a.innerText;
-                document.getElementById('edit-tab-link').value = a.getAttribute('href');
                 document.getElementById('edit-tab-highlight').checked = a.classList.contains('highlight');
-                document.getElementById('header-tab-modal-title').innerText = "EDITAR PESTAÑA: " + a.innerText;
             }
-            headerTabModal.classList.add('active');
+            document.getElementById('edit-header-tab-modal').classList.add('active');
         }
 
-        function closeHeaderTabModal() {
-            headerTabModal.classList.remove('active');
-        }
+        function closeHeaderTabModal() { document.getElementById('edit-header-tab-modal').classList.remove('active'); }
 
         function applyHeaderTabChanges() {
             const index = parseInt(document.getElementById('edit-tab-index').value);
             const newText = document.getElementById('edit-tab-text').value;
-            const newLink = document.getElementById('edit-tab-link').value;
             const isHighlight = document.getElementById('edit-tab-highlight').checked;
-
-            const navContainer = document.getElementById('main-nav-links');
-            const navLinks = navContainer.querySelectorAll('a');
+            const navLinks = document.querySelectorAll('#main-nav-links a');
 
             if(index >= 0 && index < navLinks.length) {
                 navLinks[index].innerText = newText;
-                navLinks[index].setAttribute('href', newLink);
-                if(isHighlight) {
-                    navLinks[index].classList.add('highlight');
-                } else {
-                    navLinks[index].classList.remove('highlight');
-                }
+                if(isHighlight) navLinks[index].classList.add('highlight');
+                else navLinks[index].classList.remove('highlight');
             }
             closeHeaderTabModal();
+            bindHeaderNavEvents();
             renderHeaderTabsManager();
             saveAllSettings();
         }
@@ -713,78 +707,43 @@
         function addNewHeaderTab() {
             const navContainer = document.getElementById('main-nav-links');
             const newA = document.createElement('a');
-            newA.setAttribute('href', '#');
             newA.innerText = 'NUEVA SECCIÓN';
             navContainer.appendChild(newA);
+            bindHeaderNavEvents();
             renderHeaderTabsManager();
             saveAllSettings();
         }
 
         function deleteHeaderTab() {
             const index = parseInt(document.getElementById('edit-tab-index').value);
-            const navContainer = document.getElementById('main-nav-links');
-            const navLinks = navContainer.querySelectorAll('a');
-
-            if(index >= 0 && index < navLinks.length) {
-                navLinks[index].remove();
-            }
+            const navLinks = document.querySelectorAll('#main-nav-links a');
+            if(index >= 0 && index < navLinks.length) navLinks[index].remove();
             closeHeaderTabModal();
+            bindHeaderNavEvents();
             renderHeaderTabsManager();
             saveAllSettings();
         }
 
-        // --- 2. CONTROLES EN VIVO HEADER Y LOGO ---
-        document.getElementById('edit-logo-size').addEventListener('input', function(e) {
-            logoTrigger.style.height = e.target.value + 'px';
-        });
-
-        document.getElementById('edit-header-pad').addEventListener('input', function(e) {
-            mainHeader.style.padding = `${e.target.value}px 40px`;
-        });
-
-        document.getElementById('edit-logo-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const base64 = event.target.result;
-                    logoTrigger.src = base64;
-                    logoTrigger.dataset.customLogo = base64; 
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // --- 3. LÓGICA MODAL DE EDICIÓN DE CARRUSEL ---
+        // --- EDICIÓN DE PRODUCTO ---
         let currentEditingCard = null;
-        const editModal = document.getElementById('edit-product-modal');
         let tempNewImgBase64 = null;
 
         function openEditModal(btnElement) {
             currentEditingCard = btnElement.closest('.card-mini');
-            const currentTitle = currentEditingCard.querySelector('.card-title').innerText;
-            const currentPrice = currentEditingCard.querySelector('.card-price-tag').innerText;
-            
-            document.getElementById('edit-mod-title').value = currentTitle;
-            document.getElementById('edit-mod-price').value = currentPrice;
-            document.getElementById('edit-mod-file').value = '';
+            document.getElementById('edit-mod-title').value = currentEditingCard.querySelector('.card-title').innerText;
+            document.getElementById('edit-mod-cat').value = currentEditingCard.querySelector('.card-category').innerText;
+            document.getElementById('edit-mod-price').value = currentEditingCard.querySelector('.card-price-tag').innerText;
             tempNewImgBase64 = null;
-            
-            editModal.classList.add('active');
+            document.getElementById('edit-product-modal').classList.add('active');
         }
 
-        function closeEditModal() {
-            editModal.classList.remove('active');
-            currentEditingCard = null;
-        }
+        function closeEditModal() { document.getElementById('edit-product-modal').classList.remove('active'); }
 
         document.getElementById('edit-mod-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    tempNewImgBase64 = event.target.result;
-                };
+                reader.onload = function(event) { tempNewImgBase64 = event.target.result; };
                 reader.readAsDataURL(file);
             }
         });
@@ -792,216 +751,38 @@
         function applyProductChanges() {
             if (!currentEditingCard) return;
             const newTitle = document.getElementById('edit-mod-title').value;
+            const newCat = document.getElementById('edit-mod-cat').value;
             const newPrice = document.getElementById('edit-mod-price').value;
-            
+
             if(tempNewImgBase64) currentEditingCard.querySelector('img').src = tempNewImgBase64;
             if(newTitle) currentEditingCard.querySelector('.card-title').innerText = newTitle;
+            if(newCat) currentEditingCard.querySelector('.card-category').innerText = newCat;
             if(newPrice) currentEditingCard.querySelector('.card-price-tag').innerText = newPrice;
-            
+
             closeEditModal();
-            saveAllSettings(); 
-        }
-
-        // --- 4. LÓGICA MODAL DE HERO ---
-        let currentHeroColNum = null;
-        const heroModal = document.getElementById('edit-hero-modal');
-        let tempHeroImgBase64 = null;
-
-        function openHeroModal(colNum) {
-            currentHeroColNum = colNum;
-            document.getElementById('hero-modal-title').innerText = "EDITAR COLUMNA HERO " + colNum;
-            document.getElementById('edit-hero-file').value = '';
-            document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
-            const subElem = document.getElementById('text-col' + colNum + '-sub');
-            document.getElementById('hero-mod-sub').value = subElem ? subElem.innerText : '';
-            tempHeroImgBase64 = null;
-            heroModal.classList.add('active');
-        }
-
-        function closeHeroModal() {
-            heroModal.classList.remove('active');
-            currentHeroColNum = null;
-        }
-
-        document.getElementById('edit-hero-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    tempHeroImgBase64 = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function applyHeroChanges() {
-            if (!currentHeroColNum) return;
-            const targetCol = document.getElementById('hero-col-' + currentHeroColNum);
-            const newTitle = document.getElementById('hero-mod-title').value;
-            const newSub = document.getElementById('hero-mod-sub').value;
-            const chosenFont = document.getElementById('hero-mod-font').value;
-
-            if (tempHeroImgBase64) {
-                targetCol.style.backgroundImage = `url('${tempHeroImgBase64}')`;
-                targetCol.dataset.customBg = tempHeroImgBase64;
-            }
+            saveAllSettings();
             
-            const titleElem = document.getElementById('text-col' + currentHeroColNum + '-title');
-            if(titleElem) {
-                titleElem.innerText = newTitle;
-                titleElem.style.fontFamily = chosenFont;
-            }
-            
-            const subElem = document.getElementById('text-col' + currentHeroColNum + '-sub');
-            if(subElem) {
-                subElem.innerText = newSub;
-                subElem.style.fontFamily = chosenFont;
-            }
+            const currentCat = document.getElementById('catalog-category-title').innerText;
+            renderCatalogGrid(currentCat);
+        }
 
-            closeHeroModal();
+        function deleteCurrentProduct() {
+            if(currentEditingCard) currentEditingCard.remove();
+            closeEditModal();
             saveAllSettings();
+            const currentCat = document.getElementById('catalog-category-title').innerText;
+            renderCatalogGrid(currentCat);
         }
 
-        // --- 5. LÓGICA MODAL COLUMNAS INFO ---
-        let currentInfoColNum = null;
-        const infoModal = document.getElementById('edit-info-modal');
-
-        function openInfoModal(colNum) {
-            currentInfoColNum = colNum;
-            document.getElementById('info-modal-title').innerText = "EDITAR COLUMNA INFO " + colNum;
-            document.getElementById('info-mod-title').value = document.getElementById('text-info-title-' + colNum).innerText;
-            document.getElementById('info-mod-desc').value = document.getElementById('text-info-desc-' + colNum).innerText;
-            infoModal.classList.add('active');
-        }
-
-        function closeInfoModal() {
-            infoModal.classList.remove('active');
-            currentInfoColNum = null;
-        }
-
-        function applyInfoChanges() {
-            if (!currentInfoColNum) return;
-            const newTitle = document.getElementById('info-mod-title').value;
-            const newDesc = document.getElementById('info-mod-desc').value;
-            const chosenFont = document.getElementById('info-mod-font').value;
-
-            const titleElem = document.getElementById('text-info-title-' + currentInfoColNum);
-            const descElem = document.getElementById('text-info-desc-' + currentInfoColNum);
-
-            if(titleElem) {
-                titleElem.innerText = newTitle;
-                titleElem.style.fontFamily = chosenFont;
-            }
-            if(descElem) {
-                descElem.innerText = newDesc;
-                descElem.style.fontFamily = chosenFont;
-            }
-
-            closeInfoModal();
-            saveAllSettings();
-        }
-
-        // --- 6. LÓGICA NEWSLETTER ---
-        const newsModal = document.getElementById('edit-news-modal');
-        const newsFormModal = document.getElementById('newsletter-form-modal');
-
-        function openNewsModal() {
-            document.getElementById('news-mod-title').value = document.getElementById('text-news-title').innerText;
-            newsModal.classList.add('active');
-        }
-        function closeNewsModal() { newsModal.classList.remove('active'); }
-        function applyNewsChanges() {
-            document.getElementById('text-news-title').innerText = document.getElementById('news-mod-title').value;
-            closeNewsModal();
-            saveAllSettings();
-        }
-
-        function openNewsletterForm() { newsFormModal.classList.add('active'); }
-        function closeNewsletterForm() { newsFormModal.classList.remove('active'); }
-        function submitNewsletter(e) {
-            e.preventDefault();
-            const name = document.getElementById('nl-name').value;
-            const wp = document.getElementById('nl-wp').value;
-            alert(`¡Gracias ${name}! Te registraste con éxito. Te contactaremos por WhatsApp (${wp}).`);
-            closeNewsletterForm();
-        }
-
-        // --- 7. LÓGICA FOOTER ---
-        let currentFooterCol = null;
-        const footerModal = document.getElementById('edit-footer-modal');
-
-        function openFooterModal(colNum) {
-            currentFooterCol = colNum;
-            document.getElementById('footer-modal-title').innerText = "EDITAR COLUMNA FOOTER " + colNum;
-            const colElem = document.getElementById('footer-col-' + colNum);
-            const clone = colElem.cloneNode(true);
-            const btn = clone.querySelector('.edit-footer-btn');
-            if(btn) btn.remove();
-            document.getElementById('footer-mod-html').value = clone.innerHTML;
-            footerModal.classList.add('active');
-        }
-
-        function closeFooterModal() {
-            footerModal.classList.remove('active');
-            currentFooterCol = null;
-        }
-
-        function applyFooterChanges() {
-            if (!currentFooterCol) return;
-            const newHtml = document.getElementById('footer-mod-html').value;
-            const colElem = document.getElementById('footer-col-' + currentFooterCol);
-            const editBtnHtml = colElem.querySelector('.edit-footer-btn').outerHTML;
-            colElem.innerHTML = editBtnHtml + newHtml;
-            closeFooterModal();
-            saveAllSettings();
-        }
-
-        // --- 8. SISTEMA DE PERSISTENCIA MAESTRA (LOCALSTORAGE) ---
+        // --- PERSISTENCIA LOCALSTORAGE ---
         function saveAllSettings() {
             const settings = {
                 fubBar: document.getElementById('fub-bar').innerText,
                 wpNum: document.querySelector('.wp-float').href.replace('https://wa.me/', ''),
                 logoSize: logoTrigger.style.height,
-                headerPad: mainHeader.style.padding,
-                logoSrc: logoTrigger.dataset.customLogo || logoTrigger.src,
                 headerNavHtml: document.getElementById('main-nav-links').innerHTML,
-                
-                // Hero Data
-                hero1Title: document.getElementById('text-col1-title').innerText,
-                hero1Sub: document.getElementById('text-col1-sub').innerText,
-                hero1Bg: document.getElementById('hero-col-1').style.backgroundImage,
-                hero1Font: document.getElementById('text-col1-title').style.fontFamily,
-
-                hero2Title: document.getElementById('text-col2-title').innerText,
-                hero2Sub: document.getElementById('text-col2-sub').innerText,
-                hero2Bg: document.getElementById('hero-col-2').style.backgroundImage,
-                hero2Font: document.getElementById('text-col2-title').style.fontFamily,
-
-                hero3Title: document.getElementById('text-col3-title').innerText,
-                hero3Sub: document.getElementById('text-col3-sub').innerText,
-                hero3Bg: document.getElementById('hero-col-3').style.backgroundImage,
-                hero3Font: document.getElementById('text-col3-title').style.fontFamily,
-
-                // Info Section
-                info1Title: document.getElementById('text-info-title-1').innerText,
-                info1Desc: document.getElementById('text-info-desc-1').innerText,
-                info1Font: document.getElementById('text-info-title-1').style.fontFamily,
-
-                info2Title: document.getElementById('text-info-title-2').innerText,
-                info2Desc: document.getElementById('text-info-desc-2').innerText,
-                info2Font: document.getElementById('text-info-title-2').style.fontFamily,
-
-                // Newsletter & Footer
-                newsTitle: document.getElementById('text-news-title').innerText,
-                footer1: document.getElementById('footer-col-1').innerHTML,
-                footer2: document.getElementById('footer-col-2').innerHTML,
-                footer3: document.getElementById('footer-col-3').innerHTML,
-                footer4: document.getElementById('footer-col-4').innerHTML,
-
-                // Carrusel
                 carouselHtml: document.getElementById('carousel-track-container').innerHTML
             };
-
             localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
             triggerSaveToast();
         }
@@ -1012,58 +793,16 @@
             setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }
 
-        // --- 9. CARGA AUTOMÁTICA AL INICIAR ---
         window.onload = () => {
             const saved = localStorage.getItem('phenom_persistent_data');
             if (saved) {
                 const data = JSON.parse(saved);
-                if(data.fubBar) {
-                    document.getElementById('fub-bar').innerText = data.fubBar;
-                    document.getElementById('edit-fub-bar').value = data.fubBar;
-                }
+                if(data.fubBar) document.getElementById('fub-bar').innerText = data.fubBar;
                 if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
-                if(data.logoSize) logoTrigger.style.height = data.logoSize;
-                if(data.headerPad) mainHeader.style.padding = data.headerPad;
-                if(data.logoSrc) { logoTrigger.src = data.logoSrc; logoTrigger.dataset.customLogo = data.logoSrc; }
                 if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
-
-                // Hero
-                if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
-                if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
-                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
-                if(data.hero1Font) { document.getElementById('text-col1-title').style.fontFamily = data.hero1Font; document.getElementById('text-col1-sub').style.fontFamily = data.hero1Font; }
-
-                if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
-                if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
-                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
-                if(data.hero2Font) { document.getElementById('text-col2-title').style.fontFamily = data.hero2Font; }
-
-                if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
-                if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
-                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
-                if(data.hero3Font) { document.getElementById('text-col3-title').style.fontFamily = data.hero3Font; document.getElementById('text-col3-sub').style.fontFamily = data.hero3Font; }
-
-                // Info
-                if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
-                if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
-                if(data.info1Font) { document.getElementById('text-info-title-1').style.fontFamily = data.info1Font; document.getElementById('text-info-desc-1').style.fontFamily = data.info1Font; }
-
-                if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title;
-                if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
-                if(data.info2Font) { document.getElementById('text-info-title-2').style.fontFamily = data.info2Font; document.getElementById('text-info-desc-2').style.fontFamily = data.info2Font; }
-
-                // Newsletter & Footer
-                if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle;
-                if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1;
-                if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
-                if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
-                if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
-
-                // Carrusel
                 if(data.carouselHtml) document.getElementById('carousel-track-container').innerHTML = data.carouselHtml;
-            } else {
-                document.getElementById('edit-fub-bar').value = document.getElementById('fub-bar').innerText;
             }
+            bindHeaderNavEvents();
         };
     </script>
 </body>
