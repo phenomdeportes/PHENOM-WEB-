@@ -32,7 +32,7 @@
 
         /* --- HERO SECTION --- */
         .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); height: 85vh; }
-        .hero-col { position: relative; background-color: #111; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #fff; }
+        .hero-col { position: relative; background-color: #111; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #fff; transition: background-image 0.3s ease; }
         .hero-col::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); }
         .hero-content { position: relative; z-index: 1; padding: 20px; width: 100%; }
         .hero-title { font-size: 2.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
@@ -169,7 +169,7 @@
 
         .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
 
-        /* --- PANEL LATERAL DE CONTROL OSCURO (IGUAL A CAPTURA 2) --- */
+        /* --- PANEL LATERAL DE CONTROL OSCURO --- */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #1e1e1e; color: #fff; border-right: 2px solid #333; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
         #admin-panel.active { display: block; }
         .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: #eab308; }
@@ -183,12 +183,12 @@
         .section-box { background: #27272a; border: 1px solid #3f3f46; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
         .section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; border-bottom: 1px solid #3f3f46; padding-bottom: 6px; letter-spacing: 0.5px; }
         
-        /* BOTONES FORMATO TEXTO (B, I, S) */
+        /* FORMATO TEXTO */
         .text-format-group { display: flex; gap: 5px; margin-top: 8px; }
         .btn-fmt { background: #3f3f46; color: #fff; border: 1px solid #52525b; width: 32px; height: 32px; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
         .btn-fmt.active { background: #eab308; color: #000; }
 
-        /* --- MODAL OSCURO CARGAR NUEVO PRODUCTO (EXACTO A CAPTURA 1) --- */
+        /* --- MODAL OSCURO CARGAR NUEVO PRODUCTO --- */
         .dark-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; }
         .dark-modal-overlay.active { display: flex; }
         .dark-modal-content { background: #1c1c1c; border: 1px solid #ca8a04; padding: 25px; width: 440px; border-radius: 8px; color: #fff; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 25px rgba(234, 179, 8, 0.2); }
@@ -197,7 +197,6 @@
         .dark-modal-content label { display: block; font-size: 12px; color: #d4d4d8; font-weight: 600; margin-bottom: 6px; }
         .dark-modal-content input[type="text"] { width: 100%; padding: 10px; background: #09090b; border: 1px solid #3f3f46; border-radius: 4px; color: #fff; font-size: 13px; outline: none; margin-bottom: 15px; }
         
-        /* CONTENEDOR CHECKBOXES ONZAS (IGUAL A LA IMAGEN) */
         .checkboxes-box { background: #09090b; border: 1px solid #3f3f46; border-radius: 4px; padding: 10px; display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; }
         .checkboxes-box label { display: flex; align-items: center; gap: 5px; margin-bottom: 0; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; }
         .checkboxes-box input[type="checkbox"] { accent-color: #eab308; width: 14px; height: 14px; }
@@ -238,11 +237,11 @@
         </div>
         
         <nav class="nav-links" id="main-nav-links">
-            <a>Guantes</a>
-            <a>Protección</a>
-            <a>Indumentaria</a>
-            <a>Tinas de Recuperación</a>
-            <a class="highlight">Sale</a>
+            <a>PROTECTORES</a>
+            <a>ACCESORIOS</a>
+            <a>INDUMENTARIA</a>
+            <a>RECUPERACIÓN - FRIO/CALOR</a>
+            <a class="highlight">SALE</a>
         </nav>
 
         <div class="header-icons">
@@ -261,7 +260,7 @@
                 <div class="hero-content">
                     <h1 class="hero-title" id="text-col1-title">PHENOM ELITE</h1>
                     <h2 class="hero-subtitle" id="text-col1-sub">MÁXIMA PROTECCIÓN</h2>
-                    <a onclick="navigateToCategory('Guantes')" class="btn-comprar">COMPRAR AHORA →</a>
+                    <a onclick="navigateToCategory('PROTECTORES')" class="btn-comprar">COMPRAR AHORA →</a>
                 </div>
             </div>
             <div class="hero-col" id="hero-col-2" style="background-image: url('https://images.unsplash.com/photo-1596356453261-0d265eb26d43?q=80&w=800');">
@@ -277,7 +276,7 @@
                 <div class="hero-content">
                     <h1 class="hero-title" id="text-col3-title">SPARRING PRO</h1>
                     <h2 class="hero-subtitle" id="text-col3-sub">ONZAS PRECISAS</h2>
-                    <a onclick="navigateToCategory('Protección')" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
+                    <a onclick="navigateToCategory('PROTECTORES')" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
                 </div>
             </div>
         </section>
@@ -321,7 +320,7 @@
                     <h1 class="catalog-title" id="catalog-category-title">EQUIPAMIENTO DE PROTECCIÓN</h1>
                     <div class="catalog-subtitle" id="catalog-category-subtitle">Guantes, cabezales y tibiales de alto rendimiento</div>
                 </div>
-                <button class="btn-add-product-top" onclick="openCreateProductModal()">+ Agregar Protector</button>
+                <button class="btn-add-product-top" id="btn-dynamic-add-prod" onclick="openCreateProductModal()">+ Agregar Producto</button>
             </div>
 
             <!-- GRILLA DE PRODUCTOS -->
@@ -341,10 +340,10 @@
         <div class="footer-col" id="footer-col-1">
             <button class="edit-footer-btn" onclick="openFooterModal(1)">✎</button>
             <h3>PRODUCTOS</h3>
-            <a onclick="navigateToCategory('Guantes')">Guantes de Boxeo</a>
-            <a onclick="navigateToCategory('Protección')">Tibiales y Cabezales</a>
-            <a onclick="navigateToCategory('Indumentaria')">Vendas y Bucales</a>
-            <a onclick="navigateToCategory('Tinas de Recuperación')">Tinas de Recuperación</a>
+            <a onclick="navigateToCategory('PROTECTORES')">Guantes de Boxeo</a>
+            <a onclick="navigateToCategory('PROTECTORES')">Tibiales y Cabezales</a>
+            <a onclick="navigateToCategory('ACCESORIOS')">Vendas y Bucales</a>
+            <a onclick="navigateToCategory('RECUPERACIÓN - FRIO/CALOR')">Tinas de Recuperación</a>
         </div>
         <div class="footer-col" id="footer-col-2">
             <button class="edit-footer-btn" onclick="openFooterModal(2)">✎</button>
@@ -375,24 +374,20 @@
     <!-- WHATSAPP FLOTANTE -->
     <a href="https://wa.me/59893418239" class="wp-float" target="_blank">✆</a>
 
-    <!-- PANEL CONTROL OMEGA (ESTILO CAPTURA 2) -->
+    <!-- PANEL CONTROL OMEGA -->
     <div id="admin-panel">
         <div class="admin-header">
             <span>Control Omega</span>
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
-        <!-- BLOQUE: FONDOS DE PANTALLA (CAPTURA 2) -->
+        <!-- BLOQUE: FONDOS DE PANTALLA (SINCRONIZADO CON LAS PESTAÑAS REALES) -->
         <div class="section-box">
             <div class="section-title">FONDOS DE PANTALLA</div>
             <div class="admin-group">
                 <label>Pantalla a Editar</label>
                 <select id="bg-target-screen" onchange="loadScreenBgSettings()">
-                    <option value="Protección">Protectores</option>
-                    <option value="Guantes">Guantes</option>
-                    <option value="Indumentaria">Indumentaria</option>
-                    <option value="Tinas de Recuperación">Tinas de Recuperación</option>
-                    <option value="Sale">Sale</option>
+                    <!-- Se llena dinámicamente por JS desde las pestañas reales -->
                 </select>
             </div>
             <div class="admin-group">
@@ -413,12 +408,12 @@
             </div>
         </div>
 
-        <!-- BLOQUE: TÍTULOS DE PANTALLA (CAPTURA 2) -->
+        <!-- BLOQUE: TÍTULOS DE PANTALLA -->
         <div class="section-box">
             <div class="section-title">TÍTULOS DE PANTALLA</div>
             <div class="admin-group">
                 <label>Texto del Título</label>
-                <input type="text" id="title-text-input" value="EQUIPAMIENTO DE PROTECCIÓN" oninput="applyTitleSettings()">
+                <input type="text" id="title-text-input" value="" oninput="applyTitleSettings()">
             </div>
             <div class="admin-group">
                 <label>Seleccionar Fuente</label>
@@ -459,7 +454,7 @@
         <button class="btn-save" onclick="saveAllSettings()">GUARDAR CAMBIOS</button>
     </div>
 
-    <!-- MODAL CARGAR NUEVO PRODUCTO (EXACTO A CAPTURA 1) -->
+    <!-- MODAL CARGAR NUEVO PRODUCTO -->
     <div class="dark-modal-overlay" id="dark-product-modal">
         <div class="dark-modal-content">
             <button class="simple-modal-close" onclick="closeDarkModal()" style="color:#fff;">X</button>
@@ -507,7 +502,7 @@
         </div>
     </div>
 
-    <!-- OTROS MODALES DE EDICIÓN -->
+    <!-- MODALES EDICIÓN AUXILIARES -->
     <div class="simple-modal-overlay" id="edit-header-tab-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeaderTabModal()">X</button>
@@ -520,14 +515,15 @@
         </div>
     </div>
 
+    <!-- MODAL HERO (INCLUYE ARCHIVO DE IMAGEN LOCAL) -->
     <div class="simple-modal-overlay" id="edit-hero-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
-            <div class="simple-modal-title" id="hero-modal-title">EDITAR HERO</div>
-            <div class="simple-group"><label>Imagen Fondo</label><input type="file" id="edit-hero-file" accept="image/*"></div>
-            <div class="simple-group"><label>Título</label><input type="text" id="hero-mod-title"></div>
+            <div class="simple-modal-title" id="hero-modal-title">EDITAR COLUMNA HERO</div>
+            <div class="simple-group"><label>Cargar Imagen de Fondo (Local)</label><input type="file" id="edit-hero-file" accept="image/*"></div>
+            <div class="simple-group"><label>Título Principal</label><input type="text" id="hero-mod-title"></div>
             <div class="simple-group"><label>Subtítulo</label><input type="text" id="hero-mod-sub"></div>
-            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR</button>
+            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
@@ -537,7 +533,7 @@
             <div class="simple-modal-title" id="info-modal-title">EDITAR INFO</div>
             <div class="simple-group"><label>Título</label><input type="text" id="info-mod-title"></div>
             <div class="simple-group"><label>Descripción</label><textarea id="info-mod-desc" rows="6"></textarea></div>
-            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR</button>
+            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
@@ -546,7 +542,7 @@
             <button class="simple-modal-close" onclick="closeNewsModal()">X</button>
             <div class="simple-modal-title">EDITAR NEWSLETTER</div>
             <div class="simple-group"><label>Título</label><input type="text" id="news-mod-title"></div>
-            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR</button>
+            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
@@ -555,7 +551,7 @@
             <button class="simple-modal-close" onclick="closeFooterModal()">X</button>
             <div class="simple-modal-title" id="footer-modal-title">EDITAR FOOTER</div>
             <div class="simple-group"><label>Contenido HTML</label><textarea id="footer-mod-html" rows="6"></textarea></div>
-            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR</button>
+            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
@@ -573,28 +569,22 @@
 
     <div id="toast-success">¡CAMBIOS GUARDADOS Y PERSISTIDOS! ✓</div>
 
-    <!-- SCRIPT PRINCIPAL COMPLETO CON CONTROL DE FONDOS Y TÍTULOS -->
+    <!-- SCRIPT PRINCIPAL COMPLETO CON SINCRONIZACIÓN AUTOMÁTICA -->
     <script>
         let clickCount = 0;
         let clickTimer;
         const logoTrigger = document.getElementById('logo-trigger');
         const adminPanel = document.getElementById('admin-panel');
 
-        // REGISTRO DE PANTALLAS (FONDOS Y TÍTULOS)
-        let screenSettings = {
-            'Protección': { bg: '', fit: 'cover', opacity: '0', title: 'EQUIPAMIENTO DE PROTECCIÓN', font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false },
-            'Guantes': { bg: '', fit: 'cover', opacity: '0', title: 'GUANTES DE BOXEO', font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false },
-            'Indumentaria': { bg: '', fit: 'cover', opacity: '0', title: 'INDUMENTARIA PHENOM', font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false },
-            'Tinas de Recuperación': { bg: '', fit: 'cover', opacity: '0', title: 'TINAS DE RECUPERACIÓN', font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false },
-            'Sale': { bg: '', fit: 'cover', opacity: '0', title: 'OFERTAS SALE', font: "'Segoe UI', sans-serif", color: '#e00000', spacing: 0, bold: false, italic: false, underline: false }
-        };
+        // REGISTRO DE PANTALLAS Y FONDOS
+        let screenSettings = {};
 
         // PRODUCTOS PERSISTENTES
         let productsData = [
             {
                 id: 'prod-1',
                 title: 'Guantes de Boxeo Blanco / Dorado',
-                category: 'Protección',
+                category: 'PROTECTORES',
                 variants: ['12oz', '14oz', '16oz'],
                 regularPrice: '$2.500',
                 price: '$2.090 UYU',
@@ -604,7 +594,7 @@
             {
                 id: 'prod-2',
                 title: 'Cabezal Sparring Pro Negro Mate',
-                category: 'Protección',
+                category: 'PROTECTORES',
                 variants: ['10oz', '12oz'],
                 regularPrice: '',
                 price: '$2.350 UYU',
@@ -613,7 +603,7 @@
             }
         ];
 
-        // --- SISTEMA SPA ---
+        // --- SISTEMA SPA Y NAVEGACIÓN ---
         function showHomePage() {
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-home').classList.add('active-view');
@@ -624,7 +614,14 @@
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-catalog').classList.add('active-view');
             
-            document.getElementById('bg-target-screen').value = categoryName;
+            // Sincronizar el selector del panel si la pantalla existe
+            const bgSelect = document.getElementById('bg-target-screen');
+            if (bgSelect.querySelector(`option[value="${categoryName}"]`)) {
+                bgSelect.value = categoryName;
+            }
+            
+            document.getElementById('btn-dynamic-add-prod').innerText = `+ Agregar ${categoryName.slice(0, -1)}`;
+            
             loadScreenBgSettings();
             renderCatalogGrid(categoryName);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -639,33 +636,64 @@
                     navigateToCategory(categoryText);
                 };
             });
+            syncDropdownWithRealTabs();
         }
 
-        // --- APLICAR AJUSTES DE FONDOS Y TÍTULOS EN VIVO (CAPTURA 2) ---
+        // SINCRONIZAR EL DESPLEGABLE CON LAS PESTAÑAS REALES DEL HEADER
+        function syncDropdownWithRealTabs() {
+            const navLinks = document.querySelectorAll('#main-nav-links a');
+            const bgSelect = document.getElementById('bg-target-screen');
+            const currentSelected = bgSelect.value;
+
+            bgSelect.innerHTML = '';
+            navLinks.forEach(a => {
+                const name = a.innerText.trim();
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                bgSelect.appendChild(opt);
+
+                if (!screenSettings[name]) {
+                    screenSettings[name] = { bg: '', fit: 'cover', opacity: '0', title: name, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
+                }
+            });
+
+            if (currentSelected && bgSelect.querySelector(`option[value="${currentSelected}"]`)) {
+                bgSelect.value = currentSelected;
+            }
+        }
+
+        // Cargar datos de fondo/título de la pantalla activa
         function loadScreenBgSettings() {
-            const screen = document.getElementById('bg-target-screen').value;
-            if(!screenSettings[screen]) {
-                screenSettings[screen] = { bg: '', fit: 'cover', opacity: '0', title: screen.toUpperCase(), font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
+            const bgSelect = document.getElementById('bg-target-screen');
+            if (!bgSelect.value) return;
+
+            const screen = bgSelect.value;
+            if (!screenSettings[screen]) {
+                screenSettings[screen] = { bg: '', fit: 'cover', opacity: '0', title: screen, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
             }
             const s = screenSettings[screen];
 
-            document.getElementById('bg-fit-mode').value = s.fit;
-            document.getElementById('card-transparency').value = s.opacity;
-            document.getElementById('title-text-input').value = s.title;
-            document.getElementById('title-font-family').value = s.font;
-            document.getElementById('title-color-input').value = s.color;
-            document.getElementById('title-letter-spacing').value = s.spacing;
+            document.getElementById('bg-fit-mode').value = s.fit || 'cover';
+            document.getElementById('card-transparency').value = s.opacity || '0';
+            document.getElementById('title-text-input').value = s.title || screen;
+            document.getElementById('title-font-family').value = s.font || "'Segoe UI', sans-serif";
+            document.getElementById('title-color-input').value = s.color || '#000000';
+            document.getElementById('title-letter-spacing').value = s.spacing || 0;
 
-            document.getElementById('fmt-b').classList.toggle('active', s.bold);
-            document.getElementById('fmt-i').classList.toggle('active', s.italic);
-            document.getElementById('fmt-s').classList.toggle('active', s.underline);
+            document.getElementById('fmt-b').classList.toggle('active', !!s.bold);
+            document.getElementById('fmt-i').classList.toggle('active', !!s.italic);
+            document.getElementById('fmt-s').classList.toggle('active', !!s.underline);
 
             applyBackgroundSettings();
             applyTitleSettings();
         }
 
         function applyBackgroundSettings() {
-            const screen = document.getElementById('bg-target-screen').value;
+            const bgSelect = document.getElementById('bg-target-screen');
+            if (!bgSelect.value) return;
+
+            const screen = bgSelect.value;
             const s = screenSettings[screen];
 
             s.fit = document.getElementById('bg-fit-mode').value;
@@ -691,16 +719,21 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const screen = document.getElementById('bg-target-screen').value;
-                    screenSettings[screen].bg = event.target.result;
-                    applyBackgroundSettings();
-                    saveAllSettings();
+                    if (screen) {
+                        screenSettings[screen].bg = event.target.result;
+                        applyBackgroundSettings();
+                        saveAllSettings();
+                    }
                 };
                 reader.readAsDataURL(file);
             }
         });
 
         function applyTitleSettings() {
-            const screen = document.getElementById('bg-target-screen').value;
+            const bgSelect = document.getElementById('bg-target-screen');
+            if (!bgSelect.value) return;
+
+            const screen = bgSelect.value;
             const s = screenSettings[screen];
 
             s.title = document.getElementById('title-text-input').value;
@@ -720,6 +753,8 @@
 
         function toggleFormat(type) {
             const screen = document.getElementById('bg-target-screen').value;
+            if(!screen) return;
+
             const s = screenSettings[screen];
             if(type === 'bold') s.bold = !s.bold;
             if(type === 'italic') s.italic = !s.italic;
@@ -735,7 +770,7 @@
             container.innerHTML = '';
 
             const filtered = productsData.filter(p => 
-                categoryFilter === 'Todos' || categoryFilter === 'Sale' || 
+                categoryFilter === 'Todos' || categoryFilter === 'SALE' || 
                 p.category.toLowerCase().includes(categoryFilter.toLowerCase()) || 
                 p.title.toLowerCase().includes(categoryFilter.toLowerCase())
             );
@@ -789,6 +824,8 @@
                 adminPanel.classList.add('active');
                 document.body.classList.add('admin-mode', 'panel-active');
                 renderHeaderTabsManager();
+                syncDropdownWithRealTabs();
+                loadScreenBgSettings();
             } else {
                 adminPanel.classList.remove('active');
                 document.body.classList.remove('admin-mode', 'panel-active');
@@ -806,7 +843,7 @@
             }
         });
 
-        // --- GESTIÓN DE PRODUCTOS OSCURO (CAPTURA 1) ---
+        // --- GESTIÓN DE PRODUCTOS OSCURO ---
         let currentUploadedFiles = [];
 
         function openCreateProductModal() {
@@ -884,7 +921,7 @@
             const regPrice = document.getElementById('dark-reg-price').value;
             const price = document.getElementById('dark-price').value || '$0 UYU';
             const mp = document.getElementById('dark-mp-link').value;
-            const cat = document.getElementById('bg-target-screen').value || 'Protección';
+            const cat = document.getElementById('bg-target-screen').value || 'PROTECTORES';
 
             const selectedOz = [];
             document.querySelectorAll('.chk-oz:checked').forEach(c => selectedOz.push(c.value));
@@ -977,19 +1014,40 @@
             saveAllSettings();
         }
 
-        // BOTONES AZULES
+        // BOTONES HERO Y SUBIDA DE IMAGEN DE FONDO LOCAL
         let currentHeroColNum = null;
+        let tempHeroImgBase64 = null;
+
         function openHeroModal(colNum) {
             currentHeroColNum = colNum;
             document.getElementById('hero-modal-title').innerText = "EDITAR HERO " + colNum;
+            document.getElementById('edit-hero-file').value = '';
             document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
             const sub = document.getElementById('text-col' + colNum + '-sub');
             document.getElementById('hero-mod-sub').value = sub ? sub.innerText : '';
+            tempHeroImgBase64 = null;
             document.getElementById('edit-hero-modal').classList.add('active');
         }
+
+        document.getElementById('edit-hero-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    tempHeroImgBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         function closeHeroModal() { document.getElementById('edit-hero-modal').classList.remove('active'); }
+
         function applyHeroChanges() {
             if(currentHeroColNum) {
+                const targetCol = document.getElementById('hero-col-' + currentHeroColNum);
+                if (tempHeroImgBase64) {
+                    targetCol.style.backgroundImage = `url('${tempHeroImgBase64}')`;
+                }
                 document.getElementById('text-col' + currentHeroColNum + '-title').innerText = document.getElementById('hero-mod-title').value;
                 const sub = document.getElementById('text-col' + currentHeroColNum + '-sub');
                 if(sub) sub.innerText = document.getElementById('hero-mod-sub').value;
@@ -1068,10 +1126,15 @@
                 
                 hero1Title: document.getElementById('text-col1-title').innerText,
                 hero1Sub: document.getElementById('text-col1-sub').innerText,
+                hero1Bg: document.getElementById('hero-col-1').style.backgroundImage,
+
                 hero2Title: document.getElementById('text-col2-title').innerText,
                 hero2Sub: document.getElementById('text-col2-sub').innerText,
+                hero2Bg: document.getElementById('hero-col-2').style.backgroundImage,
+
                 hero3Title: document.getElementById('text-col3-title').innerText,
                 hero3Sub: document.getElementById('text-col3-sub').innerText,
+                hero3Bg: document.getElementById('hero-col-3').style.backgroundImage,
 
                 info1Title: document.getElementById('text-info-title-1').innerText,
                 info1Desc: document.getElementById('text-info-desc-1').innerText,
@@ -1108,10 +1171,15 @@
 
                 if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
                 if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
+                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
+
                 if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
                 if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
+                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
+
                 if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
                 if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
+                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
 
                 if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
                 if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
