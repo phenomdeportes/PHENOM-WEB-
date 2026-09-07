@@ -3,614 +3,1090 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phenom Uruguay - Tienda Oficial FUB</title>
+    <title>Phenom | Tienda Oficial</title>
+    <!-- Importación de las 15 fuentes tipográficas solicitadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Arial&family=Courier+New&family=Georgia&family=Impact&family=Lucida+Console&family=Palatino&family=Tahoma&family=Times+New+Roman&family=Verdana&family=Montserrat:wght@400;700;900&family=Oswald:wght@400;700&family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --primary-color: #e5b80b;
-            --text-color: #111111;
-            --header-bg: #111111;
-            --header-height: auto;
-            --header-font-size: 24px;
-            --header-font-family: 'Impact', sans-serif;
+        /* --- RESET Y VARIABLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { overflow-x: hidden; background: #fff; transition: margin-left 0.3s ease; }
+        body.panel-active { margin-left: 350px; }
+
+        /* --- BARRA SUPERIOR --- */
+        .top-bar { background-color: #000; color: #fff; text-align: center; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; }
+
+        /* --- HEADER PRINCIPAL --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; }
+        .logo-container img { height: 45px; cursor: pointer; transition: all 0.3s ease; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+        .nav-links a:hover { color: #666; }
+        .nav-links a.highlight { color: #e00; }
+        .header-icons { display: flex; align-items: center; gap: 20px; }
+        .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
+        .icon { font-size: 20px; cursor: pointer; }
+
+        /* --- HERO SECTION --- */
+        .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); height: 85vh; }
+        .hero-col { position: relative; background-color: #111; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #fff; }
+        .hero-col::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); }
+        .hero-content { position: relative; z-index: 1; padding: 20px; width: 100%; }
+        .hero-title { font-size: 2.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
+        .hero-subtitle { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
+        .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .btn-comprar:hover { background: #000; color: #fff; }
+
+        /* BOTÓN DE EDICIÓN HERO (Círculo Azul) */
+        .edit-hero-btn {
+            position: absolute; top: 20px; right: 20px; width: 35px; height: 35px;
+            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            z-index: 10; display: none; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); transition: margin-right 0.3s ease; }
-        body.drawer-open { margin-right: 400px; }
+        body.admin-mode .edit-hero-btn { display: flex; }
 
-        /* Barra FUB Superior */
-        .fub-bar { background: var(--header-bg); color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
+        /* --- CARRUSEL HORIZONTAL --- */
+        .carousel-section { padding: 40px; background: #fff; max-width: 100vw; }
+        .carousel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 20px; }
+        .carousel-tabs button { background: none; border: 1px solid transparent; font-size: 16px; font-weight: 900; padding: 10px 20px; cursor: pointer; text-transform: uppercase; }
+        .carousel-tabs button.active { background: #000; color: #fff; border: 1px solid #000; }
+        .carousel-tabs button:not(.active) { border: 1px solid #000; margin-left: 10px; }
+        .carousel-actions { display: flex; align-items: center; gap: 15px; }
+        .view-all { color: #000; text-decoration: underline; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .arrow-btn { background: none; border: none; font-size: 20px; cursor: pointer; }
+        .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px; align-items: stretch; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .card-mini { min-width: 280px; max-width: 280px; flex-shrink: 0; cursor: pointer; position: relative; }
+        .card-img-container { position: relative; background: #f4f4f4; height: 280px; display: flex; justify-content: center; align-items: center; }
+        .card-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .heart-icon { position: absolute; top: 15px; right: 15px; font-size: 20px; color: #000; }
+        .card-price-tag { position: absolute; bottom: 0; left: 10px; background: #fff; padding: 5px 10px; font-weight: 900; font-size: 14px; }
+        .card-info { padding-top: 15px; }
+        .card-title { font-size: 13px; color: #000; font-weight: 400; margin-bottom: 3px; }
+        .card-category { font-size: 13px; color: #767677; }
 
-        /* Header Principal */
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); padding: var(--header-height, 15px) 30px; color: white; position: relative; }
-        .header-left { display: flex; align-items: center; gap: 15px; }
+        /* --- MODO ADMINISTRADOR --- */
+        .admin-only { display: none; }
+        body.admin-mode .admin-only { display: block; }
+        body.admin-mode .admin-flex { display: flex; }
+
+        /* BOTONES DE EDICIÓN EN PRODUCTOS */
+        .edit-card-btn {
+            position: absolute; top: 10px; left: 10px; z-index: 10;
+            background: #e00; color: #fff; border: none; padding: 5px 10px;
+            font-size: 11px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* TARJETA NUEVO PRODUCTO (OCULTA POR DEFECTO FUERA DE MODO ADMIN) */
+        .add-product-card {
+            min-width: 280px; max-width: 280px; flex-shrink: 0;
+            background: #f9f9f9; border: 2px dashed #000; cursor: pointer;
+            display: none; justify-content: center; align-items: center;
+            height: 355px; transition: background 0.3s;
+        }
+        body.admin-mode .add-product-card { display: flex; }
+        .add-product-card:hover { background: #eaeaea; }
+        .add-product-card span { font-size: 16px; font-weight: 900; color: #000; }
+
+        /* --- SECCIÓN INFO MARCA (FONDO CREMA) --- */
+        .info-section { background-color: #f4f4ec; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #000; }
+        .info-column { position: relative; }
+        .info-column h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; letter-spacing: -0.5px; }
+        .info-column p { font-size: 14px; line-height: 1.7; margin-bottom: 15px; color: #111; }
+
+        /* BOTÓN EDICIÓN COLUMNA INFO (Círculo Azul) */
+        .edit-info-btn {
+            position: absolute; top: 0; right: 0; width: 35px; height: 35px;
+            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            z-index: 10; display: none; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        body.admin-mode .edit-info-btn { display: flex; }
+
+        /* --- BARRA NEWSLETTER --- */
+        .newsletter-bar { background-color: #ede734; padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
+        .newsletter-bar h2 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: #000; }
+        .btn-register { background-color: #000; color: #fff; padding: 15px 30px; font-weight: 900; text-transform: uppercase; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
+        .btn-register:hover { background-color: #333; }
         
-        /* Botón Hamburguesa de 3 líneas */
-        .hamburger-btn { display: flex; flex-direction: column; justify-content: space-between; width: 28px; height: 21px; background: none; border: none; cursor: pointer; padding: 0; z-index: 1001; }
-        .hamburger-btn span { display: block; width: 100%; height: 3px; background-color: white; border-radius: 2px; transition: all 0.3s ease; }
+        .edit-news-btn {
+            position: absolute; top: 15px; right: 15px; width: 35px; height: 35px;
+            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            z-index: 10; display: none; align-items: center; justify-content: center;
+        }
+        body.admin-mode .edit-news-btn { display: flex; }
 
-        .logo-text { font-family: var(--header-font-family); font-size: var(--header-font-size); letter-spacing: 7px; color: #fff; text-decoration: none; cursor: pointer; user-select: none; }
+        /* --- FOOTER PRINCIPAL --- */
+        .footer { background-color: #fff; padding: 60px 40px; display: grid; grid-template-columns: repeat(4, 1fr) 0.5fr; gap: 30px; color: #000; border-top: 1px solid #eaeaea; }
+        .footer-col { position: relative; }
+        .footer-col h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
+        .footer-col a { display: block; color: #333; text-decoration: none; font-size: 13px; margin-bottom: 12px; }
+        .footer-col a:hover { text-decoration: underline; color: #000; }
+        .ssl-badge { margin-top: 5px; width: 50px; }
+
+        /* BOTÓN EDICIÓN FOOTER (Círculo Azul) */
+        .edit-footer-btn {
+            position: absolute; top: 0; right: 0; width: 30px; height: 30px;
+            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;
+            z-index: 10; display: none; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        body.admin-mode .edit-footer-btn { display: flex; }
+
+        /* --- WHATSAPP FLOTANTE --- */
+        .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
+
+        /* --- PANEL DE EDICIÓN OCULTO --- */
+        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #f4f4f4; border-right: 2px solid #000; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.3); }
+        #admin-panel.active { display: block; }
+        .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 10px;}
+        .admin-group { margin-bottom: 15px; }
+        .admin-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #333; }
+        .admin-group input, .admin-group select, .admin-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; outline: none; background: #fff; }
+        .btn-save { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; letter-spacing: 1px; }
+        .btn-save:hover { background: #333; }
+        .btn-close { background: #e00; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; float: right; }
         
-        /* Menú de Navegación (PC y Desplegable) */
-        nav.pc-nav { display: flex; gap: 20px; }
-        nav.pc-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
-        nav.pc-nav a:hover { color: var(--primary-color); }
-
-        /* Menú Desplegable Móvil / Hamburguesa */
-        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 260px; background: #111; flex-direction: column; border-top: 1px solid #333; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .mobile-menu a { color: white; text-decoration: none; padding: 15px 20px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; display: block; }
-        .mobile-menu a:hover { background: #222; color: var(--primary-color); }
-        .mobile-menu.active { display: flex; }
-
-        .cart-indicator { color: white; font-weight: bold; font-size: 0.9rem; }
-
-        /* Páginas / Contenedores */
-        .page-section { display: none; max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 400px; background-size: cover; background-position: center; border-radius: 8px; }
-        .page-section.active-page { display: block; }
+        /* SELECTOR DE PESTAÑAS EN EL PANEL LATERAL */
+        .btn-panel-header-tab { background: #007bff; color: #fff; border: none; width: 100%; padding: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; margin-bottom: 15px; border-radius: 4px; }
+        .btn-panel-header-tab:hover { background: #0056b3; }
+        #header-tabs-container { background: #e9ecef; padding: 10px; border-radius: 4px; margin-bottom: 15px; display: none; }
+        #header-tabs-container.active { display: block; }
+        .header-tab-item { background: #fff; padding: 8px 12px; margin-bottom: 6px; cursor: pointer; font-weight: bold; font-size: 12px; border: 1px solid #ccc; border-radius: 3px; display: flex; justify-content: space-between; align-items: center; }
+        .header-tab-item:hover { background: #f1f1f1; }
         
-        h2.section-title { font-size: 1.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .subtitle { color: #666; margin-bottom: 30px; font-size: 1rem; }
+        /* CONTROLES DE PESTAÑA SELECCIONADA */
+        #tab-editor-controls { background: #fff; border: 1px solid #000; padding: 12px; border-radius: 4px; margin-top: 10px; display: none; }
+        #tab-editor-controls.active { display: block; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px; }
-        .product-card { background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; }
-        .product-card:hover { transform: translateY(-3px); }
-        .product-img-placeholder { background: #f4f4f4; height: 200px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 15px; font-weight: 500; overflow: hidden; }
-        .product-img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
-        .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
-        
-        .options-container { margin: 15px 0; text-align: left; }
-        .options-label { font-size: 0.8rem; color: #555; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
-        .options-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
-        .opt-btn { background: #f8f8f8; border: 1px solid #ccc; padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
-        .opt-btn.selected { background: #000; color: #fff; border-color: #000; }
+        /* --- MODALES --- */
+        .simple-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center; }
+        .simple-modal-overlay.active { display: flex; }
+        .simple-modal-content { background: #fff; padding: 30px; width: 380px; border: 2px solid #000; position: relative; max-height: 90vh; overflow-y: auto; }
+        .simple-modal-title { font-weight: 900; font-size: 16px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .simple-modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer; }
+        .simple-group { margin-bottom: 15px; }
+        .simple-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #333; }
+        .simple-group input, .simple-group select, .simple-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; outline: none; }
+        .btn-apply { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
-        .price-box { margin: 15px 0; font-size: 1.2rem; font-weight: bold; color: #111; }
-        .old-price { text-decoration: line-through; color: #888; font-size: 0.9rem; margin-right: 8px; }
-        
-        .btn-action { display: block; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; text-decoration: none; text-align: center; font-size: 0.9rem; }
-        .btn-cart { background: #111; color: #fff; }
-        .btn-mp { background: #009ee3; color: #fff; }
-
-        .btn-open-new-product { background: var(--primary-color); color: #11; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px; }
-
-        .new-product-modal { display: none; background: #1a1a1a; color: #fff; padding: 25px; border-radius: 8px; border: 1px solid #333; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .new-product-modal.active { display: block; }
-        .form-row { margin-bottom: 15px; }
-        .form-row label { display: block; font-size: 0.85rem; color: #ccc; margin-bottom: 5px; font-weight: bold; }
-        .form-row input[type="text"] { width: 100%; padding: 9px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; }
-        .checkbox-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: #222; padding: 12px; border-radius: 4px; }
-        .checkbox-grid label { font-size: 0.8rem; color: #ddd; display: flex; align-items: center; gap: 6px; cursor: pointer; }
-
-        /* Panel Lateral Deslizable (Drawer) */
-        #side-editor-drawer { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #1a1a1a; color: #fff; z-index: 9999; box-shadow: -5px 0 25px rgba(0,0,0,0.5); transition: right 0.3s ease; display: flex; flex-direction: column; }
-        #side-editor-drawer.open { right: 0; }
-        
-        .drawer-header { background: #111; padding: 20px; border-bottom: 2px solid var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
-        .drawer-header h3 { color: var(--primary-color); font-size: 1.1rem; }
-        .btn-close-drawer { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
-
-        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
-        
-        .editor-section { border-bottom: 1px solid #333; margin-bottom: 15px; padding-bottom: 15px; }
-        .section-toggle { background: #222; color: var(--primary-color); border: none; width: 100%; padding: 12px; text-align: left; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; justify-content: space-between; }
-        .section-body { display: none; padding-top: 15px; }
-        .section-body.active { display: block; }
-
-        .editor-group { margin-bottom: 12px; }
-        .editor-group label { display: block; font-size: 0.75rem; color: #aaa; margin-bottom: 4px; }
-        .editor-group input, .editor-group select { width: 100%; padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 0.85rem; }
-        
-        .btn-save-drawer { background: #28a745; color: #fff; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        /* CUADRO DE ÉXITO FLOTANTE */
+        #toast-success { position: fixed; top: 20px; right: 20px; background: #000; color: #ede734; padding: 15px 25px; font-weight: 900; border-radius: 4px; z-index: 10000; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; font-size: 12px; border: 1px solid #ede734; }
 
         @media (max-width: 768px) {
-            body.drawer-open { margin-right: 0; }
-            #side-editor-drawer { width: 100%; right: -100%; }
+            body.panel-active { margin-left: 0; }
+            #admin-panel { width: 100%; }
+            .hero-grid { grid-template-columns: 1fr; height: auto; }
+            .hero-col { height: 400px; }
+            .info-section { grid-template-columns: 1fr; padding: 40px 20px; }
+            .footer { grid-template-columns: repeat(2, 1fr); }
+            .newsletter-bar { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Barra FUB Superior -->
-    <div class="fub-bar" id="fubBarText">🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)</div>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar" id="fub-bar">
+        ¡BIENVENIDOS A LA TIENDA OFICIAL DE PHENOM!
+    </div>
 
-    <!-- Header Principal -->
-    <header>
-        <div class="header-left">
-            <!-- Botón Hamburguesa de 3 líneas -->
-            <button class="hamburger-btn" id="hamburgerToggle" aria-label="Abrir Menú">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="logo-area">
-                <span class="logo-text" id="brandLogoText" onclick="handleLogoClick()">PHENOM</span>
-            </div>
+    <!-- HEADER -->
+    <header class="header" id="main-header">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger">
         </div>
+        
+        <nav class="nav-links" id="main-nav-links">
+            <a href="categoria.html?cat=Guantes">Guantes</a>
+            <a href="categoria.html?cat=Proteccion">Protección</a>
+            <a href="categoria.html?cat=Indumentaria">Indumentaria</a>
+            <a href="categoria.html?cat=Tinas">Tinas de Recuperación</a>
+            <a href="categoria.html?cat=Sale" class="highlight">Sale</a>
+        </nav>
 
-        <!-- Menú Desplegable Hamburguesa (Con los 6 botones) -->
-        <div class="mobile-menu" id="mobileMenuDropdown">
-            <a onclick="switchPage('inicio'); closeMobileMenu()">Inicio</a>
-            <a onclick="switchPage('protectores'); closeMobileMenu()">Protectores</a>
-            <a onclick="switchPage('accesorios'); closeMobileMenu()">Accesorios</a>
-            <a onclick="switchPage('como-comprar'); closeMobileMenu()">Cómo Comprar</a>
-            <a onclick="switchPage('contacto'); closeMobileMenu()">Contacto</a>
-            <a onclick="switchPage('fub-novedades'); closeMobileMenu()" style="color: var(--primary-color);">FUB - Novedades</a>
+        <div class="header-icons">
+            <input type="text" class="search-box" placeholder="Buscar...">
+            <span class="icon">👤</span>
+            <span class="icon">♡</span>
+            <span class="icon">🛒</span>
         </div>
-
-        <div class="cart-indicator">🛒 Carrito: <span id="cartCount">0</span></div>
     </header>
 
-    <!-- PÁGINAS DE LA TIENDA -->
-    <div class="page-section active-page" id="page-inicio">
-        <h2 class="section-title" id="title-inicio">Productos Más Vendidos</h2>
-        <p class="subtitle" id="sub-inicio">Sponsor Oficial de la Federación Uruguaya de Boxeo</p>
-        <div class="products-grid" id="grid-inicio">
-            <div class="product-card">
-                <div class="product-img-placeholder">Guantes Blanco / Dorado</div>
-                <div class="product-title">Guantes de Boxeo Blanco / Dorado</div>
-                <div class="options-container">
-                    <span class="options-label">Seleccionar Onzas:</span>
-                    <div class="options-buttons">
-                        <button class="opt-btn selected" onclick="selectOption(this)">12oz</button>
-                        <button class="opt-btn" onclick="selectOption(this)">14oz</button>
-                        <button class="opt-btn" onclick="selectOption(this)">16oz</button>
-                    </div>
-                </div>
-                <div class="price-box"><span class="old-price">$2.500 UYU</span>$2.090 UYU</div>
-                <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
-                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+    <!-- HERO SECTION (3 COLUMNAS) -->
+    <section class="hero-grid">
+        <div class="hero-col" id="hero-col-1" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800');">
+            <button class="edit-hero-btn" onclick="openHeroModal(1)">✎</button>
+            <div class="hero-content">
+                <h1 class="hero-title" id="text-col1-title">PHENOM ELITE</h1>
+                <h2 class="hero-subtitle" id="text-col1-sub">MÁXIMA PROTECCIÓN</h2>
+                <a href="#" class="btn-comprar">COMPRAR AHORA →</a>
             </div>
         </div>
-    </div>
-
-    <!-- PROTECTORES -->
-    <div class="page-section" id="page-protectores">
-        <h2 class="section-title" id="title-protectores">Protectores Oficiales</h2>
-        <p class="subtitle" id="sub-protectores">Máxima seguridad para sparring y competencia.</p>
-        
-        <button class="btn-open-new-product" onclick="toggleNewProductForm('protectores')">＋ Cargar Nuevo Producto</button>
-        
-        <div class="new-product-modal" id="form-protectores">
-            <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
-            <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-protectores" placeholder="Ej: Cabezal Pro Negro"></div>
-            <div class="form-row">
-                <label>Talles / Onzas Disponibles</label>
-                <div class="checkbox-grid" id="opts-protectores">
-                    <label><input type="checkbox" value="6oz"> 6oz</label><label><input type="checkbox" value="8oz"> 8oz</label><label><input type="checkbox" value="10oz"> 10oz</label><label><input type="checkbox" value="12oz"> 12oz</label>
-                    <label><input type="checkbox" value="14oz"> 14oz</label><label><input type="checkbox" value="16oz"> 16oz</label><label><input type="checkbox" value="S"> S</label><label><input type="checkbox" value="M"> M</label>
-                    <label><input type="checkbox" value="L"> L</label><label><input type="checkbox" value="XL"> XL</label>
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div class="form-row"><label>Precio Tachado (UYU)</label><input type="text" id="old-price-protectores" placeholder="$2.500"></div>
-                <div class="form-row"><label>Precio Actual (UYU)</label><input type="text" id="price-protectores" placeholder="$2.090"></div>
-            </div>
-            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-protectores" placeholder="url?id=38..."></div>
-            <div class="form-row"><label>Cargar Fotos (Desde PC)</label><input type="file" id="file-protectores" accept="image/*" style="color:#ccc;"></div>
-            <button class="btn-action btn-cart" style="background:var(--primary-color); color:#11; margin-top:15px;" onclick="saveNewProduct('protectores')">Guardar Publicación</button>
-        </div>
-
-        <div class="products-grid" id="grid-protectores">
-            <div class="product-card">
-                <div class="product-img-placeholder">Cabezal Pro Negro</div>
-                <div class="product-title">Cabezal Sparring Pro Negro Mate</div>
-                <div class="options-container">
-                    <span class="options-label">Seleccionar Talle:</span>
-                    <div class="options-buttons">
-                        <button class="opt-btn selected" onclick="selectOption(this)">10oz</button>
-                        <button class="opt-btn" onclick="selectOption(this)">12oz</button>
-                    </div>
-                </div>
-                <div class="price-box">$2.350 UYU</div>
-                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+        <div class="hero-col" id="hero-col-2" style="background-image: url('https://images.unsplash.com/photo-1596356453261-0d265eb26d43?q=80&w=800');">
+            <button class="edit-hero-btn" onclick="openHeroModal(2)">✎</button>
+            <div class="hero-content">
+                <h1 class="hero-title" id="text-col2-title">THE ORIGINAL</h1>
+                <h2 class="hero-subtitle" id="text-col2-sub"></h2>
+                <a href="#" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
             </div>
         </div>
-    </div>
-
-    <!-- ACCESORIOS -->
-    <div class="page-section" id="page-accesorios">
-        <h2 class="section-title" id="title-accesorios">Accesorios de Entrenamiento</h2>
-        <p class="subtitle" id="sub-accesorios">Equipamiento complementario de alta durabilidad.</p>
-        
-        <button class="btn-open-new-product" onclick="toggleNewProductForm('accesorios')">＋ Cargar Nuevo Producto</button>
-        
-        <div class="new-product-modal" id="form-accesorios">
-            <h3 style="color:var(--primary-color); margin-bottom:15px;">Cargar Nuevo Producto</h3>
-            <div class="form-row"><label>Título del Producto</label><input type="text" id="title-prod-accesorios" placeholder="Ej: Vendas Pro 5M"></div>
-            <div class="form-row">
-                <label>Talles / Onzas Disponibles</label>
-                <div class="checkbox-grid" id="opts-accesorios">
-                    <label><input type="checkbox" value="6oz"> 6oz</label><label><input type="checkbox" value="8oz"> 8oz</label><label><input type="checkbox" value="10oz"> 10oz</label><label><input type="checkbox" value="12oz"> 12oz</label>
-                    <label><input type="checkbox" value="14oz"> 14oz</label><label><input type="checkbox" value="16oz"> 16oz</label><label><input type="checkbox" value="S"> S</label><label><input type="checkbox" value="M"> M</label>
-                    <label><input type="checkbox" value="L"> L</label><label><input type="checkbox" value="XL"> XL</label>
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div class="form-row"><label>Precio Tachado (UYU)</label><input type="text" id="old-price-accesorios" placeholder="$500"></div>
-                <div class="form-row"><label>Precio Actual (UYU)</label><input type="text" id="price-accesorios" placeholder="$450"></div>
-            </div>
-            <div class="form-row"><label>Link de Pago Mercado Pago</label><input type="text" id="mp-accesorios" placeholder="https://mpago.la/..."></div>
-            <div class="form-row"><label>Cargar Fotos (Desde PC)</label><input type="file" id="file-accesorios" accept="image/*" style="color:#ccc;"></div>
-            <button class="btn-action btn-cart" style="background:var(--primary-color); color:#11; margin-top:15px;" onclick="saveNewProduct('accesorios')">Guardar Publicación</button>
-        </div>
-
-        <div class="products-grid" id="grid-accesorios">
-            <div class="product-card">
-                <div class="product-img-placeholder">Vendas Pro 5 Metros</div>
-                <div class="product-title">Vendas Pro 5 Metros Phenom</div>
-                <div class="options-container">
-                    <span class="options-label">Seleccionar Opción:</span>
-                    <div class="options-buttons">
-                        <button class="opt-btn selected" onclick="selectOption(this)">5 Metros</button>
-                    </div>
-                </div>
-                <div class="price-box"><span class="old-price">$500 UYU</span>$450 UYU</div>
-                <a href="https://mercadopago.com.uy" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>
-                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
+        <div class="hero-col" id="hero-col-3" style="background-image: url('https://images.unsplash.com/photo-1517438322307-e67111335449?q=80&w=800');">
+            <button class="edit-hero-btn" onclick="openHeroModal(3)">✎</button>
+            <div class="hero-content">
+                <h1 class="hero-title" id="text-col3-title">SPARRING PRO</h1>
+                <h2 class="hero-subtitle" id="text-col3-sub">ONZAS PRECISAS</h2>
+                <a href="#" class="btn-comprar" style="display:none;">COMPRAR AHORA →</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- CÓMO COMPRAR -->
-    <div class="page-section" id="page-como-comprar">
-        <h2 class="section-title" id="title-como-comprar">Cómo Comprar</h2>
-        <p class="subtitle" id="sub-como-comprar">Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo.</p>
-    </div>
-
-    <!-- CONTACTO -->
-    <div class="page-section" id="page-contacto">
-        <h2 class="section-title" id="title-contacto">Contacto</h2>
-        <p class="subtitle" id="sub-contacto">Escribinos por WhatsApp para consultas comerciales o atención a clubes.</p>
-    </div>
-
-    <!-- FUB NOVEDADES -->
-    <div class="page-section" id="page-fub-novedades">
-        <h2 class="section-title" id="title-fub-novedades">FUB - Novedades</h2>
-        <p class="subtitle" id="sub-fub-novedades">Enterate de todas las competencias oficiales y torneos de la Federación.</p>
-        <div style="background: rgba(249,249,249,0.9); padding: 25px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
-            <h3 style="margin-bottom: 10px;">👕 Nuevas camisetas oficiales de árbitros</h3>
-            <p style="color: #555; line-height: 1.6;">Desarrollo exclusivo en conjunto con la FUB.</p>
+    <!-- CARRUSEL DE PRODUCTOS -->
+    <section class="carousel-section">
+        <div class="carousel-header">
+            <div class="carousel-tabs">
+                <button class="active">Novedades</button>
+                <button>Equipamiento</button>
+            </div>
+            <div class="carousel-actions">
+                <a href="#" class="view-all">VER TODO</a>
+                <button class="arrow-btn">❮</button>
+                <button class="arrow-btn">❯</button>
+            </div>
         </div>
-    </div>
-
-
-    <!-- PANEL LATERAL DE EDICIÓN (DRAWER) -->
-    <div id="side-editor-drawer">
-        <div class="drawer-header">
-            <h3>🛠️ Panel de Edición Phenom</h3>
-            <button class="btn-close-drawer" onclick="toggleDrawer()">✕</button>
-        </div>
-        <div class="drawer-content">
+        <div class="carousel-track" id="carousel-track-container">
             
-            <!-- SECCIÓN 1: BARRA SUPERIOR / LOGO -->
-            <div class="editor-section">
-                <button class="section-toggle" onclick="toggleSection('sec-header')">🏷️ Barra Superior / Logo <span>▼</span></button>
-                <div class="section-body active" id="sec-header">
-                    <div class="editor-group">
-                        <label>Texto Barra Superior (FUB):</label>
-                        <input type="text" id="inputFubText" value="🛡️ SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)" oninput="updateHeaderLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Nombre de Marca:</label>
-                        <input type="text" id="inputBrandName" value="PHENOM" oninput="updateHeaderLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Color de la Barra / Header:</label>
-                        <input type="color" id="inputHeaderColor" value="#111111" oninput="updateHeaderLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Dimensiones / Padding vertical (px):</label>
-                        <input type="number" id="inputHeaderHeight" value="15" min="5" max="40" oninput="updateHeaderLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Tipografía del Logo:</label>
-                        <select id="inputHeaderFont" onchange="updateHeaderLive()">
-                            <option value="'Impact', sans-serif">Impact</option>
-                            <option value="'Segoe UI', sans-serif">Segoe UI</option>
-                            <option value="'Courier New', monospace">Courier New</option>
-                            <option value="'Georgia', serif">Georgia</option>
-                        </select>
-                    </div>
-                    <div class="editor-group">
-                        <label>Tamaño de Fuente del Logo (px):</label>
-                        <input type="number" id="inputHeaderFontSize" value="24" min="14" max="48" oninput="updateHeaderLive()">
-                    </div>
+            <div class="card-mini" id="product-card-1">
+                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                <div class="card-img-container">
+                    <span class="heart-icon">♡</span>
+                    <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400" alt="Guante Phenom">
+                    <div class="card-price-tag">$ 2.250,00</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Guantes Boxeo Phenom Pro Violeta 14oz</h3>
+                    <p class="card-category">Unisex</p>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: PESTAÑAS Y PÁGINAS -->
-            <div class="editor-section">
-                <button class="section-toggle" onclick="toggleSection('sec-pestanas')">📁 Pestañas y Páginas <span>▼</span></button>
-                <div class="section-body" id="sec-pestanas">
-                    <div class="editor-group">
-                        <label>Seleccionar Página a Editar:</label>
-                        <select id="targetPageSelect" onchange="loadPageEditorData()">
-                            <option value="inicio">Inicio</option>
-                            <option value="protectores">Protectores</option>
-                            <option value="accesorios">Accesorios</option>
-                            <option value="como-comprar">Cómo Comprar</option>
-                            <option value="contacto">Contacto</option>
-                            <option value="fub-novedades">FUB - Novedades</option>
-                        </select>
-                    </div>
-                    <div class="editor-group">
-                        <label>Título Principal de la Página:</label>
-                        <input type="text" id="editPageTitle" oninput="updateCurrentPageLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Subtítulo de la Página:</label>
-                        <input type="text" id="editPageSub" oninput="updateCurrentPageLive()">
-                    </div>
-                    <div class="editor-group">
-                        <label>Cargar Imagen de Fondo (Desde Dispositivo):</label>
-                        <input type="file" id="editPageBgFile" accept="image/*" onchange="loadBgImage(event)" style="color:#ccc;">
-                    </div>
-                    <div class="editor-group">
-                        <label>Transparencia de Tarjetas / Bloques (0 a 1):</label>
-                        <input type="number" id="editCardOpacity" min="0" max="1" step="0.1" value="0.95" oninput="updateCurrentPageLive()">
-                    </div>
+            <div class="card-mini" id="product-card-2">
+                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                <div class="card-img-container">
+                    <span class="heart-icon">♡</span>
+                    <img src="https://images.unsplash.com/photo-1517649763962-0c6232660d02?q=80&w=400" alt="Guante Elite">
+                    <div class="card-price-tag">$ 2.070,00</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Guantes Phenom Elite Azul 16oz</h3>
+                    <p class="card-category">Unisex</p>
                 </div>
             </div>
 
-            <button class="btn-save-drawer" onclick="saveConfiguration()">💾 Guardar Todo</button>
+            <div class="card-mini" id="product-card-3">
+                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                <div class="card-img-container">
+                    <span class="heart-icon">♡</span>
+                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400" alt="Cabezal">
+                    <div class="card-price-tag">$ 2.350,00</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Tibial Boxeo Phenom Sparring M</h3>
+                    <p class="card-category">Protección</p>
+                </div>
+            </div>
+
+            <div class="card-mini" id="product-card-4">
+                <button class="edit-card-btn admin-only" onclick="openEditModal(this)">Editar</button>
+                <div class="card-img-container">
+                    <span class="heart-icon">♡</span>
+                    <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=400" alt="Vendas">
+                    <div class="card-price-tag">$ 400,00</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Vendas Phenom Pro 5m</h3>
+                    <p class="card-category">Accesorios</p>
+                </div>
+            </div>
+
+            <!-- TARJETA CREAR PRODUCTO (SOLO VISIBLE EN MODO ADMIN) -->
+            <div class="add-product-card" onclick="alert('Módulo de creación de producto')">
+                <span>+ NUEVO PRODUCTO</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECCIÓN INFO BOXEO (FONDO CREMA) -->
+    <section class="info-section">
+        <div class="info-column" id="info-col-1">
+            <button class="edit-info-btn" onclick="openInfoModal(1)">✎</button>
+            <h2 id="text-info-title-1">HISTORIA, COMBATE Y EQUIPAMIENTO PHENOM</h2>
+            <p id="text-info-desc-1">El deporte nos mantiene alerta. Nos une y nos forja. A través del boxeo y los deportes de combate podemos cambiar vidas, inspirándote a subir al ring y superar tu mejor marca personal. Ofrecemos artículos deportivos con las últimas tecnologías para absorber el impacto y mejorar tu rendimiento en каждый round. Phenom es el hogar del peleador amateur, del atleta profesional y del entusiasta del fitness que deja todo en el saco. Nuestra ropa y equipamiento te mantienen concentrado antes de que suene la campana. En el sparring, en la competencia y en la recuperación. Estamos aquí para apoyar a los verdaderos peleadores.</p>
+        </div>
+        <div class="info-column" id="info-col-2">
+            <button class="edit-info-btn" onclick="openInfoModal(2)">✎</button>
+            <h2 id="text-info-title-2">TU TIENDA DE DEPORTES DE COMBATE PARA CUALQUIER DESAFÍO</h2>
+            <p id="text-info-desc-2">Phenom diseña equipamiento para atletas de todo tipo. Creadores que disfrutan desafiar las convenciones y romper las normas del combate. Confeccionamos los guantes y protectores que visten a los campeones en preparación para su próxima pelea. Para que no pierdan la concentración. Diseñamos con un objetivo en mente: máxima protección y durabilidad extrema para deportes de alto impacto. Innovamos en cada costura y ponemos a prueba nuevas tecnologías, desde nuestras onzas precisas hasta el equipamiento de recuperación. A través de nuestras colecciones, eliminamos las barreras entre el diseño de vanguardia y el mejor rendimiento en el ring.</p>
+        </div>
+    </section>
+
+    <!-- BARRA NEWSLETTER -->
+    <section class="newsletter-bar">
+        <button class="edit-news-btn" onclick="openNewsModal()">✎</button>
+        <h2 id="text-news-title">SUSCRÍBETE AL NEWSLETTER</h2>
+        <button class="btn-register" id="text-news-btn" onclick="openNewsletterForm()">REGÍSTRATE GRATIS →</button>
+    </section>
+
+    <!-- FOOTER PRINCIPAL -->
+    <footer class="footer">
+        <div class="footer-col" id="footer-col-1">
+            <button class="edit-footer-btn" onclick="openFooterModal(1)">✎</button>
+            <h3>PRODUCTOS</h3>
+            <a href="#">Guantes de Boxeo</a>
+            <a href="#">Tibiales y Cabezales</a>
+            <a href="#">Vendas y Bucales</a>
+            <a href="#">Tinas de Recuperación</a>
+        </div>
+        <div class="footer-col" id="footer-col-2">
+            <button class="edit-footer-btn" onclick="openFooterModal(2)">✎</button>
+            <h3>DEPORTES</h3>
+            <a href="#">Boxeo</a>
+            <a href="#">Kickboxing</a>
+            <a href="#">Muay Thai</a>
+            <a href="#">Fitness</a>
+            <h3 style="margin-top: 30px;">COLECCIONES</h3>
+            <a href="#">Phenom Elite</a>
+            <a href="#">Phenom Pro</a>
+            <a href="#">Sparring Series</a>
+        </div>
+        <div class="footer-col" id="footer-col-3">
+            <button class="edit-footer-btn" onclick="openFooterModal(3)">✎</button>
+            <h3>ASISTENCIA</h3>
+            <a href="#">Contacto</a>
+            <a href="#">Preguntas Frecuentes</a>
+            <a href="#">Cambios y Devoluciones</a>
+            <a href="#">Guía de Tallas (Onzas)</a>
+            <a href="#">Políticas del Sitio Web</a>
+        </div>
+        <div class="footer-col" id="footer-col-4">
+            <button class="edit-footer-btn" onclick="openFooterModal(4)">✎</button>
+            <h3>INFORMACIÓN DE LA EMPRESA</h3>
+            <a href="#">Trabaja con Nosotros</a>
+            <a href="#">Información Corporativa</a>
+            <h3 style="margin-top: 30px;">TIENDAS</h3>
+            <a href="#">Puntos de Retiro (Óptica)</a>
+        </div>
+        <div class="footer-col">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/SSL_Secured.svg/120px-SSL_Secured.svg.png" alt="Sitio Seguro SSL" class="ssl-badge">
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOTANTE -->
+    <a href="https://wa.me/59893418239" class="wp-float" target="_blank">✆</a>
+
+    <!-- PANEL DE EDICIÓN OCULTO (MAESTRO) -->
+    <div id="admin-panel">
+        <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
+        <div class="admin-header">Control Omega</div>
+        
+        <!-- SELECTOR Y SUBMENÚ DE GESTIÓN DE PESTAÑAS -->
+        <button class="btn-panel-header-tab" onclick="toggleHeaderTabsSolapa()">Gestionar Pestañas Header</button>
+        <div id="header-tabs-container">
+            <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">Selecciona pestaña:</div>
+            <div id="header-tabs-list"></div>
+            <div style="margin-top: 10px; display: flex; gap: 5px;">
+                <button type="button" onclick="addNewHeaderTab()" style="background: #28a745; color:#fff; border:none; padding:6px; font-size:11px; font-weight:bold; cursor:pointer; flex:1;">+ Agregar</button>
+            </div>
+
+            <!-- CONTROLES DE LA PESTAÑA SELECCIONADA -->
+            <div id="tab-editor-controls">
+                <input type="hidden" id="selected-tab-index">
+                <div class="admin-group" style="margin-bottom: 8px;">
+                    <label>Nombre de Pestaña</label>
+                    <input type="text" id="sel-tab-name" oninput="updateSelectedTabLive()">
+                </div>
+                <div class="admin-group" style="margin-bottom: 8px;">
+                    <label>Título de Página (H1)</label>
+                    <input type="text" id="sel-tab-title" oninput="saveSelectedTabMeta()">
+                </div>
+                <div class="admin-group" style="margin-bottom: 8px;">
+                    <label>Subtítulo / Bajada</label>
+                    <input type="text" id="sel-tab-sub" oninput="saveSelectedTabMeta()">
+                </div>
+                <div class="admin-group" style="margin-bottom: 8px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="sel-tab-btn-prod" onchange="saveSelectedTabMeta()" style="width: auto;"> Mostrar Botón "Nuevo Producto"
+                    </label>
+                </div>
+                <button type="button" onclick="deleteSelectedTab()" style="background: #e00; color: #fff; border: none; width: 100%; padding: 6px; font-size: 11px; font-weight: bold; cursor: pointer; margin-top: 5px;">Eliminar Pestaña</button>
+            </div>
+        </div>
+
+        <div class="admin-group">
+            <label>Logo de la Marca (Subir Archivo)</label>
+            <input type="file" id="edit-logo-file" accept="image/*">
+        </div>
+        <div class="admin-group">
+            <label>Tamaño del Logo (px)</label>
+            <input type="range" id="edit-logo-size" min="20" max="150" value="45">
+        </div>
+        <div class="admin-group">
+            <label>Altura Barra Blanca Superior (Padding px)</label>
+            <input type="range" id="edit-header-pad" min="5" max="50" value="15">
+        </div>
+        <div class="admin-group">
+            <label>WhatsApp de Ventas (Ej: 59893418239)</label>
+            <input type="text" id="edit-wp-num" value="59893418239">
+        </div>
+        <hr style="margin: 20px 0; border: 1px solid #ccc;">
+        <div class="admin-group">
+            <label>Texto Barra Superior</label>
+            <input type="text" id="edit-fub-bar">
+        </div>
+        
+        <button class="btn-save" onclick="saveAllSettings()">GUARDAR CAMBIOS</button>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE PRODUCTO (CARRUSEL) -->
+    <div class="simple-modal-overlay" id="edit-product-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeEditModal()">X</button>
+            <div class="simple-modal-title">EDITAR PRODUCTO</div>
+            
+            <div class="simple-group">
+                <label>Adjuntar Archivo de Imagen</label>
+                <input type="file" id="edit-mod-file" accept="image/*">
+            </div>
+            <div class="simple-group">
+                <label>Título del Producto</label>
+                <input type="text" id="edit-mod-title">
+            </div>
+            <div class="simple-group">
+                <label>Precio (Texto libre)</label>
+                <input type="text" id="edit-mod-price">
+            </div>
+            
+            <button class="btn-apply" onclick="applyProductChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
+    <!-- MODAL DE EDICIÓN DE HERO (COLUMNAS CON 15 FUENTES) -->
+    <div class="simple-modal-overlay" id="edit-hero-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
+            <div class="simple-modal-title" id="hero-modal-title">EDITAR COLUMNA HERO</div>
+            
+            <div class="simple-group">
+                <label>Adjuntar Imagen de Fondo</label>
+                <input type="file" id="edit-hero-file" accept="image/*">
+            </div>
+            <div class="simple-group">
+                <label>Título Principal</label>
+                <input type="text" id="hero-mod-title">
+            </div>
+            <div class="simple-group">
+                <label>Subtítulo</label>
+                <input type="text" id="hero-mod-sub">
+            </div>
+            <div class="simple-group">
+                <label>Tipografía (15 Opciones)</label>
+                <select id="hero-mod-font">
+                    <option value="'Arial', sans-serif">Arial</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="'Georgia', serif">Georgia</option>
+                    <option value="'Impact', sans-serif">Impact</option>
+                    <option value="'Lucida Console', monospace">Lucida Console</option>
+                    <option value="'Palatino', serif">Palatino</option>
+                    <option value="'Tahoma', sans-serif">Tahoma</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="'Verdana', sans-serif">Verdana</option>
+                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                    <option value="'Oswald', sans-serif">Oswald</option>
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                    <option value="'Lato', sans-serif">Lato</option>
+                    <option value="'Poppins', sans-serif">Poppins</option>
+                </select>
+            </div>
+            
+            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR CAMBIOS</button>
+        </div>
+    </div>
 
+    <!-- MODAL DE EDICIÓN DE COLUMNA INFO (FONDO CREMA CON 15 FUENTES) -->
+    <div class="simple-modal-overlay" id="edit-info-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeInfoModal()">X</button>
+            <div class="simple-modal-title" id="info-modal-title">EDITAR COLUMNA INFO</div>
+            
+            <div class="simple-group">
+                <label>Título</label>
+                <input type="text" id="info-mod-title">
+            </div>
+            <div class="simple-group">
+                <label>Texto Descriptivo</label>
+                <textarea id="info-mod-desc" rows="6"></textarea>
+            </div>
+            <div class="simple-group">
+                <label>Tipografía (15 Opciones)</label>
+                <select id="info-mod-font">
+                    <option value="'Arial', sans-serif">Arial</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="'Georgia', serif">Georgia</option>
+                    <option value="'Impact', sans-serif">Impact</option>
+                    <option value="'Lucida Console', monospace">Lucida Console</option>
+                    <option value="'Palatino', serif">Palatino</option>
+                    <option value="'Tahoma', sans-serif">Tahoma</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="'Verdana', sans-serif">Verdana</option>
+                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                    <option value="'Oswald', sans-serif">Oswald</option>
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                    <option value="'Lato', sans-serif">Lato</option>
+                    <option value="'Poppins', sans-serif">Poppins</option>
+                </select>
+            </div>
+            
+            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR CAMBIOS</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE NEWSLETTER -->
+    <div class="simple-modal-overlay" id="edit-news-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeNewsModal()">X</button>
+            <div class="simple-modal-title">EDITAR NEWSLETTER</div>
+            <div class="simple-group">
+                <label>Texto del Título</label>
+                <input type="text" id="news-mod-title" value="SUSCRÍBETE AL NEWSLETTER">
+            </div>
+            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR CAMBIOS</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE FOOTER -->
+    <div class="simple-modal-overlay" id="edit-footer-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeFooterModal()">X</button>
+            <div class="simple-modal-title" id="footer-modal-title">EDITAR COLUMNA FOOTER</div>
+            <div class="simple-group">
+                <label>Contenido (HTML / Enlaces)</label>
+                <textarea id="footer-mod-html" rows="6"></textarea>
+            </div>
+            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR CAMBIOS</button>
+        </div>
+    </div>
+
+    <!-- MODAL INTERACTIVO DE REGISTRO NEWSLETTER -->
+    <div class="simple-modal-overlay" id="newsletter-form-modal">
+        <div class="simple-modal-content">
+            <button class="simple-modal-close" onclick="closeNewsletterForm()">X</button>
+            <div class="simple-modal-title">¡ÚNETE A PHENOM!</div>
+            <form onsubmit="submitNewsletter(event)">
+                <div class="simple-group">
+                    <label>Tu Nombre *</label>
+                    <input type="text" id="nl-name" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="simple-group">
+                    <label>Tu WhatsApp *</label>
+                    <input type="text" id="nl-wp" required placeholder="Ej. 099123456">
+                </div>
+                <div class="simple-group">
+                    <label>Correo Electrónico (Opcional)</label>
+                    <input type="email" id="nl-email" placeholder="tucorreo@email.com">
+                </div>
+                <button type="submit" class="btn-apply">REGISTRARME AHORA</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN DE ÉXITO -->
+    <div id="toast-success">¡CAMBIOS GUARDADOS Y PERSISTIDOS! ✓</div>
+
+    <!-- SCRIPT DE MOTOR LÓGICO Y PERSISTENCIA -->
     <script>
-        let pagesConfig = {
-            inicio: { title: "Productos Más Vendidos", sub: "Sponsor Oficial de la Federación Uruguaya de Boxeo", bg: "", opacity: "0.95" },
-            protectores: { title: "Protectores Oficiales", sub: "Máxima seguridad para sparring y competencia.", bg: "", opacity: "0.95" },
-            accesorios: { title: "Accesorios de Entrenamiento", sub: "Equipamiento complementario de alta durabilidad.", bg: "", opacity: "0.95" },
-            "como-comprar": { title: "Cómo Comprar", sub: "Envíos a todo Uruguay mediante DAC o cadetería propia en Montevideo.", bg: "", opacity: "0.95" },
-            contacto: { title: "Contacto", sub: "Escribinos por WhatsApp para consultas comerciales o atención a clubes.", bg: "", opacity: "0.95" },
-            "fub-novedades": { title: "FUB - Novedades", sub: "Enterate de todas las competencias oficiales y torneos de la Federación.", bg: "", opacity: "0.95" }
+        // --- 1. LÓGICA GATILLO Y MODO ADMINISTRADOR ---
+        let clickCount = 0;
+        let clickTimer;
+        const logoTrigger = document.getElementById('logo-trigger');
+        const adminPanel = document.getElementById('admin-panel');
+        const mainHeader = document.getElementById('main-header');
+
+        // Estructura de metadatos avanzada para cada categoría de la tienda
+        let categoryMetadata = {
+            "Guantes": { title: "Guantes de Boxeo", sub: "Alta performance y protección profesional", showBtn: true },
+            "Protección": { title: "Equipamiento de Protección", sub: "Cabezales, tibiales y soportes", showBtn: true },
+            "Indumentaria": { title: "Indumentaria Oficial", sub: "Ropa de entrenamiento y competencia", showBtn: true },
+            "Tinas de Recuperación": { title: "Tinas de Recuperación", sub: "Crioterapia y recuperación avanzada", showBtn: true },
+            "Sale": { title: "Sale / Oportunidades", sub: "Descuentos exclusivos por tiempo limitado", showBtn: true }
         };
 
-        let currentActivePage = 'inicio';
-
-        function switchPage(pageId) {
-            currentActivePage = pageId;
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active-page'));
-            const target = document.getElementById('page-' + pageId);
-            if (target) target.classList.add('active-page');
-            
-            document.getElementById('targetPageSelect').value = pageId;
-            loadPageEditorData();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function loadPageEditorData() {
-            const sel = document.getElementById('targetPageSelect').value;
-            currentActivePage = sel;
-            const conf = pagesConfig[sel];
-            if (conf) {
-                document.getElementById('editPageTitle').value = conf.title;
-                document.getElementById('editPageSub').value = conf.sub;
-                document.getElementById('editCardOpacity').value = conf.opacity || '0.95';
+        function toggleAdminMode(forceState) {
+            if (forceState) {
+                adminPanel.classList.add('active');
+                document.body.classList.add('admin-mode');
+                document.body.classList.add('panel-active');
+            } else {
+                adminPanel.classList.remove('active');
+                document.body.classList.remove('admin-mode');
+                document.body.classList.remove('panel-active');
+                document.getElementById('header-tabs-container').classList.remove('active');
             }
         }
 
-        function loadBgImage(event) {
-            const file = event.target.files[0];
+        logoTrigger.addEventListener('click', () => {
+            clickCount++;
+            clearTimeout(clickTimer);
+            if (clickCount === 5) {
+                toggleAdminMode(true);
+                clickCount = 0; 
+            } else {
+                clickTimer = setTimeout(() => { clickCount = 0; }, 2000); 
+            }
+        });
+
+        // --- GESTIÓN DE PESTAÑAS Y CONFIGURACIÓN POR PÁGINA DESDE EL PANEL ---
+        function toggleHeaderTabsSolapa() {
+            const container = document.getElementById('header-tabs-container');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) {
+                renderHeaderTabsManager();
+            }
+        }
+
+        function renderHeaderTabsManager() {
+            const listContainer = document.getElementById('header-tabs-list');
+            listContainer.innerHTML = '';
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            navLinks.forEach((a, index) => {
+                const catName = getCatNameFromLink(a);
+                const item = document.createElement('div');
+                item.className = 'header-tab-item';
+                item.innerHTML = `<span>${a.innerText}</span> <span>⚙️ Editar</span>`;
+                item.onclick = () => selectTabForEditing(index, a, catName);
+                listContainer.appendChild(item);
+            });
+        }
+
+        function getCatNameFromLink(aTag) {
+            const href = aTag.getAttribute('href');
+            const urlParams = new URLSearchParams(href.split('?')[1]);
+            return urlParams.get('cat') || aTag.innerText;
+        }
+
+        function selectTabForEditing(index, aTag, catName) {
+            document.getElementById('tab-editor-controls').classList.add('active');
+            document.getElementById('selected-tab-index').value = index;
+            document.getElementById('sel-tab-name').value = aTag.innerText;
+
+            if(!categoryMetadata[catName]) {
+                categoryMetadata[catName] = { title: catName, sub: "Descripción de categoría", showBtn: true };
+            }
+
+            document.getElementById('sel-tab-title').value = categoryMetadata[catName].title;
+            document.getElementById('sel-tab-sub').value = categoryMetadata[catName].sub;
+            document.getElementById('sel-tab-btn-prod').checked = categoryMetadata[catName].showBtn;
+        }
+
+        function updateSelectedTabLive() {
+            const index = parseInt(document.getElementById('selected-tab-index').value);
+            const newName = document.getElementById('sel-tab-name').value;
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            if(index >= 0 && index < navLinks.length) {
+                navLinks[index].innerText = newName;
+                const oldCat = getCatNameFromLink(navLinks[index]);
+                navLinks[index].setAttribute('href', `categoria.html?cat=${encodeURIComponent(newName)}`);
+                
+                if(categoryMetadata[oldCat]) {
+                    categoryMetadata[newName] = categoryMetadata[oldCat];
+                    if(oldCat !== newName) delete categoryMetadata[oldCat];
+                } else {
+                    categoryMetadata[newName] = { title: newName, sub: "Detalle de categoría", showBtn: true };
+                }
+            }
+            renderHeaderTabsManager();
+            saveAllSettings();
+        }
+
+        function saveSelectedTabMeta() {
+            const index = parseInt(document.getElementById('selected-tab-index').value);
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            if(index >= 0 && index < navLinks.length) {
+                const catName = getCatNameFromLink(navLinks[index]);
+                if(!categoryMetadata[catName]) {
+                    categoryMetadata[catName] = {};
+                }
+                categoryMetadata[catName].title = document.getElementById('sel-tab-title').value;
+                categoryMetadata[catName].sub = document.getElementById('sel-tab-sub').value;
+                categoryMetadata[catName].showBtn = document.getElementById('sel-tab-btn-prod').checked;
+                saveAllSettings();
+            }
+        }
+
+        function addNewHeaderTab() {
+            const navContainer = document.getElementById('main-nav-links');
+            const newName = "Nueva Categoría";
+            categoryMetadata[newName] = { title: newName, sub: "Bajada descriptiva", showBtn: true };
+            
+            const newA = document.createElement('a');
+            newA.setAttribute('href', `categoria.html?cat=${encodeURIComponent(newName)}`);
+            newA.innerText = newName;
+            navContainer.appendChild(newA);
+            
+            renderHeaderTabsManager();
+            saveAllSettings();
+        }
+
+        function deleteSelectedTab() {
+            const index = parseInt(document.getElementById('selected-tab-index').value);
+            const navContainer = document.getElementById('main-nav-links');
+            const navLinks = navContainer.querySelectorAll('a');
+
+            if(index >= 0 && index < navLinks.length) {
+                const catName = getCatNameFromLink(navLinks[index]);
+                delete categoryMetadata[catName];
+                navLinks[index].remove();
+            }
+            document.getElementById('tab-editor-controls').classList.remove('active');
+            renderHeaderTabsManager();
+            saveAllSettings();
+        }
+
+        // --- 2. CONTROLES EN VIVO HEADER Y LOGO ---
+        document.getElementById('edit-logo-size').addEventListener('input', function(e) {
+            logoTrigger.style.height = e.target.value + 'px';
+        });
+
+        document.getElementById('edit-header-pad').addEventListener('input', function(e) {
+            mainHeader.style.padding = `${e.target.value}px 40px`;
+        });
+
+        document.getElementById('edit-logo-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const sel = document.getElementById('targetPageSelect').value;
-                    pagesConfig[sel].bg = e.target.result;
-                    updateCurrentPageLive();
+                reader.onload = function(event) {
+                    const base64 = event.target.result;
+                    logoTrigger.src = base64;
+                    logoTrigger.dataset.customLogo = base64; 
                 };
                 reader.readAsDataURL(file);
             }
-        }
+        });
 
-        function updateCurrentPageLive() {
-            const sel = document.getElementById('targetPageSelect').value;
-            const title = document.getElementById('editPageTitle').value;
-            const sub = document.getElementById('editPageSub').value;
-            const opacity = document.getElementById('editCardOpacity').value;
+        // --- 3. LÓGICA MODAL DE EDICIÓN DE CARRUSEL ---
+        let currentEditingCard = null;
+        const editModal = document.getElementById('edit-product-modal');
+        let tempNewImgBase64 = null;
 
-            if(!pagesConfig[sel]) pagesConfig[sel] = {};
-            pagesConfig[sel].title = title;
-            pagesConfig[sel].sub = sub;
-            pagesConfig[sel].opacity = opacity;
-
-            const tEl = document.getElementById('title-' + sel);
-            const sEl = document.getElementById('sub-'  + sel);
-            const pEl = document.getElementById('page-' + sel);
-
-            if (tEl) tEl.innerText = title;
-            if (sEl) sEl.innerText = sub;
-            if (pEl) {
-                if(pagesConfig[sel].bg) {
-                    pEl.style.backgroundImage = `url('${pagesConfig[sel].bg}')`;
-                }
-            }
-
-            if (pEl) {
-                pEl.querySelectorAll('.product-card').forEach(card => {
-                    card.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-                });
-            }
-        }
-
-        function toggleNewProductForm(category) {
-            const form = document.getElementById('form-' + category);
-            form.classList.toggle('active');
-        }
-
-        function saveNewProduct(category) {
-            const title = document.getElementById('title-prod-' + category).value;
-            const oldPrice = document.getElementById('old-price-' + category).value;
-            const price = document.getElementById('price-' + category).value;
-            const mpLink = document.getElementById('mp-' + category).value;
-            const fileInput = document.getElementById('file-' + category);
-
-            if(!title || !price) {
-                alert('Por favor completa al menos el título y el precio actual.');
-                return;
-            }
-
-            const checkboxes = document.querySelectorAll('#opts-' + category + ' input[type="checkbox"]:checked');
-            let optsHtml = '';
-            checkboxes.forEach(cb => {
-                optsHtml += `<button class="opt-btn" onclick="selectOption(this)">${cb.value}</button>`;
-            });
-            if(optsHtml === '') optsHtml = `<button class="opt-btn selected" onclick="selectOption(this)">Estándar</button>`;
-
-            if(fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    createNewCard(category, title, oldPrice, price, mpLink, e.target.result, optsHtml);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                createNewCard(category, title, oldPrice, price, mpLink, null, optsHtml);
-            }
-        }
-
-        function createNewCard(category, title, oldPrice, price, mpLink, imgSrc, optsHtml) {
-            const grid = document.getElementById('grid-' + category);
-            const card = document.createElement('div');
-            card.className = 'product-card';
+        function openEditModal(btnElement) {
+            currentEditingCard = btnElement.closest('.card-mini');
+            const currentTitle = currentEditingCard.querySelector('.card-title').innerText;
+            const currentPrice = currentEditingCard.querySelector('.card-price-tag').innerText;
             
-            let imgContent = `<div class="product-img-placeholder">${title}</div>`;
-            if(imgSrc) {
-                imgContent = `<div class="product-img-placeholder"><img src="${imgSrc}" alt="${title}"></div>`;
-            }
-
-            let oldPriceHtml = oldPrice ? `<span class="old-price">${oldPrice} UYU</span>` : '';
-            let mpBtnHtml = mpLink ? `<a href="${mpLink}" target="_blank" class="btn-action btn-mp">Pagar con Mercado Pago</a>` : '';
-
-            card.innerHTML = `
-                ${imgContent}
-                <div class="product-title">${title}</div>
-                <div class="options-container">
-                    <span class="options-label">Opciones:</span>
-                    <div class="options-buttons">${optsHtml}</div>
-                </div>
-                <div class="price-box">${oldPriceHtml}${price} UYU</div>
-                ${mpBtnHtml}
-                <button class="btn-action btn-cart" onclick="addToCart()">Agregar al Carrito</button>
-            `;
-
-            grid.insertBefore(card, grid.firstChild);
-            document.getElementById('form-' + category).classList.remove('active');
-            alert('¡Producto publicado con éxito!');
+            document.getElementById('edit-mod-title').value = currentTitle;
+            document.getElementById('edit-mod-price').value = currentPrice;
+            document.getElementById('edit-mod-file').value = '';
+            tempNewImgBase64 = null;
+            
+            editModal.classList.add('active');
         }
 
-        function updateHeaderLive() {
-            const fub = document.getElementById('inputFubText').value;
-            const brand = document.getElementById('inputBrandName').value;
-            const color = document.getElementById('inputHeaderColor').value;
-            const height = document.getElementById('inputHeaderHeight').value;
-            const font = document.getElementById('inputHeaderFont').value;
-            const fontSize = document.getElementById('inputHeaderFontSize').value;
-
-            document.getElementById('fubBarText').innerText = fub;
-            document.getElementById('brandLogoText').innerText = brand;
-
-            document.documentElement.style.setProperty('--header-bg', color);
-            document.documentElement.style.setProperty('--header-height', height + 'px');
-            document.documentElement.style.setProperty('--header-font-family', font);
-            document.documentElement.style.setProperty('--header-font-size', fontSize + 'px');
+        function closeEditModal() {
+            editModal.classList.remove('active');
+            currentEditingCard = null;
         }
 
-        // Menú Hamburguesa de 3 líneas
-        const hamburgerBtn = document.getElementById('hamburgerToggle');
-        const mobileMenu = document.getElementById('mobileMenuDropdown');
-        
-        hamburgerBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mobileMenu.classList.toggle('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                mobileMenu.classList.remove('active');
+        document.getElementById('edit-mod-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    tempNewImgBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
         });
 
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('active');
+        function applyProductChanges() {
+            if (!currentEditingCard) return;
+            const newTitle = document.getElementById('edit-mod-title').value;
+            const newPrice = document.getElementById('edit-mod-price').value;
+            
+            if(tempNewImgBase64) currentEditingCard.querySelector('img').src = tempNewImgBase64;
+            if(newTitle) currentEditingCard.querySelector('.card-title').innerText = newTitle;
+            if(newPrice) currentEditingCard.querySelector('.card-price-tag').innerText = newPrice;
+            
+            closeEditModal();
+            saveAllSettings(); 
         }
 
-        function selectOption(button) {
-            const container = button.parentElement;
-            container.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
+        // --- 4. LÓGICA MODAL DE HERO ---
+        let currentHeroColNum = null;
+        const heroModal = document.getElementById('edit-hero-modal');
+        let tempHeroImgBase64 = null;
+
+        function openHeroModal(colNum) {
+            currentHeroColNum = colNum;
+            document.getElementById('hero-modal-title').innerText = "EDITAR COLUMNA HERO " + colNum;
+            document.getElementById('edit-hero-file').value = '';
+            document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
+            const subElem = document.getElementById('text-col' + colNum + '-sub');
+            document.getElementById('hero-mod-sub').value = subElem ? subElem.innerText : '';
+            tempHeroImgBase64 = null;
+            heroModal.classList.add('active');
         }
 
-        let cartTotal = 0;
-        function addToCart() {
-            cartTotal++;
-            document.getElementById('cartCount').innerText = cartTotal;
-            alert('¡Producto agregado al carrito con éxito!');
+        function closeHeroModal() {
+            heroModal.classList.remove('active');
+            currentHeroColNum = null;
         }
 
-        let logoClicks = 0;
-        let clickTimer = null;
-        function handleLogoClick() {
-            logoClicks++;
-            clearTimeout(clickTimer);
-            if (logoClicks >= 5) {
-                logoClicks = 0;
-                toggleDrawer();
-            } else {
-                clickTimer = setTimeout(() => { logoClicks = 0; }, 600);
+        document.getElementById('edit-hero-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    tempHeroImgBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
+        });
+
+        function applyHeroChanges() {
+            if (!currentHeroColNum) return;
+            const targetCol = document.getElementById('hero-col-' + currentHeroColNum);
+            const newTitle = document.getElementById('hero-mod-title').value;
+            const newSub = document.getElementById('hero-mod-sub').value;
+            const chosenFont = document.getElementById('hero-mod-font').value;
+
+            if (tempHeroImgBase64) {
+                targetCol.style.backgroundImage = `url('${tempHeroImgBase64}')`;
+                targetCol.dataset.customBg = tempHeroImgBase64;
+            }
+            
+            const titleElem = document.getElementById('text-col' + currentHeroColNum + '-title');
+            if(titleElem) {
+                titleElem.innerText = newTitle;
+                titleElem.style.fontFamily = chosenFont;
+            }
+            
+            const subElem = document.getElementById('text-col' + currentHeroColNum + '-sub');
+            if(subElem) {
+                subElem.innerText = newSub;
+                subElem.style.fontFamily = chosenFont;
+            }
+
+            closeHeroModal();
+            saveAllSettings();
         }
 
-        function toggleDrawer() {
-            const drawer = document.getElementById('side-editor-drawer');
-            drawer.classList.toggle('open');
-            document.body.classList.toggle('drawer-open');
-            loadPageEditorData();
+        // --- 5. LÓGICA MODAL COLUMNAS INFO ---
+        let currentInfoColNum = null;
+        const infoModal = document.getElementById('edit-info-modal');
+
+        function openInfoModal(colNum) {
+            currentInfoColNum = colNum;
+            document.getElementById('info-modal-title').innerText = "EDITAR COLUMNA INFO " + colNum;
+            document.getElementById('info-mod-title').value = document.getElementById('text-info-title-' + colNum).innerText;
+            document.getElementById('info-mod-desc').value = document.getElementById('text-info-desc-' + colNum).innerText;
+            infoModal.classList.add('active');
         }
 
-        function toggleSection(sectionId) {
-            const body = document.getElementById(sectionId);
-            body.classList.toggle('active');
+        function closeInfoModal() {
+            infoModal.classList.remove('active');
+            currentInfoColNum = null;
         }
 
-        function saveConfiguration() {
-            const globalConfig = {
-                fubText: document.getElementById('inputFubText').value,
-                brandName: document.getElementById('inputBrandName').value,
-                headerColor: document.getElementById('inputHeaderColor').value,
-                headerHeight: document.getElementById('inputHeaderHeight').value,
-                headerFont: document.getElementById('inputHeaderFont').value,
-                headerFontSize: document.getElementById('inputHeaderFontSize').value,
-                pages: pagesConfig
+        function applyInfoChanges() {
+            if (!currentInfoColNum) return;
+            const newTitle = document.getElementById('info-mod-title').value;
+            const newDesc = document.getElementById('info-mod-desc').value;
+            const chosenFont = document.getElementById('info-mod-font').value;
+
+            const titleElem = document.getElementById('text-info-title-' + currentInfoColNum);
+            const descElem = document.getElementById('text-info-desc-' + currentInfoColNum);
+
+            if(titleElem) {
+                titleElem.innerText = newTitle;
+                titleElem.style.fontFamily = chosenFont;
+            }
+            if(descElem) {
+                descElem.innerText = newDesc;
+                descElem.style.fontFamily = chosenFont;
+            }
+
+            closeInfoModal();
+            saveAllSettings();
+        }
+
+        // --- 6. LÓGICA NEWSLETTER ---
+        const newsModal = document.getElementById('edit-news-modal');
+        const newsFormModal = document.getElementById('newsletter-form-modal');
+
+        function openNewsModal() {
+            document.getElementById('news-mod-title').value = document.getElementById('text-news-title').innerText;
+            newsModal.classList.add('active');
+        }
+        function closeNewsModal() { newsModal.classList.remove('active'); }
+        function applyNewsChanges() {
+            document.getElementById('text-news-title').innerText = document.getElementById('news-mod-title').value;
+            closeNewsModal();
+            saveAllSettings();
+        }
+
+        function openNewsletterForm() { newsFormModal.classList.add('active'); }
+        function closeNewsletterForm() { newsFormModal.classList.remove('active'); }
+        function submitNewsletter(e) {
+            e.preventDefault();
+            const name = document.getElementById('nl-name').value;
+            const wp = document.getElementById('nl-wp').value;
+            alert(`¡Gracias ${name}! Te registraste con éxito. Te contactaremos por WhatsApp (${wp}).`);
+            closeNewsletterForm();
+        }
+
+        // --- 7. LÓGICA FOOTER ---
+        let currentFooterCol = null;
+        const footerModal = document.getElementById('edit-footer-modal');
+
+        function openFooterModal(colNum) {
+            currentFooterCol = colNum;
+            document.getElementById('footer-modal-title').innerText = "EDITAR COLUMNA FOOTER " + colNum;
+            const colElem = document.getElementById('footer-col-' + colNum);
+            const clone = colElem.cloneNode(true);
+            const btn = clone.querySelector('.edit-footer-btn');
+            if(btn) btn.remove();
+            document.getElementById('footer-mod-html').value = clone.innerHTML;
+            footerModal.classList.add('active');
+        }
+
+        function closeFooterModal() {
+            footerModal.classList.remove('active');
+            currentFooterCol = null;
+        }
+
+        function applyFooterChanges() {
+            if (!currentFooterCol) return;
+            const newHtml = document.getElementById('footer-mod-html').value;
+            const colElem = document.getElementById('footer-col-' + currentFooterCol);
+            const editBtnHtml = colElem.querySelector('.edit-footer-btn').outerHTML;
+            colElem.innerHTML = editBtnHtml + newHtml;
+            closeFooterModal();
+            saveAllSettings();
+        }
+
+        // --- 8. SISTEMA DE PERSISTENCIA MAESTRA ---
+        function saveAllSettings() {
+            const settings = {
+                fubBar: document.getElementById('fub-bar').innerText,
+                wpNum: document.querySelector('.wp-float').href.replace('https://wa.me/', ''),
+                logoSize: logoTrigger.style.height,
+                headerPad: mainHeader.style.padding,
+                logoSrc: logoTrigger.dataset.customLogo || logoTrigger.src,
+                headerNavHtml: document.getElementById('main-nav-links').innerHTML,
+                categoryMeta: categoryMetadata,
+                
+                hero1Title: document.getElementById('text-col1-title').innerText,
+                hero1Sub: document.getElementById('text-col1-sub').innerText,
+                hero1Bg: document.getElementById('hero-col-1').style.backgroundImage,
+                hero1Font: document.getElementById('text-col1-title').style.fontFamily,
+
+                hero2Title: document.getElementById('text-col2-title').innerText,
+                hero2Sub: document.getElementById('text-col2-sub').innerText,
+                hero2Bg: document.getElementById('hero-col-2').style.backgroundImage,
+                hero2Font: document.getElementById('text-col2-title').style.fontFamily,
+
+                hero3Title: document.getElementById('text-col3-title').innerText,
+                hero3Sub: document.getElementById('text-col3-sub').innerText,
+                hero3Bg: document.getElementById('hero-col-3').style.backgroundImage,
+                hero3Font: document.getElementById('text-col3-title').style.fontFamily,
+
+                info1Title: document.getElementById('text-info-title-1').innerText,
+                info1Desc: document.getElementById('text-info-desc-1').innerText,
+                info1Font: document.getElementById('text-info-title-1').style.fontFamily,
+
+                info2Title: document.getElementById('text-info-title-2').innerText,
+                info2Desc: document.getElementById('text-info-desc-2').innerText,
+                info2Font: document.getElementById('text-info-title-2').style.fontFamily,
+
+                newsTitle: document.getElementById('text-news-title').innerText,
+                footer1: document.getElementById('footer-col-1').innerHTML,
+                footer2: document.getElementById('footer-col-2').innerHTML,
+                footer3: document.getElementById('footer-col-3').innerHTML,
+                footer4: document.getElementById('footer-col-4').innerHTML,
+
+                carouselHtml: document.getElementById('carousel-track-container').innerHTML
             };
-            localStorage.setItem('phenom_advanced_config_v2', JSON.stringify(globalConfig));
-            alert('¡Configuración guardada correctamente en el navegador!');
-            toggleDrawer();
+
+            localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
+            triggerSaveToast();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('phenom_advanced_config_v2');
+        function triggerSaveToast() {
+            const toast = document.getElementById('toast-success');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        // --- 9. CARGA AUTOMÁTICA DE DATOS PERSISTIDOS AL ABRIR ---
+        window.onload = () => {
+            const saved = localStorage.getItem('phenom_persistent_data');
             if (saved) {
-                const cfg = JSON.parse(saved);
-                document.getElementById('inputFubText').value = cfg.fubText || '';
-                document.getElementById('inputBrandName').value = cfg.brandName || '';
-                document.getElementById('inputHeaderColor').value = cfg.headerColor || '#111111';
-                document.getElementById('inputHeaderHeight').value = cfg.headerHeight || '15';
-                document.getElementById('inputHeaderFont').value = cfg.headerFont || "'Impact', sans-serif";
-                document.getElementById('inputHeaderFontSize').value = cfg.headerFontSize || '24';
-                updateHeaderLive();
-                if (cfg.pages) {
-                    pagesConfig = cfg.pages;
-                    loadPageEditorData();
-                    Object.keys(pagesConfig).forEach(p => {
-                        currentActivePage = p;
-                        document.getElementById('targetPageSelect').value = p;
-                        updateCurrentPageLive();
-                    });
-                    switchPage('inicio');
+                const data = JSON.parse(saved);
+                if(data.fubBar) {
+                    document.getElementById('fub-bar').innerText = data.fubBar;
+                    document.getElementById('edit-fub-bar').value = data.fubBar;
                 }
+                if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
+                if(data.logoSize) logoTrigger.style.height = data.logoSize;
+                if(data.headerPad) mainHeader.style.padding = data.headerPad;
+                if(data.logoSrc) { logoTrigger.src = data.logoSrc; logoTrigger.dataset.customLogo = data.logoSrc; }
+                if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
+                if(data.categoryMeta) categoryMetadata = data.categoryMeta;
+
+                if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
+                if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
+                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
+                if(data.hero1Font) { document.getElementById('text-col1-title').style.fontFamily = data.hero1Font; document.getElementById('text-col1-sub').style.fontFamily = data.hero1Font; }
+
+                if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
+                if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
+                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
+                if(data.hero2Font) { document.getElementById('text-col2-title').style.fontFamily = data.hero2Font; }
+
+                if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
+                if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
+                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
+                if(data.hero3Font) { document.getElementById('text-col3-title').style.fontFamily = data.hero3Font; document.getElementById('text-col3-sub').style.fontFamily = data.hero3Font; }
+
+                if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
+                if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
+                if(data.info1Font) { document.getElementById('text-info-title-1').style.fontFamily = data.info1Font; document.getElementById('text-info-desc-1').style.fontFamily = data.info1Font; }
+
+                if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title;
+                if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
+                if(data.info2Font) { document.getElementById('text-info-title-2').style.fontFamily = data.info2Font; document.getElementById('text-info-desc-2').style.fontFamily = data.info2Font; }
+
+                if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle;
+                if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1;
+                if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
+                if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
+                if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
+
+                if(data.carouselHtml) document.getElementById('carousel-track-container').innerHTML = data.carouselHtml;
+            } else {
+                document.getElementById('edit-fub-bar').value = document.getElementById('fub-bar').innerText;
             }
-        });
+        };
     </script>
 </body>
 </html>
