@@ -40,10 +40,11 @@
         .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; }
         .btn-comprar:hover { background: #000; color: #fff; }
 
+        /* BOTÓN DE EDICIÓN AZUL (HERO) */
         .edit-hero-btn {
             position: absolute; top: 20px; right: 20px; width: 35px; height: 35px;
-            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
-            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
@@ -99,35 +100,39 @@
         .add-product-card:hover { background: #eaeaea; }
         .add-product-card span { font-size: 16px; font-weight: 900; color: #000; }
 
-        /* --- SECCIÓN INFO MARCA --- */
+        /* --- SECCIÓN INFO MARCA (FONDO CREMA) --- */
         .info-section { background-color: #f4f4ec; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #000; }
         .info-column { position: relative; }
         .info-column h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; letter-spacing: -0.5px; }
         .info-column p { font-size: 14px; line-height: 1.7; margin-bottom: 15px; color: #111; }
 
+        /* BOTÓN DE EDICIÓN AZUL (INFO) */
         .edit-info-btn {
-            position: absolute; top: 0; right: 0; width: 35px; height: 35px;
-            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
-            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            position: absolute; top: -10px; right: 0; width: 35px; height: 35px;
+            background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
         body.admin-mode .edit-info-btn { display: flex; }
 
-        /* --- NEWSLETTER Y FOOTER --- */
+        /* --- NEWSLETTER --- */
         .newsletter-bar { background-color: #ede734; padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
         .newsletter-bar h2 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: #000; }
         .btn-register { background-color: #000; color: #fff; padding: 15px 30px; font-weight: 900; text-transform: uppercase; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
         .btn-register:hover { background-color: #333; }
         
+        /* BOTÓN DE EDICIÓN AZUL (NEWSLETTER) */
         .edit-news-btn {
             position: absolute; top: 15px; right: 15px; width: 35px; height: 35px;
-            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
-            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
+            background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         body.admin-mode .edit-news-btn { display: flex; }
 
+        /* --- FOOTER --- */
         .footer { background-color: #fff; padding: 60px 40px; display: grid; grid-template-columns: repeat(4, 1fr) 0.5fr; gap: 30px; color: #000; border-top: 1px solid #eaeaea; }
         .footer-col { position: relative; }
         .footer-col h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
@@ -135,10 +140,11 @@
         .footer-col a:hover { text-decoration: underline; color: #000; }
         .ssl-badge { margin-top: 5px; width: 50px; }
 
+        /* BOTÓN DE EDICIÓN AZUL (FOOTER) */
         .edit-footer-btn {
-            position: absolute; top: 0; right: 0; width: 30px; height: 30px;
-            background: rgba(0, 123, 255, 0.8); border: 2px solid #fff; border-radius: 50%;
-            color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;
+            position: absolute; top: -10px; right: 0; width: 30px; height: 30px;
+            background: rgba(0, 123, 255, 0.9); border: 2px solid #fff; border-radius: 50%;
+            color: #fff; font-size: 12px; font-weight: bold; cursor: pointer;
             z-index: 10; display: none; align-items: center; justify-content: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
@@ -485,46 +491,50 @@
         </div>
     </div>
 
-    <!-- MODALES ADICIONALES -->
+    <!-- MODAL EDITAR HERO -->
     <div class="simple-modal-overlay" id="edit-hero-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
-            <div class="simple-modal-title" id="hero-modal-title">EDITAR HERO</div>
+            <div class="simple-modal-title" id="hero-modal-title">EDITAR COLUMNA HERO</div>
             <div class="simple-group"><label>Imagen de Fondo</label><input type="file" id="edit-hero-file" accept="image/*"></div>
-            <div class="simple-group"><label>Título</label><input type="text" id="hero-mod-title"></div>
+            <div class="simple-group"><label>Título Principal</label><input type="text" id="hero-mod-title"></div>
             <div class="simple-group"><label>Subtítulo</label><input type="text" id="hero-mod-sub"></div>
-            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR</button>
+            <button class="btn-apply" onclick="applyHeroChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
+    <!-- MODAL EDITAR INFO -->
     <div class="simple-modal-overlay" id="edit-info-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeInfoModal()">X</button>
-            <div class="simple-modal-title" id="info-modal-title">EDITAR INFO</div>
+            <div class="simple-modal-title" id="info-modal-title">EDITAR COLUMNA INFO</div>
             <div class="simple-group"><label>Título</label><input type="text" id="info-mod-title"></div>
-            <div class="simple-group"><label>Descripción</label><textarea id="info-mod-desc" rows="5"></textarea></div>
-            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR</button>
+            <div class="simple-group"><label>Texto Descriptivo</label><textarea id="info-mod-desc" rows="6"></textarea></div>
+            <button class="btn-apply" onclick="applyInfoChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
+    <!-- MODAL EDITAR NEWSLETTER -->
     <div class="simple-modal-overlay" id="edit-news-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsModal()">X</button>
             <div class="simple-modal-title">EDITAR NEWSLETTER</div>
-            <div class="simple-group"><label>Título</label><input type="text" id="news-mod-title"></div>
-            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR</button>
+            <div class="simple-group"><label>Texto del Título</label><input type="text" id="news-mod-title"></div>
+            <button class="btn-apply" onclick="applyNewsChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
+    <!-- MODAL EDITAR FOOTER -->
     <div class="simple-modal-overlay" id="edit-footer-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeFooterModal()">X</button>
-            <div class="simple-modal-title" id="footer-modal-title">EDITAR FOOTER</div>
-            <div class="simple-group"><label>Contenido HTML</label><textarea id="footer-mod-html" rows="5"></textarea></div>
-            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR</button>
+            <div class="simple-modal-title" id="footer-modal-title">EDITAR COLUMNA FOOTER</div>
+            <div class="simple-group"><label>Contenido (HTML / Enlaces)</label><textarea id="footer-mod-html" rows="6"></textarea></div>
+            <button class="btn-apply" onclick="applyFooterChanges()">APLICAR CAMBIOS</button>
         </div>
     </div>
 
+    <!-- MODAL REGISTRO NEWSLETTER -->
     <div class="simple-modal-overlay" id="newsletter-form-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeNewsletterForm()">X</button>
@@ -539,7 +549,7 @@
 
     <div id="toast-success">¡CAMBIOS GUARDADOS! ✓</div>
 
-    <!-- SCRIPT PRINCIPAL CON ENLACE AUTOMÁTICO DE NAVEGACIÓN -->
+    <!-- SCRIPT PRINCIPAL COMPLETO CON LÓGICA DE BOTONES AZULES -->
     <script>
         let clickCount = 0;
         let clickTimer;
@@ -547,7 +557,7 @@
         const adminPanel = document.getElementById('admin-panel');
         const mainHeader = document.getElementById('main-header');
 
-        // --- SISTEMA DE NAVEGACIÓN SPA (PORTADA Y CATÁLOGO) ---
+        // --- SISTEMA DE NAVEGACIÓN SPA ---
         function showHomePage() {
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-home').classList.add('active-view');
@@ -563,7 +573,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Revincula los clics en los enlaces del menú del header
         function bindHeaderNavEvents() {
             const navLinks = document.querySelectorAll('#main-nav-links a');
             navLinks.forEach(a => {
@@ -724,7 +733,138 @@
             saveAllSettings();
         }
 
-        // --- EDICIÓN DE PRODUCTO ---
+        // --- LÓGICA DE EDICIÓN: HERO (COLUMNAS PORTADA) ---
+        let currentHeroColNum = null;
+        let tempHeroImgBase64 = null;
+
+        function openHeroModal(colNum) {
+            currentHeroColNum = colNum;
+            document.getElementById('hero-modal-title').innerText = "EDITAR COLUMNA HERO " + colNum;
+            document.getElementById('edit-hero-file').value = '';
+            document.getElementById('hero-mod-title').value = document.getElementById('text-col' + colNum + '-title').innerText;
+            const subElem = document.getElementById('text-col' + colNum + '-sub');
+            document.getElementById('hero-mod-sub').value = subElem ? subElem.innerText : '';
+            tempHeroImgBase64 = null;
+            document.getElementById('edit-hero-modal').classList.add('active');
+        }
+
+        function closeHeroModal() {
+            document.getElementById('edit-hero-modal').classList.remove('active');
+            currentHeroColNum = null;
+        }
+
+        document.getElementById('edit-hero-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) { tempHeroImgBase64 = event.target.result; };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function applyHeroChanges() {
+            if (!currentHeroColNum) return;
+            const targetCol = document.getElementById('hero-col-' + currentHeroColNum);
+            const newTitle = document.getElementById('hero-mod-title').value;
+            const newSub = document.getElementById('hero-mod-sub').value;
+
+            if (tempHeroImgBase64) {
+                targetCol.style.backgroundImage = `url('${tempHeroImgBase64}')`;
+            }
+            
+            const titleElem = document.getElementById('text-col' + currentHeroColNum + '-title');
+            if(titleElem) titleElem.innerText = newTitle;
+            
+            const subElem = document.getElementById('text-col' + currentHeroColNum + '-sub');
+            if(subElem) subElem.innerText = newSub;
+
+            closeHeroModal();
+            saveAllSettings();
+        }
+
+        // --- LÓGICA DE EDICIÓN: INFO MARCA (HISTORIA, COMBATE...) ---
+        let currentInfoColNum = null;
+
+        function openInfoModal(colNum) {
+            currentInfoColNum = colNum;
+            document.getElementById('info-modal-title').innerText = "EDITAR COLUMNA INFO " + colNum;
+            document.getElementById('info-mod-title').value = document.getElementById('text-info-title-' + colNum).innerText;
+            document.getElementById('info-mod-desc').value = document.getElementById('text-info-desc-' + colNum).innerText;
+            document.getElementById('edit-info-modal').classList.add('active');
+        }
+
+        function closeInfoModal() {
+            document.getElementById('edit-info-modal').classList.remove('active');
+            currentInfoColNum = null;
+        }
+
+        function applyInfoChanges() {
+            if (!currentInfoColNum) return;
+            const newTitle = document.getElementById('info-mod-title').value;
+            const newDesc = document.getElementById('info-mod-desc').value;
+
+            const titleElem = document.getElementById('text-info-title-' + currentInfoColNum);
+            const descElem = document.getElementById('text-info-desc-' + currentInfoColNum);
+
+            if(titleElem) titleElem.innerText = newTitle;
+            if(descElem) descElem.innerText = newDesc;
+
+            closeInfoModal();
+            saveAllSettings();
+        }
+
+        // --- LÓGICA DE EDICIÓN: NEWSLETTER ---
+        function openNewsModal() {
+            document.getElementById('news-mod-title').value = document.getElementById('text-news-title').innerText;
+            document.getElementById('edit-news-modal').classList.add('active');
+        }
+        function closeNewsModal() { document.getElementById('edit-news-modal').classList.remove('active'); }
+        function applyNewsChanges() {
+            document.getElementById('text-news-title').innerText = document.getElementById('news-mod-title').value;
+            closeNewsModal();
+            saveAllSettings();
+        }
+
+        function openNewsletterForm() { document.getElementById('newsletter-form-modal').classList.add('active'); }
+        function closeNewsletterForm() { document.getElementById('newsletter-form-modal').classList.remove('active'); }
+        function submitNewsletter(e) {
+            e.preventDefault();
+            const name = document.getElementById('nl-name').value;
+            const wp = document.getElementById('nl-wp').value;
+            alert(`¡Gracias ${name}! Te registraste con éxito. Te contactaremos por WhatsApp (${wp}).`);
+            closeNewsletterForm();
+        }
+
+        // --- LÓGICA DE EDICIÓN: FOOTER ---
+        let currentFooterCol = null;
+
+        function openFooterModal(colNum) {
+            currentFooterCol = colNum;
+            document.getElementById('footer-modal-title').innerText = "EDITAR COLUMNA FOOTER " + colNum;
+            const colElem = document.getElementById('footer-col-' + colNum);
+            const clone = colElem.cloneNode(true);
+            const btn = clone.querySelector('.edit-footer-btn');
+            if(btn) btn.remove();
+            document.getElementById('footer-mod-html').value = clone.innerHTML;
+            document.getElementById('edit-footer-modal').classList.add('active');
+        }
+
+        function closeFooterModal() {
+            document.getElementById('edit-footer-modal').classList.remove('active');
+            currentFooterCol = null;
+        }
+
+        function applyFooterChanges() {
+            if (!currentFooterCol) return;
+            const newHtml = document.getElementById('footer-mod-html').value;
+            const colElem = document.getElementById('footer-col-' + currentFooterCol);
+            const editBtnHtml = colElem.querySelector('.edit-footer-btn').outerHTML;
+            colElem.innerHTML = editBtnHtml + newHtml;
+            closeFooterModal();
+            saveAllSettings();
+        }
+
+        // --- LÓGICA DE EDICIÓN: PRODUCTO ---
         let currentEditingCard = null;
         let tempNewImgBase64 = null;
 
@@ -781,6 +921,33 @@
                 wpNum: document.querySelector('.wp-float').href.replace('https://wa.me/', ''),
                 logoSize: logoTrigger.style.height,
                 headerNavHtml: document.getElementById('main-nav-links').innerHTML,
+                
+                // Hero Data
+                hero1Title: document.getElementById('text-col1-title').innerText,
+                hero1Sub: document.getElementById('text-col1-sub').innerText,
+                hero1Bg: document.getElementById('hero-col-1').style.backgroundImage,
+
+                hero2Title: document.getElementById('text-col2-title').innerText,
+                hero2Sub: document.getElementById('text-col2-sub').innerText,
+                hero2Bg: document.getElementById('hero-col-2').style.backgroundImage,
+
+                hero3Title: document.getElementById('text-col3-title').innerText,
+                hero3Sub: document.getElementById('text-col3-sub').innerText,
+                hero3Bg: document.getElementById('hero-col-3').style.backgroundImage,
+
+                // Info Section
+                info1Title: document.getElementById('text-info-title-1').innerText,
+                info1Desc: document.getElementById('text-info-desc-1').innerText,
+                info2Title: document.getElementById('text-info-title-2').innerText,
+                info2Desc: document.getElementById('text-info-desc-2').innerText,
+
+                // Newsletter & Footer
+                newsTitle: document.getElementById('text-news-title').innerText,
+                footer1: document.getElementById('footer-col-1').innerHTML,
+                footer2: document.getElementById('footer-col-2').innerHTML,
+                footer3: document.getElementById('footer-col-3').innerHTML,
+                footer4: document.getElementById('footer-col-4').innerHTML,
+
                 carouselHtml: document.getElementById('carousel-track-container').innerHTML
             };
             localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
@@ -801,6 +968,30 @@
                 if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
                 if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
                 if(data.carouselHtml) document.getElementById('carousel-track-container').innerHTML = data.carouselHtml;
+
+                // Restaurar datos guardados de Hero e Info
+                if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
+                if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
+                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
+
+                if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
+                if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
+                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
+
+                if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
+                if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
+                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
+
+                if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
+                if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
+                if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title;
+                if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
+
+                if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle;
+                if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1;
+                if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
+                if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
+                if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
             }
             bindHeaderNavEvents();
         };
