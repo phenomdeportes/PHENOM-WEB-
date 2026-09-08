@@ -183,6 +183,9 @@
         .section-box { background: #27272a; border: 1px solid #3f3f46; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
         .section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; border-bottom: 1px solid #3f3f46; padding-bottom: 6px; letter-spacing: 0.5px; }
         
+        .header-tab-item { background: #09090b; padding: 10px; border: 1px solid #3f3f46; border-radius: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: bold; cursor: pointer; color: #fff; }
+        .btn-add-tab { background: #28a745; color: #fff; border: none; width: 100%; padding: 10px; font-weight: bold; text-transform: uppercase; font-size: 11px; cursor: pointer; border-radius: 4px; }
+
         /* FORMATO TEXTO */
         .text-format-group { display: flex; gap: 5px; margin-top: 8px; }
         .btn-fmt { background: #3f3f46; color: #fff; border: 1px solid #52525b; width: 32px; height: 32px; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
@@ -381,14 +384,12 @@
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
-        <!-- BLOQUE: FONDOS DE PANTALLA (SINCRONIZADO CON LAS PESTAÑAS REALES) -->
+        <!-- BLOQUE: FONDOS DE PANTALLA -->
         <div class="section-box">
             <div class="section-title">FONDOS DE PANTALLA</div>
             <div class="admin-group">
                 <label>Pantalla a Editar</label>
-                <select id="bg-target-screen" onchange="loadScreenBgSettings()">
-                    <!-- Se llena dinámicamente por JS desde las pestañas reales -->
-                </select>
+                <select id="bg-target-screen" onchange="loadScreenBgSettings()"></select>
             </div>
             <div class="admin-group">
                 <label>Cargar Imagen de Fondo (Local)</label>
@@ -515,7 +516,7 @@
         </div>
     </div>
 
-    <!-- MODAL HERO (INCLUYE ARCHIVO DE IMAGEN LOCAL) -->
+    <!-- MODAL HERO CON COMPRESIÓN -->
     <div class="simple-modal-overlay" id="edit-hero-modal">
         <div class="simple-modal-content">
             <button class="simple-modal-close" onclick="closeHeroModal()">X</button>
@@ -569,17 +570,14 @@
 
     <div id="toast-success">¡CAMBIOS GUARDADOS Y PERSISTIDOS! ✓</div>
 
-    <!-- SCRIPT PRINCIPAL COMPLETO CON SINCRONIZACIÓN AUTOMÁTICA -->
+    <!-- SCRIPT PRINCIPAL CON OPTIMIZACIÓN Y PERSISTENCIA -->
     <script>
         let clickCount = 0;
         let clickTimer;
         const logoTrigger = document.getElementById('logo-trigger');
         const adminPanel = document.getElementById('admin-panel');
 
-        // REGISTRO DE PANTALLAS Y FONDOS
         let screenSettings = {};
-
-        // PRODUCTOS PERSISTENTES
         let productsData = [
             {
                 id: 'prod-1',
@@ -603,7 +601,42 @@
             }
         ];
 
-        // --- SISTEMA SPA Y NAVEGACIÓN ---
+        // FUNCIÓN DE COMPRESIÓN DE IMÁGENES
+        function compressImage(file, maxWidth, maxHeight, quality, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    callback(compressedDataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- SISTEMA SPA ---
         function showHomePage() {
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-home').classList.add('active-view');
@@ -614,13 +647,12 @@
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
             document.getElementById('view-catalog').classList.add('active-view');
             
-            // Sincronizar el selector del panel si la pantalla existe
             const bgSelect = document.getElementById('bg-target-screen');
             if (bgSelect.querySelector(`option[value="${categoryName}"]`)) {
                 bgSelect.value = categoryName;
             }
             
-            document.getElementById('btn-dynamic-add-prod').innerText = `+ Agregar ${categoryName.slice(0, -1)}`;
+            document.getElementById('btn-dynamic-add-prod').innerText = `+ Agregar Producto`;
             
             loadScreenBgSettings();
             renderCatalogGrid(categoryName);
@@ -639,7 +671,6 @@
             syncDropdownWithRealTabs();
         }
 
-        // SINCRONIZAR EL DESPLEGABLE CON LAS PESTAÑAS REALES DEL HEADER
         function syncDropdownWithRealTabs() {
             const navLinks = document.querySelectorAll('#main-nav-links a');
             const bgSelect = document.getElementById('bg-target-screen');
@@ -663,7 +694,6 @@
             }
         }
 
-        // Cargar datos de fondo/título de la pantalla activa
         function loadScreenBgSettings() {
             const bgSelect = document.getElementById('bg-target-screen');
             if (!bgSelect.value) return;
@@ -716,16 +746,14 @@
         document.getElementById('bg-file-input').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if(file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
+                compressImage(file, 1200, 1200, 0.7, function(compressedUrl) {
                     const screen = document.getElementById('bg-target-screen').value;
                     if (screen) {
-                        screenSettings[screen].bg = event.target.result;
+                        screenSettings[screen].bg = compressedUrl;
                         applyBackgroundSettings();
                         saveAllSettings();
                     }
-                };
-                reader.readAsDataURL(file);
+                });
             }
         });
 
@@ -764,7 +792,7 @@
             saveAllSettings();
         }
 
-        // --- RENDERIZAR GRILLA CATÁLOGO ---
+        // --- RENDERIZAR CATÁLOGO ---
         function renderCatalogGrid(categoryFilter) {
             const container = document.getElementById('catalog-grid-container');
             container.innerHTML = '';
@@ -843,7 +871,7 @@
             }
         });
 
-        // --- GESTIÓN DE PRODUCTOS OSCURO ---
+        // --- PRODUCTOS ---
         let currentUploadedFiles = [];
 
         function openCreateProductModal() {
@@ -886,12 +914,19 @@
         function handleDarkFiles(input, type) {
             const files = Array.from(input.files);
             files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentUploadedFiles.push(e.target.result);
-                    renderFilesPreview();
-                };
-                reader.readAsDataURL(file);
+                if(file.type.startsWith('image/')) {
+                    compressImage(file, 600, 600, 0.7, function(compressedUrl) {
+                        currentUploadedFiles.push(compressedUrl);
+                        renderFilesPreview();
+                    });
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        currentUploadedFiles.push(e.target.result);
+                        renderFilesPreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
         }
 
@@ -949,7 +984,7 @@
             }
         }
 
-        // --- GESTIÓN PESTAÑAS Y MODALES ---
+        // --- GESTIÓN PESTAÑAS ---
         function renderHeaderTabsManager() {
             const listContainer = document.getElementById('header-tabs-list');
             listContainer.innerHTML = '';
@@ -1014,7 +1049,7 @@
             saveAllSettings();
         }
 
-        // BOTONES HERO Y SUBIDA DE IMAGEN DE FONDO LOCAL
+        // HERO
         let currentHeroColNum = null;
         let tempHeroImgBase64 = null;
 
@@ -1032,11 +1067,9 @@
         document.getElementById('edit-hero-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    tempHeroImgBase64 = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                compressImage(file, 1000, 1000, 0.7, function(compressedUrl) {
+                    tempHeroImgBase64 = compressedUrl;
+                });
             }
         });
 
@@ -1116,7 +1149,7 @@
             closeNewsletterForm();
         }
 
-        // --- SISTEMA DE PERSISTENCIA ---
+        // --- SISTEMA DE PERSISTENCIA DEFINITIVO ---
         function saveAllSettings() {
             const settings = {
                 fubBar: document.getElementById('fub-bar').innerText,
@@ -1151,8 +1184,12 @@
                 productsData: productsData
             };
 
-            localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
-            triggerSaveToast();
+            try {
+                localStorage.setItem('phenom_persistent_data', JSON.stringify(settings));
+                triggerSaveToast();
+            } catch (err) {
+                alert("¡Atención! La memoria local del navegador está llena. Borrá algunos productos viejos o cargá imágenes más livianas.");
+            }
         }
 
         function triggerSaveToast() {
@@ -1164,36 +1201,40 @@
         window.onload = () => {
             const saved = localStorage.getItem('phenom_persistent_data');
             if (saved) {
-                const data = JSON.parse(saved);
-                if(data.fubBar) document.getElementById('fub-bar').innerText = data.fubBar;
-                if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
-                if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
+                try {
+                    const data = JSON.parse(saved);
+                    if(data.fubBar) document.getElementById('fub-bar').innerText = data.fubBar;
+                    if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum;
+                    if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
 
-                if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
-                if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
-                if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
+                    if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title;
+                    if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub;
+                    if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg;
 
-                if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
-                if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
-                if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
+                    if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title;
+                    if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub;
+                    if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg;
 
-                if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
-                if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
-                if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
+                    if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title;
+                    if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub;
+                    if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
 
-                if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
-                if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
-                if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title;
-                if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
+                    if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title;
+                    if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc;
+                    if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title;
+                    if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
 
-                if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle;
-                if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1;
-                if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
-                if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
-                if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
+                    if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle;
+                    if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1;
+                    if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2;
+                    if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3;
+                    if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
 
-                if(data.screenSettings) screenSettings = data.screenSettings;
-                if(data.productsData) productsData = data.productsData;
+                    if(data.screenSettings) screenSettings = data.screenSettings;
+                    if(data.productsData) productsData = data.productsData;
+                } catch(e) {
+                    console.error("Error al cargar localStorage:", e);
+                }
             }
             bindHeaderNavEvents();
             loadScreenBgSettings();
