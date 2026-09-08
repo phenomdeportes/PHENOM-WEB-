@@ -2,272 +2,199 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phenom | Tienda Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Arial&family=Courier+New&family=Georgia&family=Impact&family=Lucida+Console&family=Palatino&family=Segoe+UI&family=Tahoma&family=Times+New+Roman&family=Verdana&family=Montserrat:wght@400;700;900&family=Oswald:wght@400;700&family=Roboto:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Etiqueta Viewport Crítica -->
+    <title>Phenom Uruguay | E-Commerce Omega</title>
     <style>
-        /* --- RESET Y VARIABLES --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { overflow-x: hidden; background: #fff; transition: background-color 0.3s ease; }
+        /* --- VARIABLES Y RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f4f4f4; color: #111; overflow-x: hidden; }
         
-        /* CONTENEDOR MAESTRO PARA SIMULADOR */
-        #app-wrapper { width: 100%; min-height: 100vh; background: #fff; transition: all 0.3s ease; margin: 0 auto; position: relative; }
-        
-        /* MODO SIMULADOR ACTIVO */
-        body.mobile-simulator { background: #333; display: flex; justify-content: center; align-items: center; padding: 20px 0; }
-        body.mobile-simulator #app-wrapper { 
-            width: 375px; height: 812px; border: 12px solid #111; border-radius: 36px; 
-            overflow-y: auto; overflow-x: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-        }
-        body.mobile-simulator #app-wrapper::-webkit-scrollbar { display: none; }
+        /* --- HEADER Y NAVEGACIÓN --- */
+        .fub-bar { background: #002266; color: #fff; text-align: center; padding: 8px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: #111; color: #fff; border-bottom: 2px solid #d4af37; }
+        .logo-container img { height: 45px; cursor: pointer; transition: height 0.3s; }
+        .nav-links { display: flex; gap: 20px; background: #222; padding: 15px; justify-content: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: bold; font-size: 13px; text-transform: uppercase; cursor: pointer; }
+        .nav-links a:hover { color: #d4af37; }
 
-        /* --- BARRA SUPERIOR --- */
-        .top-bar { background-color: #000; color: #fff; text-align: center; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; }
+        /* --- HERO (3 COLUMNAS) --- */
+        .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); min-height: 60vh; }
+        .hero-col { position: relative; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-align: center; padding: 20px; border-right: 1px solid #333; }
+        .hero-col::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-title { font-size: 2rem; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; }
+        .hero-sub { font-size: 1.2rem; font-weight: bold; color: #d4af37; }
 
-        /* --- HEADER PRINCIPAL --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; position: relative; }
-        .logo-container img { height: 45px; cursor: pointer; transition: all 0.3s ease; }
-        
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active-link { color: #666; text-decoration: underline; }
-        .nav-links a.highlight { color: #e00; }
-        .header-icons { display: flex; align-items: center; gap: 20px; }
-        .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
-        .icon { font-size: 20px; cursor: pointer; }
-
-        .mobile-menu-btn { display: none; font-size: 24px; cursor: pointer; background: none; border: none; color: #000; font-weight: bold; }
-
-        /* --- VISTAS SPA --- */
-        .page-view { display: none; }
-        .page-view.active-view { display: block; }
-
-        /* --- HERO SECTION --- */
-        .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); height: 85vh; }
-        .hero-col { position: relative; background-color: #111; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #fff; }
-        .hero-col::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); }
-        .hero-content { position: relative; z-index: 1; padding: 20px; width: 100%; }
-        .hero-title { font-size: 2.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-        .hero-subtitle { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
-        .btn-comprar { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 15px 30px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-        
-        /* --- CARRUSEL HORIZONTAL --- */
-        .carousel-section { padding: 40px; background: #fff; width: 100%; }
-        .carousel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 20px; }
-        .carousel-tabs button { background: none; border: 1px solid transparent; font-size: 16px; font-weight: 900; padding: 10px 20px; cursor: pointer; text-transform: uppercase; }
-        .carousel-tabs button.active { background: #000; color: #fff; border: 1px solid #000; }
-        .carousel-actions { display: flex; align-items: center; gap: 15px; }
-        .view-all { color: #000; text-decoration: underline; font-weight: 700; font-size: 13px; text-transform: uppercase; cursor: pointer; }
-        .carousel-track { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
-        .carousel-track::-webkit-scrollbar { display: none; }
-        
-        /* --- CATÁLOGO --- */
-        .catalog-container { padding: 40px; min-height: 70vh; background: #f8f9fa; }
-        .catalog-header { margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .catalog-title { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; color: #000; }
-        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
-        
-        .product-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-card .card-img-wrapper { background: #f8f9fa; height: 220px; border-radius: 6px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-bottom: 15px; }
-        .product-card .card-img-wrapper img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .product-card .card-title-text { font-size: 14px; font-weight: 800; color: #000; margin-bottom: 8px; }
-        .price-container { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .offer-price { color: #d97706; font-size: 16px; font-weight: 900; }
-        .btn-mp { background: #009ee3; color: #fff; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 800; display: block; text-align: center; text-decoration: none; margin-bottom: 8px; border: none; width: 100%; cursor: pointer; }
-
-        /* --- INFO MARCA --- */
-        .info-section { background-color: #f4f4ec; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #000; }
-        .info-column h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; }
-        .info-column p { font-size: 14px; line-height: 1.7; color: #111; }
-
-        /* --- NEWSLETTER Y FOOTER --- */
-        .newsletter-bar { background-color: #ede734; padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 30px; }
-        .newsletter-bar h2 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: #000; }
-        .btn-register { background-color: #000; color: #fff; padding: 15px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; }
-        .footer { background-color: #fff; padding: 60px 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; color: #000; border-top: 1px solid #eaeaea; }
-        .footer-col h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
-        .footer-col a { display: block; color: #333; text-decoration: none; font-size: 13px; margin-bottom: 12px; cursor: pointer; }
-
-        /* --- PANEL LATERAL DE CONTROL OSCURO --- */
-        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 320px; height: 100vh; background: #1e1e1e; color: #fff; border-right: 2px solid #333; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        /* --- PANEL DE EDICIÓN OMEGA (OCULTO) --- */
+        #admin-panel { display: none; position: fixed; top: 0; right: 0; width: 350px; height: 100vh; background: #181818; color: #fff; border-left: 2px solid #d4af37; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
         #admin-panel.active { display: block; }
-        .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: #eab308; }
-        .btn-sim { background: #2563eb; color: #fff; width: 100%; padding: 12px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-bottom: 15px; }
-        .btn-save { background: #eab308; color: #000; width: 100%; padding: 12px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-bottom: 15px; }
-        .btn-close { background: #dc3545; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; border-radius: 3px; }
-        
-        /* COMPORTAMIENTO MÓVIL FORZADO (SIMULADOR O MEDIA QUERY) */
+        .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; color: #d4af37; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .admin-group { margin-bottom: 15px; background: #252525; padding: 12px; border-radius: 6px; }
+        .admin-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #aaa; text-transform: uppercase; }
+        .admin-group input[type="text"], .admin-group input[type="number"] { width: 100%; padding: 8px; border: 1px solid #444; border-radius: 4px; background: #111; color: #fff; font-size: 12px; }
+        .admin-group input[type="file"] { font-size: 11px; color: #ccc; }
+        .btn-save { background: #d4af37; color: #000; width: 100%; padding: 12px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 4px; }
+        .btn-close { background: #e00; color: #fff; border: none; padding: 4px 8px; cursor: pointer; font-weight: bold; border-radius: 3px; }
+
+        /* --- ADAPTABILIDAD MÓVIL (MEDIA QUERIES) --- */
         @media (max-width: 768px) {
-            .header { padding: 15px 20px; flex-wrap: wrap; }
-            .mobile-menu-btn { display: block; }
-            .nav-links { display: none; flex-direction: column; width: 100%; text-align: center; margin-top: 15px; gap: 15px; }
-            .nav-links.active { display: flex; }
-            .header-icons { width: 100%; justify-content: center; margin-top: 15px; }
-            .hero-grid { grid-template-columns: 1fr; height: auto; }
-            .hero-col { height: 400px; }
-            .info-section { grid-template-columns: 1fr; padding: 40px 20px; gap: 30px; }
-            .newsletter-bar { flex-direction: column; text-align: center; gap: 15px; }
-            .footer { grid-template-columns: repeat(2, 1fr); padding: 40px 20px; }
-            .catalog-container { padding: 20px; }
+            .header { padding: 15px 20px; flex-direction: column; gap: 10px; }
+            .nav-links { flex-direction: column; align-items: center; gap: 15px; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-col { min-height: 350px; border-right: none; border-bottom: 1px solid #333; }
+            #admin-panel { width: 100%; border-left: none; }
         }
-
-        /* LAS MISMAS REGLAS APLICADAS AL SIMULADOR */
-        body.mobile-simulator #app-wrapper .header { padding: 15px 20px; flex-wrap: wrap; }
-        body.mobile-simulator #app-wrapper .mobile-menu-btn { display: block; }
-        body.mobile-simulator #app-wrapper .nav-links { display: none; flex-direction: column; width: 100%; text-align: center; margin-top: 15px; gap: 15px; }
-        body.mobile-simulator #app-wrapper .nav-links.active { display: flex; }
-        body.mobile-simulator #app-wrapper .header-icons { width: 100%; justify-content: center; margin-top: 15px; }
-        body.mobile-simulator #app-wrapper .hero-grid { grid-template-columns: 1fr; height: auto; }
-        body.mobile-simulator #app-wrapper .hero-col { height: 400px; }
-        body.mobile-simulator #app-wrapper .info-section { grid-template-columns: 1fr; padding: 40px 20px; gap: 30px; }
-        body.mobile-simulator #app-wrapper .newsletter-bar { flex-direction: column; text-align: center; gap: 15px; }
-        body.mobile-simulator #app-wrapper .footer { grid-template-columns: repeat(2, 1fr); padding: 40px 20px; }
-        body.mobile-simulator #app-wrapper .catalog-container { padding: 20px; }
-
     </style>
 </head>
 <body>
 
-    <div id="app-wrapper">
-        <!-- BARRA SUPERIOR -->
-        <div class="top-bar">¡BIENVENIDOS A LA TIENDA OFICIAL DE PHENOM!</div>
+    <div class="fub-bar" id="fub-bar-text">SPONSOR OFICIAL DE LA FEDERACIÓN URUGUAYA DE BOXEO (FUB)</div>
 
-        <!-- HEADER -->
-        <header class="header">
-            <div class="logo-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger" onclick="showHomePage()">
-            </div>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-            <nav class="nav-links" id="main-nav-links">
-                <a onclick="navigateToCategory('PROTECTORES')">PROTECTORES</a>
-                <a onclick="navigateToCategory('ACCESORIOS')">ACCESORIOS</a>
-                <a onclick="navigateToCategory('INDUMENTARIA')">INDUMENTARIA</a>
-            </nav>
-            <div class="header-icons">
-                <input type="text" class="search-box" placeholder="Buscar...">
-                <span class="icon">🛒</span>
-            </div>
-        </header>
-
-        <!-- VISTA INICIO -->
-        <div id="view-home" class="page-view active-view">
-            <section class="hero-grid">
-                <div class="hero-col" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800');">
-                    <div class="hero-content">
-                        <h1 class="hero-title">PHENOM ELITE</h1>
-                        <a onclick="navigateToCategory('PROTECTORES')" class="btn-comprar">COMPRAR</a>
-                    </div>
-                </div>
-                <div class="hero-col" style="background-image: url('https://images.unsplash.com/photo-1517438322307-e67111335449?q=80&w=800');">
-                    <div class="hero-content">
-                        <h1 class="hero-title">SPARRING PRO</h1>
-                    </div>
-                </div>
-                <div class="hero-col" style="background-color: #000;">
-                    <div class="hero-content">
-                        <h1 class="hero-title">NOVEDADES</h1>
-                    </div>
-                </div>
-            </section>
+    <header class="header" id="main-header">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger">
         </div>
+        <div style="font-weight: bold; font-size: 14px;">🛒 Carrito: 0</div>
+    </header>
 
-        <!-- VISTA CATÁLOGO -->
-        <div id="view-catalog" class="page-view">
-            <div class="catalog-container">
-                <div class="catalog-header">
-                    <h1 class="catalog-title" id="cat-title">PRODUCTOS</h1>
-                </div>
-                <div class="catalog-grid" id="catalog-grid-container">
-                    <!-- Tarjeta Prueba -->
-                    <div class="product-card">
-                        <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400"></div>
-                        <div class="card-title-text">Guantes Boxeo Phenom Pro Violeta 14oz</div>
-                        <div class="price-container"><span class="offer-price">$2.250 UYU</span></div>
-                        <button class="btn-mp">Agregar al Carrito</button>
-                    </div>
-                </div>
+    <nav class="nav-links">
+        <a>GUANTES</a>
+        <a>PROTECTORES</a>
+        <a>INDUMENTARIA</a>
+        <a>TINAS</a>
+        <a>SALE</a>
+    </nav>
+
+    <section class="hero-grid">
+        <div class="hero-col" id="col-1-bg" style="background-image: url('https://via.placeholder.com/800x600/111/fff?text=COLUMNA+1');">
+            <div class="hero-content">
+                <h1 class="hero-title" id="col-1-title">PHENOM ELITE</h1>
+                <h2 class="hero-sub" id="col-1-sub">MÁXIMA PROTECCIÓN</h2>
             </div>
         </div>
-
-        <!-- INFO -->
-        <section class="info-section">
-            <div class="info-column">
-                <h2>HISTORIA Y COMBATE</h2>
-                <p>Equipamiento para atletas de alto rendimiento diseñado en Uruguay.</p>
+        <div class="hero-col" id="col-2-bg" style="background-image: url('https://via.placeholder.com/800x600/222/fff?text=COLUMNA+2');">
+            <div class="hero-content">
+                <h1 class="hero-title" id="col-2-title">THE ORIGINAL</h1>
+                <h2 class="hero-sub" id="col-2-sub"></h2>
             </div>
-        </section>
+        </div>
+        <div class="hero-col" id="col-3-bg" style="background-image: url('https://via.placeholder.com/800x600/333/fff?text=COLUMNA+3');">
+            <div class="hero-content">
+                <h1 class="hero-title" id="col-3-title">SPARRING PRO</h1>
+                <h2 class="hero-sub" id="col-3-sub">ONZAS PRECISAS</h2>
+            </div>
+        </div>
+    </section>
 
-        <!-- NEWSLETTER -->
-        <section class="newsletter-bar">
-            <h2>SUSCRÍBETE</h2>
-            <button class="btn-register">REGÍSTRATE GRATIS →</button>
-        </section>
-    </div>
-
-    <!-- PANEL LATERAL DE CONTROL OSCURO -->
+    <!-- PANEL OMEGA -->
     <div id="admin-panel">
         <div class="admin-header">
-            <span>Control Omega</span>
-            <button class="btn-close" onclick="toggleAdminPanel()">X</button>
+            CONTROL OMEGA
+            <button class="btn-close" onclick="document.getElementById('admin-panel').classList.remove('active')">X</button>
         </div>
-        
-        <button class="btn-sim" onclick="toggleMobileSimulator()">📱 ACTIVAR SIMULADOR MÓVIL</button>
-        <button class="btn-save" onclick="alert('Configuración guardada en LocalStorage')">💾 GUARDAR CAMBIOS</button>
-        
-        <p style="font-size: 11px; color:#aaa; margin-top: 20px;">Utilice el simulador para auditar la experiencia de compra en celulares antes de inyectar tráfico de pauta.</p>
+
+        <div class="admin-group">
+            <label>Tamaño del Logo (px)</label>
+            <input type="number" id="edit-logo-size" value="45" oninput="document.getElementById('logo-trigger').style.height = this.value + 'px'">
+        </div>
+
+        <div class="admin-group">
+            <label>Columna 1: Cargar Imagen (Compresión Auto)</label>
+            <input type="file" id="upload-col-1" accept="image/*" onchange="handleImageUpload(event, 'col-1-bg')">
+            <label style="margin-top: 10px;">Título Col 1</label>
+            <input type="text" id="edit-col-1-title" oninput="document.getElementById('col-1-title').innerText = this.value">
+        </div>
+
+        <button class="btn-save" onclick="saveData()">💾 GUARDAR CAMBIOS</button>
     </div>
 
     <script>
-        // Lógica Gatillo Omega (5 clics)
+        // --- 1. GATILLO TÁCTICO: 5 CLICS AL LOGO ---
         let clickCount = 0;
         let clickTimer;
-        
         document.getElementById('logo-trigger').addEventListener('click', () => {
             clickCount++;
             clearTimeout(clickTimer);
             if (clickCount === 5) {
-                toggleAdminPanel();
+                document.getElementById('admin-panel').classList.add('active');
                 clickCount = 0; 
             } else {
                 clickTimer = setTimeout(() => { clickCount = 0; }, 2000); 
             }
         });
 
-        function toggleAdminPanel() {
-            document.getElementById('admin-panel').classList.toggle('active');
+        // --- 2. MOTOR DE COMPRESIÓN DE IMÁGENES (Evita saturar LocalStorage) ---
+        function compressImage(file, maxWidth, quality, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Retorna Base64 optimizado
+                    callback(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
-        // --- SISTEMA SIMULADOR DE CELULARES ---
-        function toggleMobileSimulator() {
-            const body = document.body;
-            body.classList.toggle('mobile-simulator');
-            const btn = document.querySelector('.btn-sim');
+        // --- 3. PROCESAMIENTO Y PREVISUALIZACIÓN DE IMÁGENES ---
+        let pendingImages = {};
+        function handleImageUpload(event, targetId) {
+            const file = event.target.files[0];
+            if (!file) return;
             
-            if(body.classList.contains('mobile-simulator')) {
-                btn.innerText = "💻 VOLVER A MODO ESCRITORIO";
-                btn.style.background = "#dc3545";
-            } else {
-                btn.innerText = "📱 ACTIVAR SIMULADOR MÓVIL";
-                btn.style.background = "#2563eb";
+            // Comprime a un máximo de 800px ancho, calidad 70%
+            compressImage(file, 800, 0.7, function(compressedBase64) {
+                document.getElementById(targetId).style.backgroundImage = `url('${compressedBase64}')`;
+                pendingImages[targetId] = compressedBase64;
+            });
+        }
+
+        // --- 4. PERSISTENCIA TOTAL (LOCALSTORAGE) ---
+        function saveData() {
+            const data = {
+                logoSize: document.getElementById('edit-logo-size').value,
+                col1Title: document.getElementById('edit-col-1-title').value,
+                col1Bg: pendingImages['col-1-bg'] || document.getElementById('col-1-bg').style.backgroundImage
+            };
+            localStorage.setItem('phenom_omega_data', JSON.stringify(data));
+            alert('¡Datos y Fotos guardados con éxito!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('phenom_omega_data');
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            
+            if (data.logoSize) {
+                document.getElementById('logo-trigger').style.height = data.logoSize + 'px';
+                document.getElementById('edit-logo-size').value = data.logoSize;
+            }
+            if (data.col1Title) {
+                document.getElementById('col-1-title').innerText = data.col1Title;
+                document.getElementById('edit-col-1-title').value = data.col1Title;
+            }
+            if (data.col1Bg) {
+                document.getElementById('col-1-bg').style.backgroundImage = data.col1Bg.startsWith('url') ? data.col1Bg : `url('${data.col1Bg}')`;
+                pendingImages['col-1-bg'] = data.col1Bg;
             }
         }
 
-        // Navegación SPA Básica
-        function showHomePage() {
-            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-            document.getElementById('view-home').classList.add('active-view');
-        }
-
-        function navigateToCategory(cat) {
-            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-            document.getElementById('view-catalog').classList.add('active-view');
-            document.getElementById('cat-title').innerText = cat;
-            document.getElementById('main-nav-links').classList.remove('active');
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById('main-nav-links').classList.toggle('active');
-        }
+        window.onload = loadData;
     </script>
 </body>
 </html>
