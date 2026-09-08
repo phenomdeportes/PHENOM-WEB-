@@ -84,13 +84,16 @@
 
         .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
 
-        /* PANEL ADMIN */
+        /* PANEL ADMIN OMEGA */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #1e1e1e; color: #fff; border-right: 2px solid #333; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
         #admin-panel.active { display: block; }
         .admin-header { font-weight: 900; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: #eab308; }
         .btn-close { background: #dc3545; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; font-size: 12px; border-radius: 3px; }
         .section-box { background: #27272a; border: 1px solid #3f3f46; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
         .section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; border-bottom: 1px solid #3f3f46; padding-bottom: 6px; }
+        .admin-group { margin-bottom: 15px; }
+        .admin-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #a1a1aa; }
+        .admin-group input { width: 100%; padding: 10px; border: 1px solid #3f3f46; border-radius: 4px; font-size: 13px; outline: none; background: #09090b; color: #fff; }
 
         @media (max-width: 992px) {
             .hero-grid { grid-template-columns: 1fr !important; height: auto !important; }
@@ -210,12 +213,16 @@
         <div class="admin-header"><span>Control Omega</span><button class="btn-close" onclick="toggleAdminMode(false)">X</button></div>
         <div class="section-box">
             <div class="section-title">ESTADO DEL SISTEMA</div>
-            <p style="font-size: 12px; color: #a1a1aa; line-height: 1.5;">Panel de control activo. Estructura móvil blindada y sincronizada.</p>
+            <div class="admin-group">
+                <label>Productos Activos en Memoria:</label>
+                <input type="text" id="admin-status-count" readonly value="2 Productos Sincronizados">
+            </div>
+            <p style="font-size: 12px; color: #a1a1aa; line-height: 1.5;">Estructura móvil adaptada y panel restaurado correctamente.</p>
         </div>
     </div>
 
     <script>
-        const productsData = [
+        let productsData = [
             { id: 'prod-1', title: 'Guantes de Boxeo Blanco / Dorado', category: 'PROTECTORES', variants: ['12oz', '14oz', '16oz'], regularPrice: '$2.500', price: '$2.090 UYU', media: ['https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400'] },
             { id: 'prod-2', title: 'Cabezal Sparring Pro Negro Mate', category: 'PROTECTORES', variants: ['10oz', '12oz'], price: '$2.350 UYU', media: ['https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400'] }
         ];
@@ -272,11 +279,14 @@
 
         function renderCarouselFront() {
             const track = document.getElementById('carousel-track-container');
+            if(!track) return;
             track.innerHTML = '';
             productsData.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'product-card carousel-card';
-                card.innerHTML = `<div><div class="card-img-wrapper"><img src="${p.media[0]}" alt="${p.title}"></div><div class="card-title-text">${p.title}</div><div class="price-container"><span class="offer-price">${p.price}</span></div></div><div><button class="btn-add-cart" onclick="alert('Producto agregado')">Agregar al Carrito</button></div>`;
+                let variantsHtml = (p.variants || []).map(v => `<span class="badge-item">${v}</span>`).join('');
+                let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
+                card.innerHTML = `<div><div class="card-img-wrapper"><img src="${p.media[0]}" alt="${p.title}"></div><div class="card-title-text">${p.title}</div><div class="variant-badges">${variantsHtml}</div><div class="price-container">${regPriceHtml} <span class="offer-price">${p.price}</span></div></div><div><button class="btn-add-cart" onclick="alert('Producto agregado')">Agregar al Carrito</button></div>`;
                 track.appendChild(card);
             });
         }
@@ -287,11 +297,14 @@
 
         function renderCatalogGrid(filter) {
             const container = document.getElementById('catalog-grid-container');
+            if(!container) return;
             container.innerHTML = '';
             productsData.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                card.innerHTML = `<div><div class="card-img-wrapper"><img src="${p.media[0]}" alt="${p.title}"></div><div class="card-title-text">${p.title}</div><div class="price-container"><span class="offer-price">${p.price}</span></div></div><div><button class="btn-add-cart" onclick="alert('Producto agregado')">Agregar al Carrito</button></div>`;
+                let variantsHtml = (p.variants || []).map(v => `<span class="badge-item">${v}</span>`).join('');
+                let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
+                card.innerHTML = `<div><div class="card-img-wrapper"><img src="${p.media[0]}" alt="${p.title}"></div><div class="card-title-text">${p.title}</div><div class="variant-badges">${variantsHtml}</div><div class="price-container">${regPriceHtml} <span class="offer-price">${p.price}</span></div></div><div><button class="btn-add-cart" onclick="alert('Producto agregado')">Agregar al Carrito</button></div>`;
                 container.appendChild(card);
             });
         }
