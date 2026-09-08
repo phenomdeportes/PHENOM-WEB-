@@ -65,6 +65,8 @@
         .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px; align-items: stretch; }
         .carousel-track::-webkit-scrollbar { display: none; }
         
+        .carousel-card { min-width: 280px; flex-shrink: 0; }
+
         /* --- ESTILOS CATÁLOGO --- */
         .catalog-container { padding: 40px; min-height: 70vh; background: #f8f9fa; background-size: cover; background-position: center; transition: all 0.3s ease; }
         .catalog-header { margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -303,8 +305,8 @@
                 </div>
                 <div class="carousel-actions">
                     <a onclick="navigateToCategory('Todos')" class="view-all">VER TODO</a>
-                    <button class="arrow-btn">❮</button>
-                    <button class="arrow-btn">❯</button>
+                    <button class="arrow-btn" onclick="scrollCarousel(-1)">❮</button>
+                    <button class="arrow-btn" onclick="scrollCarousel(1)">❯</button>
                 </div>
             </div>
             <div class="carousel-track" id="carousel-track-container"></div>
@@ -390,6 +392,17 @@
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
+        <!-- NUEVO BLOQUE: CARRUSEL DESTACADOS -->
+        <div class="section-box">
+            <div class="section-title">CARRUSEL DESTACADOS (INICIO)</div>
+            <div class="admin-group">
+                <label>Selecciona los productos a mostrar:</label>
+                <div class="checkboxes-box" id="admin-carousel-products" style="max-height: 200px; overflow-y: auto;">
+                    <!-- Checkboxes dinámicos -->
+                </div>
+            </div>
+        </div>
+
         <!-- BLOQUE: BARRA SUPERIOR (HEADER) -->
         <div class="section-box">
             <div class="section-title">BARRA SUPERIOR (HEADER)</div>
@@ -423,7 +436,7 @@
             </div>
         </div>
 
-        <!-- NUEVO BLOQUE: BARRA DE NAVEGACIÓN (MENÚ) -->
+        <!-- BLOQUE: BARRA DE NAVEGACIÓN (MENÚ) -->
         <div class="section-box">
             <div class="section-title">BARRA DE NAVEGACIÓN (MENÚ)</div>
             <div class="two-cols">
@@ -712,6 +725,7 @@
             }
         ];
         
+        let featuredProducts = ['prod-1', 'prod-2']; // Array de IDs para mostrar en inicio
         let logoTextFormat = { bold: false, italic: false, underline: false };
 
         function compressImage(file, maxWidth, maxHeight, quality, callback) {
@@ -772,6 +786,59 @@
             });
             if (currentSelected && bgSelect.querySelector(`option[value="${currentSelected}"]`)) bgSelect.value = currentSelected;
         }
+
+        // --- SISTEMA DE CARRUSEL DINÁMICO ---
+        function renderCarouselAdmin() {
+            const container = document.getElementById('admin-carousel-products');
+            container.innerHTML = '';
+            productsData.forEach(p => {
+                const isChecked = featuredProducts.includes(p.id) ? 'checked' : '';
+                container.innerHTML += `<label><input type="checkbox" value="${p.id}" class="chk-featured" ${isChecked} onchange="updateFeaturedProducts()"> ${p.title}</label>`;
+            });
+        }
+
+        function updateFeaturedProducts() {
+            featuredProducts = Array.from(document.querySelectorAll('.chk-featured:checked')).map(c => c.value);
+            renderCarouselFront();
+            saveAllSettings();
+        }
+
+        function renderCarouselFront() {
+            const track = document.getElementById('carousel-track-container');
+            track.innerHTML = '';
+            featuredProducts.forEach(id => {
+                const p = productsData.find(prod => prod.id === id);
+                if (p) {
+                    const card = document.createElement('div'); 
+                    card.className = 'product-card carousel-card'; 
+                    card.id = 'front-' + p.id;
+                    
+                    let variantsHtml = (p.variants || []).map(v => `<span class="badge-item">${v}</span>`).join('');
+                    let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
+                    let mpBtnHtml = p.mpLink ? `<a href="${p.mpLink}" target="_blank" class="btn-mp">💳 Pagar</a>` : '';
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="card-img-wrapper"><img src="${p.media && p.media[0] ? p.media[0] : ''}" alt="${p.title}"></div>
+                            <div class="card-title-text">${p.title}</div>
+                            <div class="variant-badges">${variantsHtml}</div>
+                            <div class="price-container">${regPriceHtml} <span class="offer-price">${p.price}</span></div>
+                        </div>
+                        <div>
+                            ${mpBtnHtml}
+                            <button class="btn-add-cart" onclick="alert('Producto agregado al carrito de WhatsApp')">Agregar al Carrito</button>
+                        </div>`;
+                    track.appendChild(card);
+                }
+            });
+        }
+
+        function scrollCarousel(dir) {
+            const track = document.getElementById('carousel-track-container');
+            const scrollAmount = 300; // píxeles a desplazar
+            track.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+        }
+
 
         // --- CONTROLES BARRA SUPERIOR & LOGO ---
         function applyTopBarSettings() {
@@ -893,7 +960,7 @@
             } else { 
                 catalogBg.style.backgroundImage = 'none'; 
             }
-            document.querySelectorAll('.product-card').forEach(c => c.style.backgroundColor = `rgba(255, 255, 255, ${1 - parseFloat(s.opacity)})`);
+            document.querySelectorAll('.product-card:not(.carousel-card)').forEach(c => c.style.backgroundColor = `rgba(255, 255, 255, ${1 - parseFloat(s.opacity)})`);
         }
 
         document.getElementById('bg-file-input').addEventListener('change', function(e) {
@@ -949,7 +1016,7 @@
                     </div>
                     <div>
                         ${mpBtnHtml}
-                        <button class="btn-add-cart" onclick="alert('Producto agregado')">Agregar al Carrito</button>
+                        <button class="btn-add-cart" onclick="alert('Producto agregado al carrito')">Agregar al Carrito</button>
                         <div class="admin-card-controls"><button class="btn-admin-edit" onclick="editDarkProduct('${p.id}')">✏️ Editar</button><button class="btn-admin-delete" onclick="deleteProductById('${p.id}')">🗑️ Eliminar</button></div>
                     </div>`;
                 container.appendChild(card);
@@ -965,7 +1032,7 @@
         function toggleAdminMode(forceState) {
             if (forceState) {
                 adminPanel.classList.add('active'); document.body.classList.add('admin-mode', 'panel-active');
-                renderHeaderTabsManager(); syncDropdownWithRealTabs(); loadScreenBgSettings();
+                renderHeaderTabsManager(); syncDropdownWithRealTabs(); loadScreenBgSettings(); renderCarouselAdmin();
             } else {
                 adminPanel.classList.remove('active'); document.body.classList.remove('admin-mode', 'panel-active');
             }
@@ -1024,9 +1091,18 @@
             const selectedOz = []; document.querySelectorAll('.chk-oz:checked').forEach(c => selectedOz.push(c.value));
             if(id) { const idx = productsData.findIndex(p => p.id === id); if(idx !== -1) productsData[idx] = { id, title, category: cat, variants: selectedOz, regularPrice: regPrice, price, mpLink: mp, media: currentUploadedFiles }; } 
             else { productsData.push({ id: 'prod-' + Date.now(), title, category: cat, variants: selectedOz, regularPrice: regPrice, price, mpLink: mp, media: currentUploadedFiles }); }
-            closeDarkModal(); saveAllSettings(); renderCatalogGrid(cat);
+            closeDarkModal(); saveAllSettings(); renderCatalogGrid(cat); renderCarouselAdmin(); renderCarouselFront();
         }
-        function deleteProductById(id) { if(confirm("¿Eliminar este producto?")) { productsData = productsData.filter(p => p.id !== id); saveAllSettings(); renderCatalogGrid(document.getElementById('bg-target-screen').value); } }
+        function deleteProductById(id) { 
+            if(confirm("¿Eliminar este producto?")) { 
+                productsData = productsData.filter(p => p.id !== id); 
+                featuredProducts = featuredProducts.filter(fid => fid !== id);
+                saveAllSettings(); 
+                renderCatalogGrid(document.getElementById('bg-target-screen').value);
+                renderCarouselAdmin();
+                renderCarouselFront();
+            } 
+        }
 
         // --- PESTAÑAS, HERO E INFO ---
         function renderHeaderTabsManager() {
@@ -1119,7 +1195,7 @@
                 newsTitle: document.getElementById('text-news-title').innerText,
                 footer1: document.getElementById('footer-col-1').innerHTML, footer2: document.getElementById('footer-col-2').innerHTML, footer3: document.getElementById('footer-col-3').innerHTML, footer4: document.getElementById('footer-col-4').innerHTML,
 
-                screenSettings: screenSettings, productsData: productsData
+                screenSettings: screenSettings, productsData: productsData, featuredProducts: featuredProducts
             };
             try { localStorage.setItem('phenom_persistent_data', JSON.stringify(settings)); triggerSaveToast(); } catch (err) { alert("¡Atención! Memoria llena. Borrá imágenes antiguas."); }
         }
@@ -1185,10 +1261,12 @@
 
                     if(data.screenSettings) screenSettings = data.screenSettings;
                     if(data.productsData) productsData = data.productsData;
+                    if(data.featuredProducts) featuredProducts = data.featuredProducts;
                 } catch(e) {}
             }
             bindHeaderNavEvents();
             loadScreenBgSettings();
+            renderCarouselFront();
         };
     </script>
 </body>
