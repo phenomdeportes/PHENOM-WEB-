@@ -16,8 +16,8 @@
         .top-bar { background-color: #000; color: #fff; text-align: center; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; }
 
         /* --- HEADER PRINCIPAL --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: all 0.3s ease; }
-        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: all 0.3s ease; position: relative; }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; z-index: 101; }
         .logo-container img { height: 45px; transition: all 0.3s ease; object-fit: contain; }
         #logo-adj-text-val { font-size: 24px; font-weight: bold; white-space: nowrap; transition: all 0.3s ease; }
         
@@ -25,9 +25,11 @@
         .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s, font-size 0.3s; cursor: pointer; }
         .nav-links a:hover, .nav-links a.active-link { text-decoration: underline; opacity: 0.7; }
         .nav-links a.highlight { color: #e00; }
-        .header-icons { display: flex; align-items: center; gap: 20px; }
+        
+        .header-controls { display: flex; align-items: center; gap: 20px; z-index: 101; }
         .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
         .icon { font-size: 20px; cursor: pointer; }
+        .hamburger { display: none; font-size: 26px; cursor: pointer; user-select: none; }
 
         /* --- VISTAS SPA --- */
         .page-view { display: none; }
@@ -54,7 +56,6 @@
         .arrow-btn { background: none; border: none; font-size: 20px; cursor: pointer; }
         .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px; align-items: stretch; }
         .carousel-track::-webkit-scrollbar { display: none; }
-        
         .carousel-card { min-width: 280px; flex-shrink: 0; }
 
         /* --- ESTILOS CATÁLOGO --- */
@@ -114,6 +115,35 @@
         body.admin-mode .edit-footer-btn { display: flex; }
 
         .wp-float { position: fixed; bottom: 30px; right: 30px; background: #000; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
+
+        /* --- RESPONSIVE DESIGN & MOBILE MENU --- */
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; height: auto; }
+            .hero-col { height: 60vh; min-height: 400px; }
+            .info-section { grid-template-columns: 1fr; padding: 40px 20px; gap: 40px; }
+            .footer { grid-template-columns: 1fr 1fr; padding: 40px 20px; gap: 30px; }
+            .newsletter-bar { flex-direction: column; text-align: center; gap: 15px; }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .header-controls .search-box { display: none; } /* Simplificamos vista móvil */
+            
+            .nav-links { 
+                position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff;
+                flex-direction: column; align-items: flex-start; padding: 0 20px;
+                max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+                z-index: 100; box-shadow: 0 5px 10px rgba(0,0,0,0.05); gap: 0 !important;
+            }
+            .nav-links.mobile-active { max-height: 400px; padding: 15px 20px; border-bottom: 1px solid #eaeaea; }
+            .nav-links a { display: block; width: 100%; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+            .nav-links a:last-child { border-bottom: none; }
+            
+            .catalog-container { padding: 20px; }
+            .catalog-grid { grid-template-columns: 1fr; }
+            .carousel-section { padding: 30px 15px; }
+            .footer { grid-template-columns: 1fr; }
+        }
 
         /* --- PANEL LATERAL DE CONTROL OSCURO --- */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 350px; height: 100vh; background: #1e1e1e; color: #fff; border-right: 2px solid #333; padding: 20px; z-index: 9999; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
@@ -184,11 +214,12 @@
             <a class="highlight">SALE</a>
         </nav>
 
-        <div class="header-icons">
+        <div class="header-controls">
             <input type="text" class="search-box" placeholder="Buscar..." oninput="filterCatalogSearch(this.value)">
             <span class="icon" style="color: inherit;">👤</span>
             <span class="icon" style="color: inherit;">♡</span>
             <span class="icon" style="color: inherit;">🛒</span>
+            <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
         </div>
     </header>
 
@@ -224,7 +255,6 @@
         <!-- CARRUSEL DESTACADOS -->
         <section class="carousel-section">
             <div class="carousel-header">
-                <!-- Pestañas removidas para limpieza visual -->
                 <div class="carousel-actions">
                     <a onclick="navigateToCategory('Todos')" class="view-all">VER TODO</a>
                     <button class="arrow-btn" onclick="scrollCarousel(-1)">❮</button>
@@ -426,9 +456,13 @@
         let screenSettings = {}; let productsData = [ { id: 'prod-1', title: 'Guantes de Boxeo Blanco / Dorado', category: 'PROTECTORES', variants: ['12oz', '14oz', '16oz'], regularPrice: '$2.500', price: '$2.090 UYU', mpLink: '', media: ['https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=400'] }, { id: 'prod-2', title: 'Cabezal Sparring Pro Negro Mate', category: 'PROTECTORES', variants: ['10oz', '12oz'], regularPrice: '', price: '$2.350 UYU', mpLink: '', media: ['https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400'] } ];
         let featuredProducts = ['prod-1', 'prod-2']; let logoTextFormat = { bold: false, italic: false, underline: false };
 
+        /* Motor de Compresión de Imágenes */
         function compressImage(file, maxWidth, maxHeight, quality, callback) { const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { let canvas = document.createElement('canvas'); let width = img.width, height = img.height; if (width > height) { if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; } } else { if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; } } canvas.width = width; canvas.height = height; let ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); callback(canvas.toDataURL('image/jpeg', quality)); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
-        function showHomePage() { document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view')); document.getElementById('view-home').classList.add('active-view'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        function navigateToCategory(categoryName) { document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view')); document.getElementById('view-catalog').classList.add('active-view'); const bgSelect = document.getElementById('bg-target-screen'); if (bgSelect.querySelector(`option[value="${categoryName}"]`)) bgSelect.value = categoryName; loadScreenBgSettings(); renderCatalogGrid(categoryName); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        
+        function showHomePage() { document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view')); document.getElementById('view-home').classList.add('active-view'); window.scrollTo({ top: 0, behavior: 'smooth' }); document.getElementById('main-nav-links').classList.remove('mobile-active'); }
+        function navigateToCategory(categoryName) { document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view')); document.getElementById('view-catalog').classList.add('active-view'); const bgSelect = document.getElementById('bg-target-screen'); if (bgSelect.querySelector(`option[value="${categoryName}"]`)) bgSelect.value = categoryName; loadScreenBgSettings(); renderCatalogGrid(categoryName); window.scrollTo({ top: 0, behavior: 'smooth' }); document.getElementById('main-nav-links').classList.remove('mobile-active'); }
+        function toggleMobileMenu() { document.getElementById('main-nav-links').classList.toggle('mobile-active'); }
+        
         function bindHeaderNavEvents() { const navLinks = document.querySelectorAll('#main-nav-links a'); navLinks.forEach(a => { const categoryText = a.innerText.trim(); a.onclick = (e) => { e.preventDefault(); navigateToCategory(categoryText); }; }); syncDropdownWithRealTabs(); }
         function syncDropdownWithRealTabs() { const navLinks = document.querySelectorAll('#main-nav-links a'); const bgSelect = document.getElementById('bg-target-screen'); const currentSelected = bgSelect.value; bgSelect.innerHTML = ''; navLinks.forEach(a => { const name = a.innerText.trim(); const opt = document.createElement('option'); opt.value = name; opt.textContent = name; bgSelect.appendChild(opt); if (!screenSettings[name]) screenSettings[name] = { bg: '', fit: 'cover', opacity: '0', bgOverlay: '0', title: name, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false }; }); if (currentSelected && bgSelect.querySelector(`option[value="${currentSelected}"]`)) bgSelect.value = currentSelected; }
 
@@ -443,7 +477,8 @@
             const header = document.getElementById('main-header');
             const linksContainer = document.querySelector('.nav-links');
             const links = document.querySelectorAll('#main-nav-links a');
-            const icons = document.querySelectorAll('.header-icons .icon');
+            const icons = document.querySelectorAll('.header-controls .icon');
+            const burger = document.querySelector('.hamburger');
             
             const bgC = document.getElementById('nav-bg-color').value;
             const txC = document.getElementById('nav-text-color').value;
@@ -459,6 +494,7 @@
 
             links.forEach(a => { a.style.color = txC; a.style.fontFamily = font; a.style.fontSize = fSize + 'px'; });
             icons.forEach(i => i.style.color = txC);
+            burger.style.color = txC;
         }
 
         function toggleLogoFormat(type) { logoTextFormat[type] = !logoTextFormat[type]; document.getElementById('fmt-logo-' + type.charAt(0)).classList.toggle('active', logoTextFormat[type]); applyLogoTextSettings(); saveAllSettings(); }
@@ -551,6 +587,7 @@
 
                     if(data.logoSrc) { logoTrigger.src = data.logoSrc; logoTrigger.dataset.customLogo = data.logoSrc; } if(data.logoWidth) document.getElementById('logo-width').value = data.logoWidth; if(data.logoAdjText !== undefined) document.getElementById('logo-adj-text-input').value = data.logoAdjText; if(data.logoAdjFont) document.getElementById('logo-adj-font').value = data.logoAdjFont; if(data.logoAdjColor) document.getElementById('logo-adj-color').value = data.logoAdjColor; if(data.logoAdjSpacing !== undefined) document.getElementById('logo-adj-spacing').value = data.logoAdjSpacing; if(data.logoTextFormat) { logoTextFormat = data.logoTextFormat; document.getElementById('fmt-logo-b').classList.toggle('active', logoTextFormat.bold); document.getElementById('fmt-logo-i').classList.toggle('active', logoTextFormat.italic); document.getElementById('fmt-logo-s').classList.toggle('active', logoTextFormat.underline); } applyLogoTextSettings();
                     if(data.wpNum) document.querySelector('.wp-float').href = 'https://wa.me/' + data.wpNum; if(data.headerNavHtml) document.getElementById('main-nav-links').innerHTML = data.headerNavHtml;
+                    
                     if(data.hero1Title) document.getElementById('text-col1-title').innerText = data.hero1Title; if(data.hero1Sub) document.getElementById('text-col1-sub').innerText = data.hero1Sub; if(data.hero1Bg) document.getElementById('hero-col-1').style.backgroundImage = data.hero1Bg; if(data.hero2Title) document.getElementById('text-col2-title').innerText = data.hero2Title; if(data.hero2Sub) document.getElementById('text-col2-sub').innerText = data.hero2Sub; if(data.hero2Bg) document.getElementById('hero-col-2').style.backgroundImage = data.hero2Bg; if(data.hero3Title) document.getElementById('text-col3-title').innerText = data.hero3Title; if(data.hero3Sub) document.getElementById('text-col3-sub').innerText = data.hero3Sub; if(data.hero3Bg) document.getElementById('hero-col-3').style.backgroundImage = data.hero3Bg;
                     if(data.info1Title) document.getElementById('text-info-title-1').innerText = data.info1Title; if(data.info1Desc) document.getElementById('text-info-desc-1').innerText = data.info1Desc; if(data.info2Title) document.getElementById('text-info-title-2').innerText = data.info2Title; if(data.info2Desc) document.getElementById('text-info-desc-2').innerText = data.info2Desc;
                     if(data.newsTitle) document.getElementById('text-news-title').innerText = data.newsTitle; if(data.footer1) document.getElementById('footer-col-1').innerHTML = data.footer1; if(data.footer2) document.getElementById('footer-col-2').innerHTML = data.footer2; if(data.footer3) document.getElementById('footer-col-3').innerHTML = data.footer3; if(data.footer4) document.getElementById('footer-col-4').innerHTML = data.footer4;
