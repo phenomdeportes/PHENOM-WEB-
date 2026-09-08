@@ -16,8 +16,9 @@
         .top-bar { background-color: #000; color: #fff; text-align: center; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; }
 
         /* --- HEADER PRINCIPAL --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; position: relative; }
         .logo-container img { height: 45px; cursor: pointer; transition: all 0.3s ease; }
+        
         .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
         .nav-links a:hover, .nav-links a.active-link { color: #666; text-decoration: underline; }
@@ -25,6 +26,9 @@
         .header-icons { display: flex; align-items: center; gap: 20px; }
         .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
         .icon { font-size: 20px; cursor: pointer; }
+
+        /* Botón Hamburguesa Móvil */
+        .mobile-menu-btn { display: none; font-size: 24px; cursor: pointer; background: none; border: none; color: #000; font-weight: bold; }
 
         /* --- VISTAS SPA --- */
         .page-view { display: none; }
@@ -224,6 +228,35 @@
         .btn-apply { background: #000; color: #fff; width: 100%; padding: 15px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 4px; }
 
         #toast-success { position: fixed; top: 20px; right: 20px; background: #000; color: #ede734; padding: 15px 25px; font-weight: 900; border-radius: 4px; z-index: 10000; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; font-size: 12px; border: 1px solid #ede734; }
+
+        /* --- CSS RESPONSIVO / ADAPTACIÓN MÓVIL --- */
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; flex-wrap: wrap; }
+            .mobile-menu-btn { display: block; }
+            
+            /* Ocultamos navegación y la convertimos en menú desplegable vertical */
+            .nav-links { display: none; flex-direction: column; width: 100%; text-align: center; margin-top: 15px; gap: 15px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea; }
+            .nav-links.active { display: flex; }
+            
+            .header-icons { width: 100%; justify-content: center; margin-top: 15px; }
+            
+            /* Colapsamos las 3 columnas del Hero en 1 vertical */
+            .hero-grid { grid-template-columns: 1fr; height: auto; }
+            .hero-col { height: 400px; }
+            
+            /* Colapsamos la información de marca en 1 columna */
+            .info-section { grid-template-columns: 1fr; padding: 40px 20px; gap: 30px; }
+            
+            /* Newsletter apilado */
+            .newsletter-bar { flex-direction: column; text-align: center; gap: 15px; }
+            
+            /* Footer de 4 columnas a 2 (o 1) para facilitar la lectura */
+            .footer { grid-template-columns: repeat(2, 1fr); padding: 40px 20px; gap: 20px; }
+            
+            /* Ajustes en catálogo de productos */
+            .catalog-container { padding: 20px; }
+            .catalog-header { flex-direction: column; gap: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -239,6 +272,8 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger" onclick="showHomePage()">
         </div>
         
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
         <nav class="nav-links" id="main-nav-links">
             <a>PROTECTORES</a>
             <a>ACCESORIOS</a>
@@ -377,7 +412,7 @@
     <!-- WHATSAPP FLOTANTE -->
     <a href="https://wa.me/59893418239" class="wp-float" target="_blank">✆</a>
 
-    <!-- PANEL CONTROL OMEGA -->
+    <!-- PANEL LATERAL DE CONTROL OSCURO -->
     <div id="admin-panel">
         <div class="admin-header">
             <span>Control Omega</span>
@@ -657,6 +692,9 @@
             loadScreenBgSettings();
             renderCatalogGrid(categoryName);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Cerrar menú móvil si estaba abierto
+            document.getElementById('main-nav-links').classList.remove('active');
         }
 
         function bindHeaderNavEvents() {
@@ -844,6 +882,11 @@
                 navigateToCategory('Todos');
             }
             renderCatalogGrid(query);
+        }
+
+        // --- HAMBURGUESA / MÓVIL ---
+        function toggleMobileMenu() {
+            document.getElementById('main-nav-links').classList.toggle('active');
         }
 
         // --- MODO ADMIN ---
