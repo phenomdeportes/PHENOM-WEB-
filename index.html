@@ -17,14 +17,14 @@
         .top-bar { background-color: #000; color: #fff; text-align: center; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; }
 
         /* --- HEADER PRINCIPAL --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: padding 0.3s ease; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #fff; border-bottom: 1px solid #eaeaea; transition: all 0.3s ease; }
         .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .logo-container img { height: 45px; transition: all 0.3s ease; object-fit: contain; }
         #logo-adj-text-val { font-size: 24px; font-weight: bold; white-space: nowrap; transition: all 0.3s ease; }
         
         .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active-link { color: #666; text-decoration: underline; }
+        .nav-links a:hover, .nav-links a.active-link { text-decoration: underline; opacity: 0.7; }
         .nav-links a.highlight { color: #e00; }
         .header-icons { display: flex; align-items: center; gap: 20px; }
         .search-box { background: #f0f0f0; border: none; padding: 10px 15px; border-radius: 4px; font-size: 13px; width: 180px; outline: none; }
@@ -85,7 +85,7 @@
         .product-card {
             background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
             padding: 15px; display: flex; flex-direction: column; justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative; transition: opacity 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative; transition: opacity 0.3s ease, background-color 0.3s ease;
         }
 
         .product-card .card-img-wrapper {
@@ -98,7 +98,7 @@
 
         .product-card .card-title-text { font-size: 14px; font-weight: 800; color: #000; margin-bottom: 8px; }
         
-        /* VARIANTES (6oz, 8oz, etc) */
+        /* VARIANTES */
         .variant-badges { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
         .badge-item { background: #f1f5f9; color: #334155; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 3px; border: 1px solid #cbd5e1; }
 
@@ -242,7 +242,7 @@
         </div>
     </div>
 
-    <!-- HEADER -->
+    <!-- HEADER / BARRA DE NAVEGACIÓN -->
     <header class="header" id="main-header">
         <div class="logo-container" onclick="showHomePage()">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png" alt="Logo" id="logo-trigger">
@@ -259,9 +259,9 @@
 
         <div class="header-icons">
             <input type="text" class="search-box" placeholder="Buscar..." oninput="filterCatalogSearch(this.value)">
-            <span class="icon">👤</span>
-            <span class="icon">♡</span>
-            <span class="icon">🛒</span>
+            <span class="icon" style="color: inherit;">👤</span>
+            <span class="icon" style="color: inherit;">♡</span>
+            <span class="icon" style="color: inherit;">🛒</span>
         </div>
     </header>
 
@@ -390,7 +390,7 @@
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
-        <!-- NUEVO BLOQUE: BARRA SUPERIOR (HEADER) -->
+        <!-- BLOQUE: BARRA SUPERIOR (HEADER) -->
         <div class="section-box">
             <div class="section-title">BARRA SUPERIOR (HEADER)</div>
             <div class="admin-group">
@@ -423,7 +423,34 @@
             </div>
         </div>
 
-        <!-- NUEVO BLOQUE: LOGO & TEXTO ADYACENTE -->
+        <!-- NUEVO BLOQUE: BARRA DE NAVEGACIÓN (MENÚ) -->
+        <div class="section-box">
+            <div class="section-title">BARRA DE NAVEGACIÓN (MENÚ)</div>
+            <div class="two-cols">
+                <div class="simple-group">
+                    <label>Fondo del Menú</label>
+                    <input type="color" id="nav-bg-color" value="#ffffff" oninput="applyNavSettings()">
+                </div>
+                <div class="simple-group">
+                    <label>Color Pestañas</label>
+                    <input type="color" id="nav-text-color" value="#000000" oninput="applyNavSettings()">
+                </div>
+            </div>
+            <div class="admin-group">
+                <label>Fuente Pestañas</label>
+                <select id="nav-font" onchange="applyNavSettings()">
+                    <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                    <option value="'Impact', sans-serif">Impact</option>
+                    <option value="'Arial', sans-serif">Arial</option>
+                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                    <option value="'Oswald', sans-serif">Oswald</option>
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Poppins', sans-serif">Poppins</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- BLOQUE: LOGO & TEXTO ADYACENTE -->
         <div class="section-box">
             <div class="section-title">LOGO & TEXTO ADYACENTE</div>
             <div class="admin-group">
@@ -483,12 +510,19 @@
                 <select id="bg-fit-mode" onchange="applyBackgroundSettings()">
                     <option value="cover">Pantalla Completa</option>
                     <option value="contain">Ajustar al Centro</option>
+                    <option value="100% 100%">Estirado (100% 100%)</option>
                     <option value="repeat">Repetir</option>
                 </select>
             </div>
-            <div class="admin-group">
-                <label>Transparencia Tarjeta (0-1)</label>
-                <input type="number" id="card-transparency" min="0" max="1" step="0.1" value="0" oninput="applyBackgroundSettings()">
+            <div class="two-cols">
+                <div class="simple-group">
+                    <label>Transp. Tarjeta (0-1)</label>
+                    <input type="number" id="card-transparency" min="0" max="1" step="0.1" value="0" oninput="applyBackgroundSettings()">
+                </div>
+                <div class="simple-group">
+                    <label>Oscuridad Fondo (0-1)</label>
+                    <input type="number" id="bg-overlay-alpha" min="0" max="1" step="0.1" value="0" oninput="applyBackgroundSettings()">
+                </div>
             </div>
         </div>
 
@@ -734,7 +768,7 @@
                 const opt = document.createElement('option');
                 opt.value = name; opt.textContent = name;
                 bgSelect.appendChild(opt);
-                if (!screenSettings[name]) screenSettings[name] = { bg: '', fit: 'cover', opacity: '0', title: name, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
+                if (!screenSettings[name]) screenSettings[name] = { bg: '', fit: 'cover', opacity: '0', bgOverlay: '0', title: name, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
             });
             if (currentSelected && bgSelect.querySelector(`option[value="${currentSelected}"]`)) bgSelect.value = currentSelected;
         }
@@ -757,8 +791,24 @@
             barWrapper.style.borderBottomLeftRadius = `${bR}px`;
             barWrapper.style.borderBottomRightRadius = `${bR}px`;
             
-            // Clear default bar background to let wrapper control transparency
             textElem.style.backgroundColor = "transparent"; 
+        }
+
+        function applyNavSettings() {
+            const header = document.getElementById('main-header');
+            const links = document.querySelectorAll('#main-nav-links a');
+            const icons = document.querySelectorAll('.header-icons .icon');
+            
+            const bgC = document.getElementById('nav-bg-color').value;
+            const txC = document.getElementById('nav-text-color').value;
+            const font = document.getElementById('nav-font').value;
+            
+            header.style.backgroundColor = bgC;
+            links.forEach(a => {
+                a.style.color = txC;
+                a.style.fontFamily = font;
+            });
+            icons.forEach(i => i.style.color = txC);
         }
 
         function toggleLogoFormat(type) {
@@ -779,7 +829,7 @@
             const s = document.getElementById('logo-adj-spacing').value;
 
             if (w) logo.style.width = w + 'px';
-            logo.style.height = 'auto'; // allow proportional scaling based on width
+            logo.style.height = 'auto'; 
             
             txtElem.innerText = t;
             txtElem.style.fontFamily = f;
@@ -808,11 +858,12 @@
             const bgSelect = document.getElementById('bg-target-screen');
             if (!bgSelect.value) return;
             const screen = bgSelect.value;
-            if (!screenSettings[screen]) screenSettings[screen] = { bg: '', fit: 'cover', opacity: '0', title: screen, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
+            if (!screenSettings[screen]) screenSettings[screen] = { bg: '', fit: 'cover', opacity: '0', bgOverlay: '0', title: screen, font: "'Segoe UI', sans-serif", color: '#000000', spacing: 0, bold: false, italic: false, underline: false };
             const s = screenSettings[screen];
 
             document.getElementById('bg-fit-mode').value = s.fit || 'cover';
             document.getElementById('card-transparency').value = s.opacity || '0';
+            document.getElementById('bg-overlay-alpha').value = s.bgOverlay || '0';
             document.getElementById('title-text-input').value = s.title || screen;
             document.getElementById('title-font-family').value = s.font || "'Segoe UI', sans-serif";
             document.getElementById('title-color-input').value = s.color || '#000000';
@@ -832,9 +883,16 @@
             const s = screenSettings[bgSelect.value];
             s.fit = document.getElementById('bg-fit-mode').value;
             s.opacity = document.getElementById('card-transparency').value;
+            s.bgOverlay = document.getElementById('bg-overlay-alpha').value;
+            
             const catalogBg = document.getElementById('catalog-main-bg');
-            if(s.bg) { catalogBg.style.backgroundImage = `url('${s.bg}')`; catalogBg.style.backgroundSize = s.fit; catalogBg.style.backgroundRepeat = s.fit === 'repeat' ? 'repeat' : 'no-repeat'; } 
-            else { catalogBg.style.backgroundImage = 'none'; }
+            if(s.bg) { 
+                catalogBg.style.backgroundImage = `linear-gradient(rgba(0,0,0,${s.bgOverlay}), rgba(0,0,0,${s.bgOverlay})), url('${s.bg}')`; 
+                catalogBg.style.backgroundSize = s.fit; 
+                catalogBg.style.backgroundRepeat = s.fit === 'repeat' ? 'repeat' : 'no-repeat'; 
+            } else { 
+                catalogBg.style.backgroundImage = 'none'; 
+            }
             document.querySelectorAll('.product-card').forEach(c => c.style.backgroundColor = `rgba(255, 255, 255, ${1 - parseFloat(s.opacity)})`);
         }
 
@@ -914,7 +972,7 @@
         }
 
         logoTrigger.addEventListener('click', (e) => {
-            if(document.body.classList.contains('admin-mode')) { e.preventDefault(); e.stopPropagation(); return;} // prevent home nav when trying to edit
+            if(document.body.classList.contains('admin-mode')) { e.preventDefault(); e.stopPropagation(); return;} 
             clickCount++; clearTimeout(clickTimer);
             if (clickCount === 5) { toggleAdminMode(true); clickCount = 0; } 
             else { clickTimer = setTimeout(() => { clickCount = 0; }, 2000); }
@@ -1036,6 +1094,10 @@
                 tbBorderC: document.getElementById('tb-border-c').value,
                 tbBorderR: document.getElementById('tb-border-r').value,
                 
+                navBgColor: document.getElementById('nav-bg-color').value,
+                navTextColor: document.getElementById('nav-text-color').value,
+                navFont: document.getElementById('nav-font').value,
+
                 logoSrc: logoTrigger.dataset.customLogo || logoTrigger.src,
                 logoWidth: document.getElementById('logo-width').value,
                 logoAdjText: document.getElementById('logo-adj-text-input').value,
@@ -1069,6 +1131,7 @@
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
+                    
                     if(data.fubBar !== undefined) document.getElementById('edit-fub-bar').value = data.fubBar;
                     if(data.tbBgColor) document.getElementById('tb-bg-color').value = data.tbBgColor;
                     if(data.tbOpacity !== undefined) document.getElementById('tb-opacity').value = data.tbOpacity;
@@ -1076,6 +1139,11 @@
                     if(data.tbBorderC) document.getElementById('tb-border-c').value = data.tbBorderC;
                     if(data.tbBorderR !== undefined) document.getElementById('tb-border-r').value = data.tbBorderR;
                     applyTopBarSettings();
+
+                    if(data.navBgColor) document.getElementById('nav-bg-color').value = data.navBgColor;
+                    if(data.navTextColor) document.getElementById('nav-text-color').value = data.navTextColor;
+                    if(data.navFont) document.getElementById('nav-font').value = data.navFont;
+                    applyNavSettings();
 
                     if(data.logoSrc) { logoTrigger.src = data.logoSrc; logoTrigger.dataset.customLogo = data.logoSrc; }
                     if(data.logoWidth) document.getElementById('logo-width').value = data.logoWidth;
