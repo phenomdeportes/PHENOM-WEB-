@@ -6,19 +6,19 @@
     <title>Phenom | Tienda Oficial</title>     
     <link href="https://fonts.googleapis.com/css2?family=Arial&family=Courier+New&family=Georgia&family=Impact&family=Lucida+Console&family=Palatino&family=Segoe+UI&family=Tahoma&family=Times+New+Roman&family=Verdana&family=Montserrat:wght@400;700;900&family=Oswald:wght@400;700&family=Roboto:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">     
     
-    <!-- SDK de Firebase -->
+    <!-- SDK de Firebase con tus credenciales reales -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      // REEMPLAZA ESTOS DATOS CON LOS DE TU PROYECTO DE FIREBASE
       const firebaseConfig = {
-        apiKey: "TU_API_KEY",
-        authDomain: "tu-proyecto.firebaseapp.com",
-        projectId: "tu-proyecto",
-        storageBucket: "tu-proyecto.appspot.com",
-        messagingSenderId: "tu-id",
-        appId: "tu-id"
+        apiKey: "AIzaSyAKkxCG40b98933qH3LVSoLoXnXzX588lE",
+        authDomain: "phenom-store.firebaseapp.com",
+        projectId: "phenom-store",
+        storageBucket: "phenom-store.firebasestorage.app",
+        messagingSenderId: "85501083109",
+        appId: "1:85501083109:web:b600ee8d110eeac6a0830c",
+        measurementId: "G-DXBGJSSVNC"
       };
 
       const app = initializeApp(firebaseConfig);
@@ -311,7 +311,8 @@
     <section class="newsletter-bar">         
         <button class="edit-news-btn" onclick="openNewsModal()">✎</button>         
         <h2 id="text-news-title">SUSCRÍBETE AL NEWSLETTER</h2>         
-        <button class="btn-register" id="text-news-btn" onclick="openNewsletterForm()">REGÍSTRATE GRATIS →</button>     </section>
+        <button class="btn-register" id="text-news-btn" onclick="openNewsletterForm()">REGÍSTRATE GRATIS →</button>     
+    </section>
 
     <!-- FOOTER -->     
     <footer class="footer">         
@@ -1184,7 +1185,6 @@
             closeNewsletterForm(); 
         }
 
-        /* --- FUNCIÓN GUARDAR ACTUALIZADA CON FIREBASE --- */
         async function saveAllSettings() {
             const settings = {                 
                 fubBar: document.getElementById('edit-fub-bar').value,                 
@@ -1231,10 +1231,7 @@
                 featuredProducts: featuredProducts             
             };             
             try { 
-                // Guarda en la base de datos de Firebase en la nube
                 await setDoc(window.firebaseDocRef, settings);
-                
-                // Respaldo local en la PC
                 localStorage.setItem('phenom_persistent_data', JSON.stringify(settings)); 
                 triggerSaveToast(); 
             } catch (err) { 
@@ -1251,19 +1248,17 @@
             }, 2500); 
         }
 
-        /* --- CARGA INICIAL ACTUALIZADA DESDE LA NUBE --- */
         window.onload = async () => {             
             let data = null;
             try {
                 const docSnap = await getDoc(window.firebaseDocRef);
                 if (docSnap.exists()) {
-                    data = docSnap.data(); // Prioriza los datos de la nube
+                    data = docSnap.data();
                 }
             } catch (e) {
                 console.warn("No se pudo conectar a Firebase, usando respaldo local.", e);
             }
 
-            // Si no hay datos en la nube, recurre al localStorage de respaldo
             if (!data) {
                 const saved = localStorage.getItem('phenom_persistent_data');
                 if (saved) {
