@@ -1,4 +1,3 @@
-const PHENOM_PLACEHOLDER_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'><rect width='100%' height='100%' fill='%2318181b'/><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle' fill='%23eab308' font-family='Arial, sans-serif' font-weight='900' font-size='24'>PHENOM</text><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' fill='%2371717a' font-family='Arial, sans-serif' font-weight='bold' font-size='12'>SIN IMAGEN</text></svg>";
 /* ==========================================================================
    PHENOM STORE - LÓGICA DEL CARRITO DE COMPRAS (cart.js)
    ========================================================================== */
@@ -73,7 +72,7 @@ function addToCart(product, variant) {
             variant: variant || 'Única',
             priceStr: product.price,
             priceNum: numericPrice,
-            image: (product.media && product.media[0]) ? product.media[0] : PHENOM_PLACEHOLDER_IMG,
+            image: (product.media && product.media[0]) ? product.media[0] : '',
             quantity: 1
         });
     }
