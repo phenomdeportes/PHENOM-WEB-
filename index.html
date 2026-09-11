@@ -6,7 +6,7 @@
     <title>Phenom | Tienda Oficial</title>     
     <link href="https://fonts.googleapis.com/css2?family=Arial&family=Courier+New&family=Georgia&family=Impact&family=Lucida+Console&family=Palatino&family=Segoe+UI&family=Tahoma&family=Times+New+Roman&family=Verdana&family=Montserrat:wght@400;700;900&family=Oswald:wght@400;700&family=Roboto:wght@400;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">     
     
-    <!-- SDK de Firebase con tus credenciales reales -->
+    <!-- SDK de Firebase con tus credenciales reales y exposición global de funciones -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -24,6 +24,10 @@
       const app = initializeApp(firebaseConfig);
       window.db = getFirestore(app);
       window.firebaseDocRef = doc(window.db, "tienda", "configuracion_global");
+
+      // EXPOSICIÓN GLOBAL DE FUNCIONES PARA EL RESTO DEL CÓDIGO
+      window.setDoc = setDoc;
+      window.getDoc = getDoc;
     </script>
 
     <style>         
@@ -1231,7 +1235,7 @@
                 featuredProducts: featuredProducts             
             };             
             try { 
-                await setDoc(window.firebaseDocRef, settings);
+                await window.setDoc(window.firebaseDocRef, settings);
                 localStorage.setItem('phenom_persistent_data', JSON.stringify(settings)); 
                 triggerSaveToast(); 
             } catch (err) { 
@@ -1252,7 +1256,7 @@
         window.onload = async () => {             
             let data = null;
             try {
-                const docSnap = await getDoc(window.firebaseDocRef);
+                const docSnap = await window.getDoc(window.firebaseDocRef);
                 if (docSnap.exists()) {
                     data = docSnap.data();
                 }
