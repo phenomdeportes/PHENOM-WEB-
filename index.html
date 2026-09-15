@@ -9,51 +9,23 @@
     <!-- Hojas de Estilos Separadas -->
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* --- ESTILOS BENTO GRID HERO --- */
-        .hero-grid { 
-            display: grid; 
-            grid-template-columns: 2fr 1fr; 
-            grid-template-rows: 1fr 1fr; 
-            height: 85vh; 
-            gap: 15px;
-            padding: 15px;
-            background: #000;
+        /* --- CORRECCIÓN IMAGEN PRODUCTO (SIN BORDES NEGROS) --- */
+        .product-card .card-img-wrapper {
+            background: #f8f9fa; height: 220px; border-radius: 6px;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; margin-bottom: 15px; position: relative;
         }
-        
-        .hero-col:nth-child(1) { 
-            grid-row: span 2; 
+        .product-card .card-img-wrapper img, .product-card .card-img-wrapper video {
+            max-width: 90%; max-height: 90%; object-fit: contain; background: transparent;
         }
-        
-        .hero-col { 
-            position: relative; 
-            background-color: #111; 
-            background-size: cover; 
-            background-position: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            color: #fff; 
-            transition: background-image 0.3s ease; 
-            border-radius: 6px;
-            overflow: hidden;
+        /* Precio en negro y botón sin negrita */
+        .offer-price { color: #000 !important; font-size: 16px; font-weight: 900; }
+        .btn-add-cart {
+            background: #000; color: #fff; text-align: center; padding: 10px;
+            border-radius: 6px; font-size: 12px; font-weight: 400 !important; text-transform: uppercase; border: none;
+            cursor: pointer; width: 100%; margin-bottom: 8px;
         }
-        .hero-col::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); }
-        .hero-content { position: relative; z-index: 1; padding: 20px; width: 100%; }
-        .hero-title { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-        .hero-subtitle { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; }
-
-        @media (max-width: 768px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(3, 50vh);
-                height: auto;
-            }
-            .hero-col:nth-child(1) {
-                grid-row: span 1;
-            }
-        }
+        .btn-add-cart:hover { background: #222; }
     </style>
     <!-- SDK de Firebase -->
     <script type="module">
@@ -76,7 +48,6 @@
       window.setDoc = setDoc;
       window.getDoc = getDoc;
     </script>
-
 </head>
 <body>
 
@@ -105,7 +76,6 @@
             <span class="icon" title="Mi Cuenta">👤</span>
             <span class="icon" title="Favoritos">♡</span>
             
-            <!-- Ícono del Carrito con Contador en Vivo -->
             <div class="cart-icon-wrapper" onclick="toggleCartDrawer(true)" title="Ver Carrito de Compras">
                 <span class="icon">🛒</span>
                 <span id="cart-badge-count" class="cart-badge" style="display:none;">0</span>
@@ -117,7 +87,6 @@
 
     <!-- ==================== VISTA 1: INICIO (HOME) ==================== -->
     <div id="view-home" class="page-view active-view">
-        <!-- SECCIÓN HERO (BENTO GRID) -->
         <section class="hero-grid">
             <div class="hero-col" id="hero-col-1" style="background-color: #111;">
                 <button class="edit-hero-btn" onclick="openHeroModal(1)">✎</button>
@@ -232,24 +201,18 @@
     <!-- BOTÓN FLOTANTE WHATSAPP -->
     <a href="https://wa.me/59893418239" class="wp-float" target="_blank" title="Contactar por WhatsApp">✆</a>
 
-    <!-- ==================== NUEVO: PANEL LATERAL DEL CARRITO (CART DRAWER) ==================== -->
+    <!-- PANEL LATERAL DEL CARRITO -->
     <div id="cart-drawer-overlay" onclick="toggleCartDrawer(false)"></div>
     <div id="cart-drawer">
         <div class="cart-header">
-            <div class="cart-header-title">
-                <span>🛒 Tu Carrito</span>
-            </div>
+            <div class="cart-header-title"><span>🛒 Tu Carrito</span></div>
             <button class="cart-close-btn" onclick="toggleCartDrawer(false)" title="Cerrar Carrito">✕</button>
         </div>
-        <div class="cart-body" id="cart-drawer-body">
-            <!-- El contenido dinámico de ítems y selector de envío se inyecta desde cart.js -->
-        </div>
-        <div class="cart-footer" id="cart-drawer-footer">
-            <!-- Totales y Botón de Checkout vía WhatsApp -->
-        </div>
+        <div class="cart-body" id="cart-drawer-body"></div>
+        <div class="cart-footer" id="cart-drawer-footer"></div>
     </div>
 
-    <!-- MODAL PARA SELECCIONAR VARIANTE (ONZAS / TALLES) -->
+    <!-- MODAL SELECCIONAR VARIANTE -->
     <div class="simple-modal-overlay" id="variant-modal-overlay">
         <div class="variant-modal-content">
             <button class="simple-modal-close" onclick="closeVariantModal()">✕</button>
@@ -267,7 +230,6 @@
             <button class="btn-close" onclick="toggleAdminMode(false)">X</button>
         </div>
 
-        <!-- SECCIÓN CARRUSEL DESTACADOS -->
         <div class="section-box">
             <div class="section-title">CARRUSEL DESTACADOS (INICIO)</div>
             <div class="admin-group">
@@ -276,7 +238,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN BARRA SUPERIOR -->
         <div class="section-box">
             <div class="section-title">BARRA SUPERIOR (HEADER INFO)</div>
             <div class="admin-group">
@@ -297,7 +258,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN BARRA NAVEGACIÓN -->
         <div class="section-box">
             <div class="section-title">BARRA DE NAVEGACIÓN (MENÚ)</div>
             <div class="two-cols">
@@ -326,7 +286,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN LOGO & TEXTO -->
         <div class="section-box">
             <div class="section-title">LOGO & TEXTO ADYACENTE</div>
             <div class="admin-group"><label>Logo de la Marca (Imagen)</label><input type="file" id="edit-logo-file" accept="image/*" class="file-upload-input"></div>
@@ -353,7 +312,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN FONDOS DE PANTALLA -->
         <div class="section-box">
             <div class="section-title">FONDOS DE PANTALLA</div>
             <div class="admin-group"><label>Pantalla a Editar</label><select id="bg-target-screen" onchange="loadScreenBgSettings()"></select></div>
@@ -365,7 +323,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN TÍTULOS DE PANTALLA -->
         <div class="section-box">
             <div class="section-title">TÍTULOS DE PANTALLA</div>
             <div class="admin-group"><label>Texto del Título</label><input type="text" id="title-text-input" oninput="applyTitleSettings()"></div>
@@ -381,7 +338,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN PESTAÑAS DE NAVEGACIÓN -->
         <div class="section-box">
             <div class="section-title">PESTAÑAS DE NAVEGACIÓN</div>
             <div id="header-tabs-list"></div>
