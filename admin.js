@@ -130,7 +130,6 @@ function renderCatalogGrid(categoryFilter) {
         let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
         let mpBtnHtml = p.mpLink ? `<a href="${p.mpLink}" target="_blank" class="btn-mp">💳 Pagar</a>` : '';
         
-        // Manejo de múltiples imágenes con galería interactiva y zoom
         window.activeImageIndices = window.activeImageIndices || {};
         if (window.activeImageIndices[p.id] === undefined) window.activeImageIndices[p.id] = 0;
         let currentImgIdx = window.activeImageIndices[p.id];
@@ -170,7 +169,6 @@ function renderCatalogGrid(categoryFilter) {
     applyBackgroundSettings();
 }
 
-// Función auxiliar global para cambiar las fotos con las flechas en la tarjeta
 window.changeCardImage = function(productId, direction, totalImages, event) {
     event.stopPropagation();
     if (!window.activeImageIndices[productId]) window.activeImageIndices[productId] = 0;
