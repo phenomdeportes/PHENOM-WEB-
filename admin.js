@@ -108,7 +108,7 @@ function initLogoUnlockTrigger() {
     });
 }
 
-// --- RENDERIZAR GRILLA DE CATÁLOGO ---
+// --- RENDERIZAR GRILLA DE CATÁLOGO (PASANDO ID ÚNICO EXPLÍCITO) ---
 function renderCatalogGrid(categoryFilter) {
     const container = document.getElementById('catalog-grid-container');
     if (!container) return;
