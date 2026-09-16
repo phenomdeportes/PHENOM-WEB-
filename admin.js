@@ -130,7 +130,7 @@ function renderCatalogGrid(categoryFilter) {
         let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
         let mpBtnHtml = p.mpLink ? `<a href="${p.mpLink}" target="_blank" class="btn-mp">💳 Pagar</a>` : '';
         
-        // Manejo de múltiples imágenes con galería interactiva
+        // Manejo de múltiples imágenes con galería interactiva y zoom
         window.activeImageIndices = window.activeImageIndices || {};
         if (window.activeImageIndices[p.id] === undefined) window.activeImageIndices[p.id] = 0;
         let currentImgIdx = window.activeImageIndices[p.id];
@@ -150,7 +150,7 @@ function renderCatalogGrid(categoryFilter) {
 
         card.innerHTML = `
             <div>
-                <div class="card-img-wrapper" style="position:relative; overflow:hidden;">${mediaContent}</div>
+                <div class="card-img-wrapper" style="position:relative; overflow:hidden;" onclick="openZoomLightbox('${p.id}', event)">${mediaContent}</div>
                 <div class="card-title-text">${p.title}</div>
                 <div class="variant-badges">${variantsHtml}</div>
                 <div class="price-container">${regPriceHtml} <span class="offer-price" style="color:#000 !important; font-weight:900;">${p.price}</span></div>
@@ -221,7 +221,7 @@ function renderCarouselFront() {
 
             card.innerHTML = `
                 <div>
-                    <div class="card-img-wrapper">${imgSrc ? `<img src="${imgSrc}" alt="${p.title}">` : `<div style="color:#a1a1aa; font-weight:800; font-size:12px; height:100%; display:flex; align-items:center; justify-content:center;">PHENOM</div>`}</div>
+                    <div class="card-img-wrapper" onclick="openZoomLightbox('${p.id}', event)">${imgSrc ? `<img src="${imgSrc}" alt="${p.title}">` : `<div style="color:#a1a1aa; font-weight:800; font-size:12px; height:100%; display:flex; align-items:center; justify-content:center;">PHENOM</div>`}</div>
                     <div class="card-title-text">${p.title}</div>
                     <div class="variant-badges">${variantsHtml}</div>
                     <div class="price-container">${regPriceHtml} <span class="offer-price">${p.price}</span></div>
