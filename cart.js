@@ -29,6 +29,7 @@ function toggleCartDrawer(forceOpen) {
 // --- UTILIDAD: PARSEAR PRECIO A NÚMERO ---
 function parsePriceToNumber(priceStr) {
     if (!priceStr) return 0;
+    // Extrae solo dígitos numéricos del string
     const cleaned = priceStr.toString().replace(/[^0-9]/g, '');
     return parseInt(cleaned, 10) || 0;
 }
@@ -43,21 +44,13 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO (BLINDADO) ---
+// --- AGREGAR PRODUCTO AL CARRITO ---
 function handleAddToCartClick(productId) {
-    let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
-    
-    if (!product) {
-        const cardElement = document.getElementById(productId) || document.querySelector('.product-card');
-        product = {
-            id: productId || 'prod-emergency',
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            variants: ['12oz', '14oz', '16oz'],
-            media: []
-        };
-    }
+    // Buscar el producto en el catálogo global
+    const product = productsData.find(p => p.id === productId);
+    if (!product) return;
 
+    // Si tiene múltiples variantes y no se especificó una, abrir modal de selección
     if (product.variants && product.variants.length > 1) {
         openVariantModal(product);
     } else {
@@ -67,34 +60,17 @@ function handleAddToCartClick(productId) {
 }
 
 function addToCart(product, variant) {
-    if (!product && typeof pendingProductForVariant !== 'undefined' && pendingProductForVariant) {
-        product = pendingProductForVariant;
-    }
-    
-    if (!product) {
-        const cardElement = document.querySelector('.product-card');
-        product = {
-            id: 'prod-emergency-' + Date.now(),
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            media: []
-        };
-    }
-
-    const priceToParse = product.price || product.priceStr || '$2.250 UYU';
-    const numericPrice = parsePriceToNumber(priceToParse);
-    const itemVariant = variant || 'Única';
-    
-    const existingIndex = cart.findIndex(item => item.id === product.id && item.variant === itemVariant);
+    const numericPrice = parsePriceToNumber(product.price);
+    const existingIndex = cart.findIndex(item => item.id === product.id && item.variant === variant);
 
     if (existingIndex !== -1) {
         cart[existingIndex].quantity += 1;
     } else {
         cart.push({
-            id: product.id || 'prod-id-unknown',
-            title: product.title || 'Guante PHENOM Pro',
-            variant: itemVariant,
-            priceStr: priceToParse,
+            id: product.id,
+            title: product.title,
+            variant: variant || 'Única',
+            priceStr: product.price,
             priceNum: numericPrice,
             image: (product.media && product.media[0]) ? product.media[0] : '',
             quantity: 1
@@ -188,6 +164,7 @@ function renderCartDrawer() {
 
     footerContainer.style.display = 'block';
 
+    // Lista de productos
     let itemsHtml = '<div class="cart-items-list">';
     let subtotalNum = 0;
 
@@ -214,6 +191,7 @@ function renderCartDrawer() {
     });
     itemsHtml += '</div>';
 
+    // Selector de método de envío
     const shippingCost = selectedShippingMethod === 'domicilio' ? 180 : 0;
     const finalTotal = subtotalNum + shippingCost;
 
@@ -239,6 +217,7 @@ function renderCartDrawer() {
 
     bodyContainer.innerHTML = itemsHtml + shippingHtml;
 
+    // Resumen y botón Checkout WhatsApp
     footerContainer.innerHTML = `
         <div class="cart-summary-row">
             <span>Subtotal:</span>
@@ -265,7 +244,7 @@ function generateWhatsAppOrder() {
     let subtotalNum = 0;
     let itemsText = '';
 
-    cart.forEach((item) => {
+    cart.forEach((item, index) => {
         const itemTotal = item.priceNum * item.quantity;
         subtotalNum += itemTotal;
         itemsText += `• *${item.title}* (${item.variant}) x${item.quantity} - $${itemTotal.toLocaleString('es-UY')} UYU\n`;
@@ -285,7 +264,7 @@ function generateWhatsAppOrder() {
     message += `Quedo a la espera para coordinar el pago y la entrega. ¡Muchas gracias!`;
 
     const encodedMsg = encodeURIComponent(message);
-    const phoneNumber = '59893418239';
+    const phoneNumber = '59893418239'; // Número oficial Phenom
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
 
     window.open(whatsappUrl, '_blank');
@@ -313,13 +292,7 @@ function loadCartFromStorage() {
     renderCartDrawer();
 }
 
-// Inicialización blindada
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadCartFromStorage);
-} else {
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
     loadCartFromStorage();
-}
-
-window.loadCartFromStorage = loadCartFromStorage;
-window.handleAddToCartClick = handleAddToCartClick;
-window.toggleCartDrawer = toggleCartDrawer;
+});
