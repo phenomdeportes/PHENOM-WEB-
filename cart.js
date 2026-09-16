@@ -4,7 +4,7 @@
 
 let cart = [];
 let selectedShippingMethod = 'retiro'; // 'retiro' (Gratis) o 'domicilio' ($180 UYU)
-let pendingVariantProductId = null; 
+let pendingVariantProductId = null; // Guardamos sólo el ID del producto para evitar corrupción de objetos
 
 // --- ABRIR Y CERRAR CARRITO ---
 function toggleCartDrawer(forceOpen) {
@@ -43,19 +43,18 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO (BLINDADO CON REFERENCIA DIRECTA) ---
-function handleAddToCartClick(productId, buttonElement) {
+// --- AGREGAR PRODUCTO AL CARRITO ---
+function handleAddToCartClick(productId) {
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
     
     if (!product) {
-        // Encontramos exactamente la tarjeta padre del botón presionado
-        const cardElement = document.getElementById(productId) || (buttonElement ? buttonElement.closest('.product-card') : document.querySelector('.product-card'));
+        const cardElement = document.getElementById(productId) || document.querySelector('.product-card');
         product = {
-            id: productId || 'prod-emergency-' + Date.now(),
+            id: productId || 'prod-emergency',
             title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
             price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            variants: ['10oz', '12oz', '14oz', '16oz'],
-            media: cardElement && cardElement.querySelector('img') ? [cardElement.querySelector('img').src] : []
+            variants: ['12oz', '14oz', '16oz'],
+            media: []
         };
     }
 
@@ -71,12 +70,12 @@ function addToCartDirect(productId, variant) {
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
 
     if (!product) {
-        const cardElement = document.getElementById(productId) || document.querySelector('.product-card');
+        const cardElement = document.querySelector('.product-card');
         product = {
             id: productId || 'prod-emergency-' + Date.now(),
             title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
             price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            media: cardElement && cardElement.querySelector('img') ? [cardElement.querySelector('img').src] : []
+            media: []
         };
     }
 

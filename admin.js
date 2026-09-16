@@ -156,7 +156,7 @@ function renderCatalogGrid(categoryFilter) {
             </div>
             <div>
                 ${mpBtnHtml}
-                <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}', this)" style="font-weight:400; text-transform:uppercase;">AGREGAR AL CARRITO</button>
+                <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}')" style="font-weight:400; text-transform:uppercase;">AGREGAR AL CARRITO</button>
                 <div class="admin-card-controls">
                     <button class="btn-admin-edit" onclick="editDarkProduct('${p.id}')">✏️ Editar</button>
                     <button class="btn-admin-delete" onclick="deleteProductById('${p.id}')">🗑️ Eliminar</button>
@@ -226,7 +226,7 @@ function renderCarouselFront() {
                 </div>
                 <div>
                     ${mpBtnHtml}
-                    <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}', this)">Agregar al Carrito</button>
+                    <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}')">Agregar al Carrito</button>
                 </div>
             `;
             track.appendChild(card);
