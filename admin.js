@@ -129,18 +129,35 @@ function renderCatalogGrid(categoryFilter) {
         let variantsHtml = (p.variants || []).map(v => `<span class="badge-item">${v}</span>`).join('');
         let regPriceHtml = p.regularPrice ? `<span class="regular-price">${p.regularPrice}</span>` : '';
         let mpBtnHtml = p.mpLink ? `<a href="${p.mpLink}" target="_blank" class="btn-mp">💳 Pagar</a>` : '';
-        let imgSrc = (p.media && p.media[0]) ? p.media[0] : '';
+        
+        // Manejo de múltiples imágenes con galería interactiva
+        window.activeImageIndices = window.activeImageIndices || {};
+        if (window.activeImageIndices[p.id] === undefined) window.activeImageIndices[p.id] = 0;
+        let currentImgIdx = window.activeImageIndices[p.id];
+        
+        let hasMedia = p.media && p.media.length > 0;
+        let imgSrc = hasMedia ? p.media[currentImgIdx] : '';
+        let totalImgs = hasMedia ? p.media.length : 0;
+
+        let arrowsHtml = totalImgs > 1 ? `
+            <button class="card-arrow card-arrow-left" onclick="changeCardImage('${p.id}', -1, ${totalImgs}, event)">❮</button>
+            <button class="card-arrow card-arrow-right" onclick="changeCardImage('${p.id}', 1, ${totalImgs}, event)">❯</button>
+        ` : '';
+
+        let mediaContent = imgSrc ? 
+            `<img id="img-prod-${p.id}" src="${imgSrc}" alt="${p.title}" style="width:100%; height:100%; object-fit:contain;">${arrowsHtml}` : 
+            `<div style="color:#a1a1aa; font-weight:800; font-size:12px; height:100%; display:flex; align-items:center; justify-content:center;">PHENOM</div>`;
 
         card.innerHTML = `
             <div>
-                <div class="card-img-wrapper">${imgSrc ? `<img src="${imgSrc}" alt="${p.title}">` : `<div style="color:#a1a1aa; font-weight:800; font-size:12px; height:100%; display:flex; align-items:center; justify-content:center;">PHENOM</div>`}</div>
+                <div class="card-img-wrapper" style="position:relative; overflow:hidden;">${mediaContent}</div>
                 <div class="card-title-text">${p.title}</div>
                 <div class="variant-badges">${variantsHtml}</div>
-                <div class="price-container">${regPriceHtml} <span class="offer-price">${p.price}</span></div>
+                <div class="price-container">${regPriceHtml} <span class="offer-price" style="color:#000 !important; font-weight:900;">${p.price}</span></div>
             </div>
             <div>
                 ${mpBtnHtml}
-                <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}')">Agregar al Carrito</button>
+                <button class="btn-add-cart" onclick="handleAddToCartClick('${p.id}')" style="font-weight:400; text-transform:uppercase;">AGREGAR AL CARRITO</button>
                 <div class="admin-card-controls">
                     <button class="btn-admin-edit" onclick="editDarkProduct('${p.id}')">✏️ Editar</button>
                     <button class="btn-admin-delete" onclick="deleteProductById('${p.id}')">🗑️ Eliminar</button>
@@ -152,6 +169,21 @@ function renderCatalogGrid(categoryFilter) {
 
     applyBackgroundSettings();
 }
+
+// Función auxiliar global para cambiar las fotos con las flechas en la tarjeta
+window.changeCardImage = function(productId, direction, totalImages, event) {
+    event.stopPropagation();
+    if (!window.activeImageIndices[productId]) window.activeImageIndices[productId] = 0;
+    window.activeImageIndices[productId] += direction;
+    if (window.activeImageIndices[productId] < 0) window.activeImageIndices[productId] = totalImages - 1;
+    if (window.activeImageIndices[productId] >= totalImages) window.activeImageIndices[productId] = 0;
+
+    const imgElement = document.getElementById(`img-prod-${productId}`);
+    const product = productsData.find(prod => prod.id === productId);
+    if (product && product.media && product.media[window.activeImageIndices[productId]]) {
+        imgElement.src = product.media[window.activeImageIndices[productId]];
+    }
+};
 
 // --- CARRUSEL DESTACADOS ---
 function renderCarouselAdmin() {
