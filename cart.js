@@ -43,12 +43,11 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO (CAPTURANDO DATOS EXACTOS DE LA TARJETA) ---
-function handleAddToCartClick(productId) {
+// --- AGREGAR PRODUCTO AL CARRITO (BLINDADO GLOBAL PARA PROTECTORES Y CATÁLOGO) ---
+window.handleAddToCartClick = function(productId) {
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
-    const cardElement = document.getElementById(productId);
+    const cardElement = document.getElementById(productId) || document.querySelector(`[id*="${productId}"]`) || (event ? event.target.closest('.product-card') : null);
 
-    // Si no está en el array global o necesitamos asegurar datos reales de la tarjeta visual
     const cardTitle = cardElement ? cardElement.querySelector('.card-title-text')?.innerText : (product ? product.title : 'Guante PHENOM Pro');
     const cardPrice = cardElement ? cardElement.querySelector('.offer-price')?.innerText : (product ? product.price : '$2.250 UYU');
     const cardImg = cardElement && cardElement.querySelector('img') ? cardElement.querySelector('img').src : (product && product.media && product.media[0] ? product.media[0] : '');
@@ -67,7 +66,7 @@ function handleAddToCartClick(productId) {
         const variant = (resolvedProduct.variants && resolvedProduct.variants.length === 1) ? resolvedProduct.variants[0] : 'Única';
         addToCartDirect(resolvedProduct, variant);
     }
-}
+};
 
 function addToCartDirect(product, variant) {
     if (!product) return;
@@ -304,7 +303,7 @@ function loadCartFromStorage() {
     renderCartDrawer();
 }
 
-// Inicialización blindada
+// Inicialización blindada global
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadCartFromStorage);
 } else {
@@ -312,5 +311,5 @@ if (document.readyState === 'loading') {
 }
 
 window.loadCartFromStorage = loadCartFromStorage;
-window.handleAddToCartClick = handleAddToCartClick;
+window.handleAddToCartClick = window.handleAddToCartClick;
 window.toggleCartDrawer = toggleCartDrawer;
