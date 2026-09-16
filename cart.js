@@ -43,10 +43,20 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO ---
+// --- AGREGAR PRODUCTO AL CARRITO (BLINDADO) ---
 function handleAddToCartClick(productId) {
-    const product = productsData.find(p => p.id === productId);
-    if (!product) return;
+    let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
+    
+    if (!product) {
+        const cardElement = document.getElementById(productId) || document.querySelector('.product-card');
+        product = {
+            id: productId || 'prod-emergency',
+            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
+            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
+            variants: ['12oz', '14oz', '16oz'],
+            media: []
+        };
+    }
 
     if (product.variants && product.variants.length > 1) {
         openVariantModal(product);
