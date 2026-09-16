@@ -29,7 +29,6 @@ function toggleCartDrawer(forceOpen) {
 // --- UTILIDAD: PARSEAR PRECIO A NÚMERO ---
 function parsePriceToNumber(priceStr) {
     if (!priceStr) return 0;
-    // Extrae solo dígitos numéricos del string
     const cleaned = priceStr.toString().replace(/[^0-9]/g, '');
     return parseInt(cleaned, 10) || 0;
 }
@@ -46,11 +45,9 @@ function updateCartBadge() {
 
 // --- AGREGAR PRODUCTO AL CARRITO ---
 function handleAddToCartClick(productId) {
-    // Buscar el producto en el catálogo global
     const product = productsData.find(p => p.id === productId);
     if (!product) return;
 
-    // Si tiene múltiples variantes y no se especificó una, abrir modal de selección
     if (product.variants && product.variants.length > 1) {
         openVariantModal(product);
     } else {
@@ -164,7 +161,6 @@ function renderCartDrawer() {
 
     footerContainer.style.display = 'block';
 
-    // Lista de productos
     let itemsHtml = '<div class="cart-items-list">';
     let subtotalNum = 0;
 
@@ -191,7 +187,6 @@ function renderCartDrawer() {
     });
     itemsHtml += '</div>';
 
-    // Selector de método de envío
     const shippingCost = selectedShippingMethod === 'domicilio' ? 180 : 0;
     const finalTotal = subtotalNum + shippingCost;
 
@@ -217,7 +212,6 @@ function renderCartDrawer() {
 
     bodyContainer.innerHTML = itemsHtml + shippingHtml;
 
-    // Resumen y botón Checkout WhatsApp
     footerContainer.innerHTML = `
         <div class="cart-summary-row">
             <span>Subtotal:</span>
@@ -244,7 +238,7 @@ function generateWhatsAppOrder() {
     let subtotalNum = 0;
     let itemsText = '';
 
-    cart.forEach((item, index) => {
+    cart.forEach((item) => {
         const itemTotal = item.priceNum * item.quantity;
         subtotalNum += itemTotal;
         itemsText += `• *${item.title}* (${item.variant}) x${item.quantity} - $${itemTotal.toLocaleString('es-UY')} UYU\n`;
@@ -264,7 +258,7 @@ function generateWhatsAppOrder() {
     message += `Quedo a la espera para coordinar el pago y la entrega. ¡Muchas gracias!`;
 
     const encodedMsg = encodeURIComponent(message);
-    const phoneNumber = '59893418239'; // Número oficial Phenom
+    const phoneNumber = '59893418239';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
 
     window.open(whatsappUrl, '_blank');
@@ -292,7 +286,13 @@ function loadCartFromStorage() {
     renderCartDrawer();
 }
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
+// Inicialización blindada
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadCartFromStorage);
+} else {
     loadCartFromStorage();
-});
+}
+
+window.loadCartFromStorage = loadCartFromStorage;
+window.handleAddToCartClick = handleAddToCartClick;
+window.toggleCartDrawer = toggleCartDrawer;
