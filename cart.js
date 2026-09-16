@@ -4,7 +4,7 @@
 
 let cart = [];
 let selectedShippingMethod = 'retiro'; // 'retiro' (Gratis) o 'domicilio' ($180 UYU)
-let pendingVariantProductId = null; // Guardamos el ID exacto del producto seleccionado
+let pendingVariantProductId = null; 
 
 // --- ABRIR Y CERRAR CARRITO ---
 function toggleCartDrawer(forceOpen) {
@@ -43,15 +43,15 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO (CORREGIDO Y DINÁMICO) ---
-function handleAddToCartClick(productId) {
+// --- AGREGAR PRODUCTO AL CARRITO (BLINDADO CON REFERENCIA DIRECTA) ---
+function handleAddToCartClick(productId, buttonElement) {
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
     
     if (!product) {
-        // Rescate preciso: buscamos la tarjeta específica del DOM usando el ID del botón o contenedor
-        const cardElement = document.getElementById(productId) || (event ? event.target.closest('.product-card') : null);
+        // Encontramos exactamente la tarjeta padre del botón presionado
+        const cardElement = document.getElementById(productId) || (buttonElement ? buttonElement.closest('.product-card') : document.querySelector('.product-card'));
         product = {
-            id: productId || 'prod-emergency',
+            id: productId || 'prod-emergency-' + Date.now(),
             title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
             price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
             variants: ['10oz', '12oz', '14oz', '16oz'],
