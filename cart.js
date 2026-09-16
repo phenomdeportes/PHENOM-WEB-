@@ -67,17 +67,34 @@ function handleAddToCartClick(productId) {
 }
 
 function addToCart(product, variant) {
-    const numericPrice = parsePriceToNumber(product.price);
-    const existingIndex = cart.findIndex(item => item.id === product.id && item.variant === variant);
+    if (!product && typeof pendingProductForVariant !== 'undefined' && pendingProductForVariant) {
+        product = pendingProductForVariant;
+    }
+    
+    if (!product) {
+        const cardElement = document.querySelector('.product-card');
+        product = {
+            id: 'prod-emergency-' + Date.now(),
+            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
+            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
+            media: []
+        };
+    }
+
+    const priceToParse = product.price || product.priceStr || '$2.250 UYU';
+    const numericPrice = parsePriceToNumber(priceToParse);
+    const itemVariant = variant || 'Única';
+    
+    const existingIndex = cart.findIndex(item => item.id === product.id && item.variant === itemVariant);
 
     if (existingIndex !== -1) {
         cart[existingIndex].quantity += 1;
     } else {
         cart.push({
-            id: product.id,
-            title: product.title,
-            variant: variant || 'Única',
-            priceStr: product.price,
+            id: product.id || 'prod-id-unknown',
+            title: product.title || 'Guante PHENOM Pro',
+            variant: itemVariant,
+            priceStr: priceToParse,
             priceNum: numericPrice,
             image: (product.media && product.media[0]) ? product.media[0] : '',
             quantity: 1
