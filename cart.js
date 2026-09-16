@@ -4,7 +4,7 @@
 
 let cart = [];
 let selectedShippingMethod = 'retiro'; // 'retiro' (Gratis) o 'domicilio' ($180 UYU)
-let pendingVariantProductId = null;
+let pendingVariantProductObj = null;
 
 // --- ABRIR Y CERRAR CARRITO ---
 function toggleCartDrawer(forceOpen) {
@@ -43,43 +43,34 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO (BUSCANDO EN TIEMPO REAL POR ID) ---
+// --- AGREGAR PRODUCTO AL CARRITO (CAPTURANDO DATOS EXACTOS DE LA TARJETA) ---
 function handleAddToCartClick(productId) {
-    // Busca directamente en la base de datos global de productos
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
-    
-    if (!product) {
-        // Fallback dinámico leyendo la tarjeta específica del DOM donde se hizo clic
-        const cardElement = document.getElementById(productId);
-        product = {
-            id: productId || 'prod-emergency-' + Date.now(),
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            variants: ['10oz', '12oz', '14oz', '16oz'],
-            media: cardElement && cardElement.querySelector('img') ? [cardElement.querySelector('img').src] : []
-        };
-    }
+    const cardElement = document.getElementById(productId);
 
-    if (product.variants && product.variants.length > 1) {
-        openVariantModal(product);
+    // Si no está en el array global o necesitamos asegurar datos reales de la tarjeta visual
+    const cardTitle = cardElement ? cardElement.querySelector('.card-title-text')?.innerText : (product ? product.title : 'Guante PHENOM Pro');
+    const cardPrice = cardElement ? cardElement.querySelector('.offer-price')?.innerText : (product ? product.price : '$2.250 UYU');
+    const cardImg = cardElement && cardElement.querySelector('img') ? cardElement.querySelector('img').src : (product && product.media && product.media[0] ? product.media[0] : '');
+
+    const resolvedProduct = {
+        id: productId || (product ? product.id : 'prod-' + Date.now()),
+        title: cardTitle || 'Guante PHENOM Pro',
+        price: cardPrice || '$2.250 UYU',
+        variants: product && product.variants ? product.variants : ['10oz', '12oz', '14oz', '16oz'],
+        media: [cardImg]
+    };
+
+    if (resolvedProduct.variants && resolvedProduct.variants.length > 1) {
+        openVariantModal(resolvedProduct);
     } else {
-        const variant = (product.variants && product.variants.length === 1) ? product.variants[0] : 'Única';
-        addToCartDirect(product.id, variant);
+        const variant = (resolvedProduct.variants && resolvedProduct.variants.length === 1) ? resolvedProduct.variants[0] : 'Única';
+        addToCartDirect(resolvedProduct, variant);
     }
 }
 
-function addToCartDirect(productId, variant) {
-    let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
-
-    if (!product) {
-        const cardElement = document.getElementById(productId);
-        product = {
-            id: productId || 'prod-emergency-' + Date.now(),
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            media: cardElement && cardElement.querySelector('img') ? [cardElement.querySelector('img').src] : []
-        };
-    }
+function addToCartDirect(product, variant) {
+    if (!product) return;
 
     const priceToParse = product.price || product.priceStr || '$2.250 UYU';
     const numericPrice = parsePriceToNumber(priceToParse);
@@ -109,7 +100,7 @@ function addToCartDirect(productId, variant) {
 
 // --- MODAL DE SELECCIÓN DE VARIANTE ---
 function openVariantModal(product) {
-    pendingVariantProductId = product.id;
+    pendingVariantProductObj = product;
     const modal = document.getElementById('variant-modal-overlay');
     const container = document.getElementById('variant-modal-options');
     const title = document.getElementById('variant-modal-prod-title');
@@ -125,7 +116,7 @@ function openVariantModal(product) {
         btn.innerText = variant;
         btn.onclick = () => {
             closeVariantModal();
-            addToCartDirect(pendingVariantProductId, variant);
+            addToCartDirect(pendingVariantProductObj, variant);
         };
         container.appendChild(btn);
     });
@@ -136,7 +127,7 @@ function openVariantModal(product) {
 function closeVariantModal() {
     const modal = document.getElementById('variant-modal-overlay');
     if (modal) modal.classList.remove('active');
-    pendingVariantProductId = null;
+    pendingVariantProductObj = null;
 }
 
 // --- MODIFICAR CANTIDAD O ELIMINAR ---
