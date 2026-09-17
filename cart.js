@@ -4,7 +4,6 @@
 
 let cart = [];
 let selectedShippingMethod = 'retiro'; // 'retiro' (Gratis) o 'domicilio' ($180 UYU)
-let pendingVariantProductId = null; // Guardamos sólo el ID del producto para evitar corrupción de objetos
 
 // --- ABRIR Y CERRAR CARRITO ---
 function toggleCartDrawer(forceOpen) {
@@ -45,10 +44,7 @@ function updateCartBadge() {
 
 // --- AGREGAR PRODUCTO AL CARRITO (ESTRICTO POR ID) ---
 window.handleAddToCartClick = function(productId) {
-    // Lectura estricta a la base de datos de productos. Cero lectura del DOM.
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
-    
-    // Si no encuentra el producto exacto, aborta la operación para no enviar genéricos.
     if (!product) return; 
 
     if (product.variants && product.variants.length > 0) {
@@ -73,9 +69,9 @@ function addToCartDirect(productId, variant) {
     } else {
         cart.push({
             id: product.id,
-            title: product.title, // CAPTURA EL TÍTULO EXACTO DEL OBJETO
-            variant: itemVariant, // CAPTURA EL TALLE SELECCIONADO
-            priceStr: priceToParse, // CAPTURA EL PRECIO EN OFERTA EXACTO
+            title: product.title, 
+            variant: itemVariant, 
+            priceStr: priceToParse, 
             priceNum: numericPrice,
             image: (product.media && product.media[0]) ? product.media[0] : '',
             quantity: 1
@@ -88,9 +84,8 @@ function addToCartDirect(productId, variant) {
     toggleCartDrawer(true);
 }
 
-// --- MODAL DE SELECCIÓN DE VARIANTE ---
+// --- MODAL DE SELECCIÓN DE VARIANTE (CORREGIDO SECUENCIALMENTE) ---
 function openVariantModal(product) {
-    pendingVariantProductId = product.id;
     const modal = document.getElementById('variant-modal-overlay');
     const container = document.getElementById('variant-modal-options');
     const title = document.getElementById('variant-modal-prod-title');
@@ -105,8 +100,9 @@ function openVariantModal(product) {
         btn.className = 'variant-btn-select';
         btn.innerText = variant;
         btn.onclick = () => {
+            // Ejecución estricta: Primero añade con el ID seguro y luego cierra el modal
+            addToCartDirect(product.id, variant);
             closeVariantModal();
-            addToCartDirect(pendingVariantProductId, variant);
         };
         container.appendChild(btn);
     });
@@ -117,7 +113,6 @@ function openVariantModal(product) {
 function closeVariantModal() {
     const modal = document.getElementById('variant-modal-overlay');
     if (modal) modal.classList.remove('active');
-    pendingVariantProductId = null;
 }
 
 // --- MODIFICAR CANTIDAD O ELIMINAR ---
