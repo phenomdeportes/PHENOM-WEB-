@@ -43,43 +43,26 @@ function updateCartBadge() {
     badge.style.display = totalCount > 0 ? 'flex' : 'none';
 }
 
-// --- AGREGAR PRODUCTO AL CARRITO ---
-function handleAddToCartClick(productId) {
+// --- AGREGAR PRODUCTO AL CARRITO (ESTRICTO POR ID) ---
+window.handleAddToCartClick = function(productId) {
+    // Lectura estricta a la base de datos de productos. Cero lectura del DOM.
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
     
-    if (!product) {
-        const cardElement = document.getElementById(productId) || document.querySelector('.product-card');
-        product = {
-            id: productId || 'prod-emergency',
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            variants: ['12oz', '14oz', '16oz'],
-            media: []
-        };
-    }
+    // Si no encuentra el producto exacto, aborta la operación para no enviar genéricos.
+    if (!product) return; 
 
-    if (product.variants && product.variants.length > 1) {
+    if (product.variants && product.variants.length > 0) {
         openVariantModal(product);
     } else {
-        const variant = (product.variants && product.variants.length === 1) ? product.variants[0] : 'Única';
-        addToCartDirect(product.id, variant);
+        addToCartDirect(product.id, 'Única');
     }
-}
+};
 
 function addToCartDirect(productId, variant) {
     let product = typeof productsData !== 'undefined' ? productsData.find(p => p.id === productId) : null;
+    if (!product) return; 
 
-    if (!product) {
-        const cardElement = document.querySelector('.product-card');
-        product = {
-            id: productId || 'prod-emergency-' + Date.now(),
-            title: cardElement ? cardElement.querySelector('.card-title-text')?.innerText || 'Guante PHENOM Pro' : 'Guante PHENOM Pro',
-            price: cardElement ? cardElement.querySelector('.offer-price')?.innerText || '$2.250 UYU' : '$2.250 UYU',
-            media: []
-        };
-    }
-
-    const priceToParse = product.price || product.priceStr || '$2.250 UYU';
+    const priceToParse = product.price || product.priceStr || '$0';
     const numericPrice = parsePriceToNumber(priceToParse);
     const itemVariant = variant || 'Única';
     
@@ -89,10 +72,10 @@ function addToCartDirect(productId, variant) {
         cart[existingIndex].quantity += 1;
     } else {
         cart.push({
-            id: product.id || 'prod-id-unknown',
-            title: product.title || 'Guante PHENOM Pro',
-            variant: itemVariant,
-            priceStr: priceToParse,
+            id: product.id,
+            title: product.title, // CAPTURA EL TÍTULO EXACTO DEL OBJETO
+            variant: itemVariant, // CAPTURA EL TALLE SELECCIONADO
+            priceStr: priceToParse, // CAPTURA EL PRECIO EN OFERTA EXACTO
             priceNum: numericPrice,
             image: (product.media && product.media[0]) ? product.media[0] : '',
             quantity: 1
